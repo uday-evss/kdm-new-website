@@ -252,10 +252,10 @@ export default function HeroSection() {
     ];
 
     const images = [
-        "https://res.cloudinary.com/drhrf0b4h/image/upload/v1771395957/samples/coffee.jpg",
-        "https://res.cloudinary.com/drhrf0b4h/image/upload/v1692444134/cld-sample-2.jpg",
-        "https://res.cloudinary.com/drhrf0b4h/image/upload/v1692444135/cld-sample-3.jpg",
-        "https://res.cloudinary.com/drhrf0b4h/image/upload/v1692444130/samples/balloons.jpg",
+        'https://res.cloudinary.com/drhrf0b4h/image/upload/v1771414419/Jagdalpur-6-scaled_bguynz.jpg',
+        'https://res.cloudinary.com/drhrf0b4h/image/upload/v1771414308/Pile-Load-Test-2-scaled_hwudrg.jpg',
+        'https://res.cloudinary.com/drhrf0b4h/image/upload/v1771414897/Material-Testing-Lab-4-scaled_ifrrsf.jpg',
+        'https://res.cloudinary.com/drhrf0b4h/image/upload/v1771415011/HomePage-2-scaled_u4zans.jpg',
     ];
 
     /* ---------------- WORD ROTATION ---------------- */
