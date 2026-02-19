@@ -251,11 +251,19 @@ export default function HeroSection() {
         "Infrastructure Consulting",
     ];
 
+    // const images = [
+    //     'https://res.cloudinary.com/drhrf0b4h/image/upload/v1771414419/Jagdalpur-6-scaled_bguynz.jpg',
+    //     'https://res.cloudinary.com/drhrf0b4h/image/upload/v1771414308/Pile-Load-Test-2-scaled_hwudrg.jpg',
+    //     'https://res.cloudinary.com/drhrf0b4h/image/upload/v1771414897/Material-Testing-Lab-4-scaled_ifrrsf.jpg',
+    //     'https://res.cloudinary.com/drhrf0b4h/image/upload/v1771415011/HomePage-2-scaled_u4zans.jpg',
+    // ];
+
+
     const images = [
-        'https://res.cloudinary.com/drhrf0b4h/image/upload/v1771414419/Jagdalpur-6-scaled_bguynz.jpg',
-        'https://res.cloudinary.com/drhrf0b4h/image/upload/v1771414308/Pile-Load-Test-2-scaled_hwudrg.jpg',
-        'https://res.cloudinary.com/drhrf0b4h/image/upload/v1771414897/Material-Testing-Lab-4-scaled_ifrrsf.jpg',
-        'https://res.cloudinary.com/drhrf0b4h/image/upload/v1771415011/HomePage-2-scaled_u4zans.jpg',
+        'https://res.cloudinary.com/drhrf0b4h/image/upload/v1771485079/Gemini_Generated_Image_rxd0ifrxd0ifrxd0_advbjy.png',
+        'https://res.cloudinary.com/drhrf0b4h/image/upload/v1771484822/Gemini_Generated_Image_gnqvurgnqvurgnqv_h5hpw3.png',
+        'https://res.cloudinary.com/drhrf0b4h/image/upload/v1771484822/Gemini_Generated_Image_16pcqr16pcqr16pc_bbvl2n.png',
+        'https://res.cloudinary.com/drhrf0b4h/image/upload/v1771484822/Gemini_Generated_Image_3aqanp3aqanp3aqa_tzpqrz.png'
     ];
 
     /* ---------------- WORD ROTATION ---------------- */
