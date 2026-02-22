@@ -261,7 +261,6 @@ export default function HeroSection() {
 
     const images = [
         'https://res.cloudinary.com/drhrf0b4h/image/upload/v1771485079/Gemini_Generated_Image_rxd0ifrxd0ifrxd0_advbjy.png',
-
         'https://res.cloudinary.com/drhrf0b4h/image/upload/v1771484822/Gemini_Generated_Image_16pcqr16pcqr16pc_bbvl2n.png',
         'https://res.cloudinary.com/drhrf0b4h/image/upload/v1771484822/Gemini_Generated_Image_gnqvurgnqvurgnqv_h5hpw3.png',
         'https://res.cloudinary.com/drhrf0b4h/image/upload/v1771484822/Gemini_Generated_Image_3aqanp3aqanp3aqa_tzpqrz.png'

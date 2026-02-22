@@ -146,7 +146,7 @@ export default function Navbar() {
                                 className="flex items-center gap-2 text-sm text-gray-700 hover:text-[#C4161C] transition-colors"
                             >
                                 <Phone className="w-4 h-4" />
-                                <span>+91 22 XXXX XXXX</span>
+                                <span>+91 22 1234 5678</span>
                             </a>
 
                             <Button className="bg-[#C4161C] hover:bg-white hover:text-[#C4161C] border-2 border-[#C4161C] text-white rounded-full px-6 transition-all duration-300">
