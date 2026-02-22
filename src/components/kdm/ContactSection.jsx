@@ -355,7 +355,7 @@ export default function ContactSection() {
                         <div className="grid sm:grid-cols-2 gap-4">
                             {[
                                 { icon: MapPin, label: 'Head Office', value: 'Mumbai, Maharashtra', sub: '400001' },
-                                { icon: Phone, label: 'Call Us', value: '+91 22 XXXX XXXX', sub: 'Toll Free: 1800-XXX-XXX' },
+                                { icon: Phone, label: 'Call Us', value: '+91 22 1234 5678', sub: 'Toll Free: 1800-XXX-XXX' },
                                 { icon: Mail, label: 'Email Us', value: 'info@kdmengineers.com', sub: 'projects@kdmengineers.com' },
                                 { icon: Clock, label: 'Working Hours', value: 'Mon - Sat: 9AM - 7PM', sub: 'Emergency: 24/7' },
                             ].map((item, i) => (
