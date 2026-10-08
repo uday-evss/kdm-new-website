@@ -1,0 +1,149 @@
+import React, { useCallback, useEffect, useMemo, useRef, useState } from 'react';
+import { createPortal } from 'react-dom';
+import { ChevronLeft, ChevronRight, X, Maximize2 } from 'lucide-react';
+import { cn } from '@/lib/utils';
+import { Img } from './primitives';
+
+// Full-screen image viewer: arrow keys / buttons to move, Escape or the
+// backdrop to close; focus returns to the thumbnail that opened it.
+export function Lightbox({ images, index, onClose, onIndex, label }) {
+    const closeRef = useRef(null);
+    const image = images[index];
+    const go = useCallback((delta) => onIndex((index + delta + images.length) % images.length), [index, images.length, onIndex]);
+
+    useEffect(() => {
+        const onKey = (e) => {
+            if (e.key === 'Escape') onClose();
+            if (e.key === 'ArrowRight') go(1);
+            if (e.key === 'ArrowLeft') go(-1);
+        };
+        document.addEventListener('keydown', onKey);
+        const previousOverflow = document.body.style.overflow;
+        document.body.style.overflow = 'hidden';
+        closeRef.current?.focus();
+        return () => {
+            document.removeEventListener('keydown', onKey);
+            document.body.style.overflow = previousOverflow;
+        };
+    }, [go, onClose]);
+
+    return createPortal(
+        <div
+            role="dialog"
+            aria-modal="true"
+            aria-label={`${label} — photo ${index + 1} of ${images.length}`}
+            className="fixed inset-0 z-[100] flex items-center justify-center bg-black/90 p-4 sm:p-10"
+            onClick={onClose}
+        >
+            <img
+                key={image.src}
+                src={image.src}
+                alt={`${label} — photo ${index + 1}`}
+                className="max-h-full max-w-full rounded-lg object-contain shadow-2xl"
+                onClick={(e) => e.stopPropagation()}
+            />
+            <button
+                ref={closeRef}
+                type="button"
+                onClick={onClose}
+                aria-label="Close"
+                className="absolute right-4 top-4 rounded-full bg-white/10 p-2.5 text-white hover:bg-white/20"
+            >
+                <X className="h-6 w-6" />
+            </button>
+            {images.length > 1 && (
+                <>
+                    <button
+                        type="button"
+                        onClick={(e) => {
+                            e.stopPropagation();
+                            go(-1);
+                        }}
+                        aria-label="Previous photo"
+                        className="absolute left-3 sm:left-6 top-1/2 -translate-y-1/2 rounded-full bg-white/10 p-3 text-white hover:bg-white/20"
+                    >
+                        <ChevronLeft className="h-6 w-6" />
+                    </button>
+                    <button
+                        type="button"
+                        onClick={(e) => {
+                            e.stopPropagation();
+                            go(1);
+                        }}
+                        aria-label="Next photo"
+                        className="absolute right-3 sm:right-6 top-1/2 -translate-y-1/2 rounded-full bg-white/10 p-3 text-white hover:bg-white/20"
+                    >
+                        <ChevronRight className="h-6 w-6" />
+                    </button>
+                    <p className="absolute bottom-4 left-1/2 -translate-x-1/2 rounded-full bg-white/10 px-3 py-1 text-sm text-white">
+                        {index + 1} / {images.length}
+                    </p>
+                </>
+            )}
+        </div>,
+        document.body,
+    );
+}
+
+// A photo gallery in natural aspect ratios (CSS columns), with the category
+// filter the old site had (All / Pile Load Test / …) when images carry one.
+export default function Gallery({ images, label }) {
+    const categories = useMemo(() => [...new Set(images.map((i) => i.category).filter(Boolean))], [images]);
+    const [category, setCategory] = useState('All');
+    const [open, setOpen] = useState(null);
+    const visible = category === 'All' ? images : images.filter((i) => i.category === category);
+
+    return (
+        <div>
+            {categories.length > 1 && (
+                <div role="tablist" aria-label="Filter photos" className="mb-8 flex flex-wrap gap-2">
+                    {['All', ...categories].map((c) => (
+                        <button
+                            key={c}
+                            type="button"
+                            role="tab"
+                            aria-selected={category === c}
+                            onClick={() => setCategory(c)}
+                            className={cn(
+                                'rounded-full px-4 py-2 text-sm font-medium transition-colors',
+                                category === c
+                                    ? 'bg-[#C4161C] text-white'
+                                    : 'bg-white text-gray-600 border border-[#E6EAF0] hover:border-[#C4161C]/40 hover:text-[#C4161C]',
+                            )}
+                        >
+                            {c}
+                            <span className={cn('ml-1.5 text-xs', category === c ? 'text-white/70' : 'text-gray-400')}>
+                                {c === 'All' ? images.length : images.filter((i) => i.category === c).length}
+                            </span>
+                        </button>
+                    ))}
+                </div>
+            )}
+
+            <ul className="columns-2 md:columns-3 lg:columns-4 gap-4 [&>li]:mb-4">
+                {visible.map((image, i) => (
+                    <li key={image.src} className="break-inside-avoid">
+                        <button
+                            type="button"
+                            onClick={() => setOpen(i)}
+                            aria-label={`Open ${label} photo ${i + 1}${image.category ? ` (${image.category})` : ''}`}
+                            className="group relative block w-full overflow-hidden rounded-xl bg-[#E6EAF0] focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#C4161C]"
+                        >
+                            <Img
+                                image={image}
+                                alt=""
+                                sizes="(min-width: 1024px) 25vw, (min-width: 768px) 33vw, 50vw"
+                                className="h-auto w-full transition-transform duration-500 group-hover:scale-105"
+                            />
+                            <span className="absolute inset-0 flex items-center justify-center bg-black/0 group-hover:bg-black/30 transition-colors">
+                                <Maximize2 className="h-6 w-6 text-white opacity-0 group-hover:opacity-100 transition-opacity" aria-hidden="true" />
+                            </span>
+                        </button>
+                    </li>
+                ))}
+            </ul>
+
+            {open !== null && <Lightbox images={visible} index={open} onIndex={setOpen} onClose={() => setOpen(null)} label={label} />}
+        </div>
+    );
+}
