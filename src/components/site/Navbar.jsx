@@ -1,274 +1,460 @@
 import React, { useEffect, useRef, useState } from 'react';
-import { Link, NavLink, useLocation } from 'react-router-dom';
+import { Link, useLocation } from 'react-router-dom';
 import { AnimatePresence, motion } from 'framer-motion';
-import { ChevronDown, Menu, X, Phone, Mail } from 'lucide-react';
+import { ChevronDown, Menu, X, Phone, Mail, FileDown } from 'lucide-react';
 import { cn } from '@/lib/utils';
-import { services } from '@/content/services';
-import { contact, formatPhone, telHref } from '@/content/site';
+import { EASE } from '@/lib/motion';
+import { services, serviceSummary } from '@/content/services';
+import { company, contact, formatPhone, telHref } from '@/content/site';
+import Logo from '@/components/brand/Logo';
+import { BlueprintGrid, CornerMarks } from '@/components/engineering';
+import { ButtonLink, Img, TextLink } from './primitives';
 import { serviceIcons } from './serviceIcons';
 
-// Mirrors the live site's menu: About Us and Our Services open sub-menus.
+const SHM = '/services/structural-health-monitoring';
+const KSC = '/services/kdm-knowledge-share-center';
+
 export const NAV = [
-    { label: 'Home', to: '/' },
+    { label: 'About', to: '/about', menu: 'about', match: (p) => p === '/about' || p === '/clients' },
     {
-        label: 'About Us',
-        to: '/about',
-        children: [
-            { label: 'About the Company', to: '/about' },
-            { label: 'Wings of KDM', to: '/about#wings' },
-            { label: "MD's Message", to: '/about#md-message' },
-            { label: 'Our Team', to: '/about#team' },
-        ],
-    },
-    { label: 'Our Clients', to: '/clients' },
-    {
-        label: 'Our Services',
+        label: 'Services',
         to: '/services',
-        children: services.map((s) => ({ label: s.title, to: `/services/${s.slug}`, icon: serviceIcons[s.slug] })),
+        menu: 'services',
+        match: (p) => p.startsWith('/services') && p !== SHM && p !== KSC,
     },
-    { label: 'Careers', to: '/careers' },
+    { label: 'Monitoring', to: SHM, match: (p) => p === SHM },
+    { label: 'Projects', to: '/projects', match: (p) => p.startsWith('/projects') },
+    { label: 'Knowledge Center', to: KSC, match: (p) => p === KSC },
+    { label: 'Careers', to: '/careers', match: (p) => p.startsWith('/careers') },
+];
+
+export const ABOUT_LINKS = [
+    { label: 'About the Company', to: '/about', note: 'Foreword, vision, mission and values' },
+    { label: 'Wings of KDM', to: '/about#wings', note: 'The two companies of the group' },
+    { label: "MD's Message", to: '/about#md-message', note: 'From the Managing Director' },
+    { label: 'Leadership', to: '/about#team', note: 'Board of directors' },
+    { label: 'Milestones', to: '/about#milestones', note: `Our journey since ${company.foundedYear}` },
+    { label: 'Our Clients', to: '/clients', note: 'Government, PSU and private clients' },
 ];
 
 const hq = contact.branches[0];
 
-function DesktopDropdown({ item, active }) {
-    const [open, setOpen] = useState(false);
-    const closeTimer = useRef();
-    const wide = item.children.length > 5;
+// ---------------------------------------------------------------------------
+// Desktop panels
+// ---------------------------------------------------------------------------
 
-    const show = () => {
-        clearTimeout(closeTimer.current);
-        setOpen(true);
-    };
-    const hide = () => {
-        closeTimer.current = setTimeout(() => setOpen(false), 120);
-    };
-
+function PanelShell({ id, children, onEnter, onLeave }) {
     return (
-        <li
-            className="relative"
-            onMouseEnter={show}
-            onMouseLeave={hide}
-            onFocus={show}
-            onBlur={(e) => !e.currentTarget.contains(e.relatedTarget) && setOpen(false)}
-            onKeyDown={(e) => e.key === 'Escape' && setOpen(false)}
+        <motion.div
+            id={id}
+            initial={{ opacity: 0, y: -8 }}
+            animate={{ opacity: 1, y: 0 }}
+            exit={{ opacity: 0, y: -6, transition: { duration: 0.15 } }}
+            transition={{ duration: 0.3, ease: EASE }}
+            onMouseEnter={onEnter}
+            onMouseLeave={onLeave}
+            className="absolute inset-x-0 top-full hidden border-b border-kdm-line bg-white shadow-lift lg:block"
         >
-            <button
-                type="button"
-                aria-expanded={open}
-                aria-haspopup="true"
-                onClick={() => setOpen((o) => !o)}
-                className={cn(
-                    'flex items-center gap-1 py-2 text-[15px] font-medium transition-colors',
-                    active ? 'text-[#C4161C]' : 'text-gray-700 hover:text-[#C4161C]',
-                )}
-            >
-                {item.label}
-                <ChevronDown className={cn('h-4 w-4 transition-transform', open && 'rotate-180')} aria-hidden="true" />
-            </button>
-            <AnimatePresence>
-                {open && (
-                    <motion.div
-                        initial={{ opacity: 0, y: 8 }}
-                        animate={{ opacity: 1, y: 0 }}
-                        exit={{ opacity: 0, y: 8 }}
-                        transition={{ duration: 0.16 }}
-                        className={cn(
-                            'absolute left-1/2 top-full z-50 mt-3 -translate-x-1/2 rounded-2xl border border-[#E6EAF0] bg-white p-2 shadow-2xl',
-                            wide ? 'w-[640px]' : 'w-64',
-                        )}
-                    >
-                        <ul className={cn(wide && 'grid grid-cols-2 gap-1')}>
-                            {item.children.map((child) => {
-                                const Icon = child.icon;
-                                return (
-                                    <li key={child.to}>
-                                        <Link
-                                            to={child.to}
-                                            onClick={() => setOpen(false)}
-                                            className="flex items-start gap-3 rounded-xl px-3 py-2.5 text-sm text-gray-700 hover:bg-[#F5F7FA] hover:text-[#C4161C] transition-colors"
-                                        >
-                                            {Icon && <Icon className="mt-0.5 h-4 w-4 shrink-0 text-[#C4161C]" aria-hidden="true" />}
-                                            <span>{child.label}</span>
-                                        </Link>
-                                    </li>
-                                );
-                            })}
-                        </ul>
-                    </motion.div>
-                )}
-            </AnimatePresence>
-        </li>
+            {children}
+        </motion.div>
     );
 }
 
+function ServicesPanel({ onNavigate, ...shell }) {
+    const [active, setActive] = useState(services.find((s) => s.featured) ?? services[0]);
+    const Icon = serviceIcons[active.slug];
+
+    return (
+        <PanelShell id="menu-services" {...shell}>
+            <div className="container-kdm grid grid-cols-12 gap-10 py-10">
+                <div className="col-span-7">
+                    <p className="t-label flex items-center gap-3 text-kdm-muted">
+                        <span className="t-num text-kdm-red-ink">{String(services.length).padStart(2, '0')}</span>
+                        <span aria-hidden="true" className="h-px w-8 bg-kdm-ink/30" />
+                        Disciplines under one roof
+                    </p>
+                    <ul className="mt-6 grid grid-cols-2 gap-x-6">
+                        {services.map((s, i) => {
+                            const ItemIcon = serviceIcons[s.slug];
+                            const isActive = s.slug === active.slug;
+                            return (
+                                <li key={s.slug}>
+                                    <Link
+                                        to={`/services/${s.slug}`}
+                                        onClick={onNavigate}
+                                        onMouseEnter={() => setActive(s)}
+                                        onFocus={() => setActive(s)}
+                                        className={cn(
+                                            'group flex items-center gap-4 border-t border-kdm-line py-3.5 transition-colors',
+                                            isActive ? 'text-kdm-blue' : 'text-kdm-ink',
+                                        )}
+                                    >
+                                        <span className="t-num w-6 text-xs text-kdm-muted">{String(i + 1).padStart(2, '0')}</span>
+                                        <ItemIcon
+                                            className={cn('h-[18px] w-[18px] shrink-0 transition-colors', isActive ? 'text-kdm-red' : 'text-kdm-muted')}
+                                            aria-hidden="true"
+                                        />
+                                        <span className="text-[15px] font-medium">{s.shortTitle}</span>
+                                        <span
+                                            aria-hidden="true"
+                                            className={cn(
+                                                'ml-auto h-1.5 w-1.5 rounded-full bg-kdm-red transition-all duration-300',
+                                                isActive ? 'scale-100 opacity-100' : 'scale-0 opacity-0',
+                                            )}
+                                        />
+                                    </Link>
+                                </li>
+                            );
+                        })}
+                    </ul>
+                    <div className="mt-6 flex items-center gap-6 border-t border-kdm-line pt-6">
+                        <TextLink to="/services" onClick={onNavigate}>All services</TextLink>
+                        <a
+                            href={company.brochures[0].href}
+                            target="_blank"
+                            rel="noopener noreferrer"
+                            className="inline-flex items-center gap-2 text-sm font-medium text-kdm-graphite hover:text-kdm-blue"
+                        >
+                            <FileDown className="h-4 w-4" aria-hidden="true" /> {company.brochures[0].title} (PDF)
+                        </a>
+                    </div>
+                </div>
+
+                <div className="col-span-5">
+                    <div className="relative overflow-hidden rounded-panel bg-kdm-paper p-5 ring-1 ring-kdm-line">
+                        <BlueprintGrid fade={false} className="opacity-60" />
+                        <div className="relative">
+                            <div className="relative aspect-[16/9] overflow-hidden rounded-card bg-kdm-mist">
+                                <AnimatePresence initial={false}>
+                                    <motion.div
+                                        key={active.slug}
+                                        initial={{ opacity: 0, scale: 1.06 }}
+                                        animate={{ opacity: 1, scale: 1 }}
+                                        exit={{ opacity: 0 }}
+                                        transition={{ duration: 0.5, ease: EASE }}
+                                        className="absolute inset-0"
+                                    >
+                                        <Img image={active.cover} alt="" sizes="480px" className="h-full w-full object-cover" />
+                                    </motion.div>
+                                </AnimatePresence>
+                                <span className="t-label absolute left-3 top-3 rounded-full bg-white/90 px-2.5 py-1 text-kdm-ink">
+                                    Fig. {String(services.indexOf(active) + 1).padStart(2, '0')}
+                                </span>
+                            </div>
+                            <motion.div key={`${active.slug}-text`} initial={{ opacity: 0, y: 8 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.35, ease: EASE }} className="mt-5">
+                                <p className="flex items-center gap-2 font-display text-lg font-semibold text-kdm-ink">
+                                    <Icon className="h-5 w-5 text-kdm-red" aria-hidden="true" />
+                                    {active.shortTitle}
+                                </p>
+                                <p className="mt-2 line-clamp-3 text-sm leading-relaxed text-kdm-graphite">{serviceSummary(active)}</p>
+                                <TextLink to={`/services/${active.slug}`} onClick={onNavigate} className="mt-4 text-sm">
+                                    Explore service
+                                </TextLink>
+                            </motion.div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </PanelShell>
+    );
+}
+
+function AboutPanel({ onNavigate, ...shell }) {
+    return (
+        <PanelShell id="menu-about" {...shell}>
+            <div className="container-kdm grid grid-cols-12 gap-10 py-10">
+                <ul className="col-span-8 grid grid-cols-2 gap-x-8">
+                    {ABOUT_LINKS.map((l) => (
+                        <li key={l.to}>
+                            <Link to={l.to} onClick={onNavigate} className="group block border-t border-kdm-line py-4">
+                                <span className="flex items-center justify-between text-[15px] font-medium text-kdm-ink group-hover:text-kdm-blue">
+                                    {l.label}
+                                    <span aria-hidden="true" className="text-kdm-muted transition-transform duration-300 group-hover:translate-x-1 group-hover:text-kdm-red">→</span>
+                                </span>
+                                <span className="mt-1 block text-sm text-kdm-muted">{l.note}</span>
+                            </Link>
+                        </li>
+                    ))}
+                </ul>
+                <div className="relative col-span-4 rounded-panel bg-kdm-paper p-6 ring-1 ring-kdm-line">
+                    <CornerMarks />
+                    <p className="t-label text-kdm-muted">Est. {company.foundedYear}</p>
+                    <p className="mt-3 font-display text-2xl font-semibold leading-tight text-kdm-ink">
+                        {company.logoWords.map((w) => (
+                            <span key={w} className="block">
+                                <span className="text-kdm-red">{w[0]}</span>
+                                {w.slice(1)}
+                            </span>
+                        ))}
+                    </p>
+                    <p className="mt-3 text-sm leading-relaxed text-kdm-graphite">
+                        {company.values.join(' · ')} — the values behind {company.wings.length} companies and one group.
+                    </p>
+                </div>
+            </div>
+        </PanelShell>
+    );
+}
+
+// ---------------------------------------------------------------------------
+// Mobile menu
+// ---------------------------------------------------------------------------
+
+function MobileMenu({ onClose }) {
+    const [servicesOpen, setServicesOpen] = useState(false);
+    const item = {
+        hidden: { opacity: 0, y: 18 },
+        show: (i) => ({ opacity: 1, y: 0, transition: { duration: 0.5, ease: EASE, delay: 0.05 + i * 0.05 } }),
+    };
+    return (
+        <motion.div
+            id="mobile-menu"
+            initial={{ clipPath: 'inset(0% 0% 100% 0%)' }}
+            animate={{ clipPath: 'inset(0% 0% 0% 0%)' }}
+            exit={{ clipPath: 'inset(0% 0% 100% 0%)' }}
+            transition={{ duration: 0.5, ease: [0.76, 0, 0.24, 1] }}
+            className="fixed inset-0 z-40 overflow-y-auto bg-kdm-paper pt-20 lg:hidden"
+        >
+            <BlueprintGrid fade={false} className="opacity-50" />
+            <nav aria-label="Mobile" className="container-kdm relative pb-12">
+                <ul className="border-b border-kdm-line">
+                    {NAV.map((n, i) => (
+                        <motion.li key={n.label} custom={i} variants={item} initial="hidden" animate="show" className="border-t border-kdm-line">
+                            {n.menu === 'services' ? (
+                                <>
+                                    <button
+                                        type="button"
+                                        aria-expanded={servicesOpen}
+                                        onClick={() => setServicesOpen((o) => !o)}
+                                        className="flex w-full items-center justify-between py-4 font-display text-[26px] font-semibold text-kdm-ink"
+                                    >
+                                        <span className="flex items-baseline gap-3">
+                                            <span className="t-num text-xs text-kdm-red-ink">{String(i + 1).padStart(2, '0')}</span>
+                                            {n.label}
+                                        </span>
+                                        <ChevronDown className={cn('h-6 w-6 transition-transform duration-300', servicesOpen && 'rotate-180')} aria-hidden="true" />
+                                    </button>
+                                    <AnimatePresence initial={false}>
+                                        {servicesOpen && (
+                                            <motion.ul
+                                                initial={{ height: 0, opacity: 0 }}
+                                                animate={{ height: 'auto', opacity: 1 }}
+                                                exit={{ height: 0, opacity: 0 }}
+                                                transition={{ duration: 0.35, ease: EASE }}
+                                                className="overflow-hidden"
+                                            >
+                                                {services.map((s) => {
+                                                    const Icon = serviceIcons[s.slug];
+                                                    return (
+                                                        <li key={s.slug}>
+                                                            <Link to={`/services/${s.slug}`} onClick={onClose} className="flex items-center gap-3 py-2.5 pl-7 text-[15px] text-kdm-graphite">
+                                                                <Icon className="h-4 w-4 text-kdm-red" aria-hidden="true" /> {s.shortTitle}
+                                                            </Link>
+                                                        </li>
+                                                    );
+                                                })}
+                                                <li>
+                                                    <Link to="/services" onClick={onClose} className="block py-3 pl-7 text-[15px] font-semibold text-kdm-blue">
+                                                        All services →
+                                                    </Link>
+                                                </li>
+                                            </motion.ul>
+                                        )}
+                                    </AnimatePresence>
+                                </>
+                            ) : (
+                                <Link to={n.to} onClick={onClose} className="flex items-baseline gap-3 py-4 font-display text-[26px] font-semibold text-kdm-ink">
+                                    <span className="t-num text-xs text-kdm-red-ink">{String(i + 1).padStart(2, '0')}</span>
+                                    {n.label}
+                                </Link>
+                            )}
+                        </motion.li>
+                    ))}
+                </ul>
+                <motion.div custom={NAV.length} variants={item} initial="hidden" animate="show" className="mt-8 space-y-5">
+                    <ButtonLink to="/contact" onClick={onClose} className="w-full justify-between">
+                        Let&apos;s talk
+                    </ButtonLink>
+                    <div className="grid gap-3 text-sm text-kdm-graphite">
+                        <a href={telHref(hq.phone)} className="flex items-center gap-3">
+                            <Phone className="h-4 w-4 text-kdm-red" aria-hidden="true" /> {formatPhone(hq.phone)}
+                        </a>
+                        <a href={`mailto:${hq.email}`} className="flex items-center gap-3 break-all">
+                            <Mail className="h-4 w-4 shrink-0 text-kdm-red" aria-hidden="true" /> {hq.email}
+                        </a>
+                    </div>
+                </motion.div>
+            </nav>
+        </motion.div>
+    );
+}
+
+// ---------------------------------------------------------------------------
+// Header
+// ---------------------------------------------------------------------------
+
 export default function Navbar() {
-    const { pathname } = useLocation();
+    const { pathname, hash } = useLocation();
     const [scrolled, setScrolled] = useState(false);
+    const [menu, setMenu] = useState(null); // 'services' | 'about' | null
+    const [hovered, setHovered] = useState(null);
     const [mobileOpen, setMobileOpen] = useState(false);
-    const [expanded, setExpanded] = useState(null);
+    const closeTimer = useRef();
+    const triggerRefs = useRef({});
 
     useEffect(() => {
-        const onScroll = () => setScrolled(window.scrollY > 24);
+        const onScroll = () => setScrolled(window.scrollY > 16);
         onScroll();
         window.addEventListener('scroll', onScroll, { passive: true });
         return () => window.removeEventListener('scroll', onScroll);
     }, []);
 
-    // Close the mobile menu on navigation and lock page scroll while it's open.
-    useEffect(() => setMobileOpen(false), [pathname]);
+    // Close everything on navigation.
     useEffect(() => {
-        document.body.style.overflow = mobileOpen ? 'hidden' : '';
+        setMenu(null);
+        setMobileOpen(false);
+    }, [pathname, hash]);
+
+    useEffect(() => {
+        if (!mobileOpen) return undefined;
+        const previous = document.body.style.overflow;
+        document.body.style.overflow = 'hidden';
+        const onKey = (e) => e.key === 'Escape' && setMobileOpen(false);
+        document.addEventListener('keydown', onKey);
         return () => {
-            document.body.style.overflow = '';
+            document.body.style.overflow = previous;
+            document.removeEventListener('keydown', onKey);
         };
     }, [mobileOpen]);
 
-    const isActive = (item) =>
-        item.to === '/' ? pathname === '/' : pathname === item.to || pathname.startsWith(`${item.to}/`);
+    useEffect(() => {
+        if (!menu) return undefined;
+        const onKey = (e) => {
+            if (e.key !== 'Escape') return;
+            triggerRefs.current[menu]?.focus();
+            setMenu(null);
+        };
+        document.addEventListener('keydown', onKey);
+        return () => document.removeEventListener('keydown', onKey);
+    }, [menu]);
+
+    useEffect(() => () => clearTimeout(closeTimer.current), []);
+
+    const openMenu = (name) => {
+        clearTimeout(closeTimer.current);
+        setMenu(name);
+    };
+    const scheduleClose = () => {
+        clearTimeout(closeTimer.current);
+        closeTimer.current = setTimeout(() => setMenu(null), 140);
+    };
+    const keepOpen = () => clearTimeout(closeTimer.current);
+
+    const solid = scrolled || menu || mobileOpen;
+    const activeIndex = NAV.findIndex((n) => n.match(pathname));
+    const pillIndex = hovered ?? (menu ? NAV.findIndex((n) => n.menu === menu) : activeIndex);
 
     return (
         <header className="fixed inset-x-0 top-0 z-50">
-            {/* Utility bar */}
             <div
                 className={cn(
-                    'hidden md:block bg-[#111111] text-gray-300 text-xs transition-all duration-300 overflow-hidden',
-                    scrolled ? 'max-h-0' : 'max-h-10',
+                    'relative z-50 transition-[background-color,box-shadow,border-color] duration-500 ease-kdm',
+                    solid ? 'border-b border-kdm-line bg-white/85 shadow-soft backdrop-blur-xl' : 'border-b border-transparent bg-transparent',
                 )}
             >
-                <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 flex h-9 items-center justify-between">
-                    <span>{hq.address}</span>
-                    <div className="flex items-center gap-5">
-                        <a href={`mailto:${hq.email}`} className="inline-flex items-center gap-1.5 hover:text-white">
-                            <Mail className="h-3.5 w-3.5" aria-hidden="true" /> {hq.email}
-                        </a>
-                        <a href={telHref(hq.phone)} className="inline-flex items-center gap-1.5 hover:text-white">
-                            <Phone className="h-3.5 w-3.5" aria-hidden="true" /> {formatPhone(hq.phone)}
-                        </a>
-                    </div>
-                </div>
-            </div>
+                <div className={cn('container-kdm flex items-center justify-between gap-6 transition-[height] duration-500 ease-kdm', scrolled ? 'h-16' : 'h-20')}>
+                    <Logo compact={scrolled} />
 
-            <nav
-                aria-label="Main"
-                className={cn(
-                    'border-b transition-all duration-300',
-                    scrolled
-                        ? 'bg-white/95 backdrop-blur-xl border-[#E6EAF0] shadow-[0_8px_30px_rgba(17,17,17,0.06)]'
-                        : 'bg-white border-transparent',
-                )}
-            >
-                <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 flex h-[72px] items-center justify-between gap-6">
-                    <Link to="/" className="flex items-center gap-3 shrink-0" aria-label="KDM Engineers Group — home">
-                        <img src="/images/logo.png" alt="" width="56" height="56" className="h-12 w-auto sm:h-14" />
-                        <span className="leading-none">
-                            <span className="block text-2xl sm:text-[28px] font-extrabold tracking-tight text-[#C4161C]">KDM</span>
-                            <span className="mt-1 block text-[10px] sm:text-[11px] font-semibold uppercase tracking-[0.28em] text-[#111111]">
-                                Engineers Group
-                            </span>
-                        </span>
-                    </Link>
-
-                    <ul className="hidden lg:flex items-center gap-7">
-                        {NAV.map((item) =>
-                            item.children ? (
-                                <DesktopDropdown key={item.label} item={item} active={isActive(item)} />
-                            ) : (
-                                <li key={item.label}>
-                                    <NavLink
-                                        to={item.to}
-                                        end={item.to === '/'}
-                                        className={({ isActive: active }) =>
-                                            cn(
-                                                'py-2 text-[15px] font-medium transition-colors',
-                                                active ? 'text-[#C4161C]' : 'text-gray-700 hover:text-[#C4161C]',
-                                            )
-                                        }
+                    <nav aria-label="Main" className="hidden lg:block">
+                        <ul className="flex items-center" onMouseLeave={() => setHovered(null)}>
+                            {NAV.map((n, i) => {
+                                const isActive = i === activeIndex;
+                                const pill = i === pillIndex && (
+                                    <motion.span
+                                        layoutId="nav-pill"
+                                        aria-hidden="true"
+                                        className="absolute inset-0 -z-10 rounded-full bg-kdm-ink/[0.05]"
+                                        transition={{ type: 'spring', stiffness: 420, damping: 36 }}
+                                    />
+                                );
+                                const cls = cn(
+                                    'relative z-0 flex items-center gap-1 rounded-full px-3.5 py-2 text-[14.5px] font-medium transition-colors xl:px-4',
+                                    isActive ? 'text-kdm-blue' : 'text-kdm-graphite hover:text-kdm-ink',
+                                );
+                                const dot = isActive && (
+                                    <span aria-hidden="true" className="absolute bottom-0.5 left-1/2 h-1 w-1 -translate-x-1/2 rounded-full bg-kdm-red" />
+                                );
+                                return (
+                                    <li
+                                        key={n.label}
+                                        onMouseEnter={() => {
+                                            setHovered(i);
+                                            if (n.menu) openMenu(n.menu);
+                                            else scheduleClose();
+                                        }}
+                                        onMouseLeave={() => n.menu && scheduleClose()}
                                     >
-                                        {item.label}
-                                    </NavLink>
-                                </li>
-                            ),
-                        )}
-                    </ul>
+                                        {n.menu ? (
+                                            <>
+                                            <button
+                                                type="button"
+                                                ref={(el) => {
+                                                    triggerRefs.current[n.menu] = el;
+                                                }}
+                                                aria-expanded={menu === n.menu}
+                                                aria-controls={`menu-${n.menu}`}
+                                                onClick={() => setMenu((m) => (m === n.menu ? null : n.menu))}
+                                                onFocus={() => setMenu((m) => (m && m !== n.menu ? null : m))}
+                                                className={cls}
+                                            >
+                                                {pill}
+                                                {n.label}
+                                                <ChevronDown className={cn('h-3.5 w-3.5 transition-transform duration-300', menu === n.menu && 'rotate-180')} aria-hidden="true" />
+                                                {dot}
+                                            </button>
+                                            {/* Rendered inside the item so Tab moves straight into the panel. */}
+                                            <AnimatePresence>
+                                                {menu === n.menu && (
+                                                    n.menu === 'services' ? (
+                                                        <ServicesPanel onNavigate={() => setMenu(null)} onEnter={keepOpen} onLeave={scheduleClose} />
+                                                    ) : (
+                                                        <AboutPanel onNavigate={() => setMenu(null)} onEnter={keepOpen} onLeave={scheduleClose} />
+                                                    )
+                                                )}
+                                            </AnimatePresence>
+                                            </>
+                                        ) : (
+                                            <Link to={n.to} className={cls} aria-current={isActive ? 'page' : undefined} onFocus={() => setMenu(null)}>
+                                                {pill}
+                                                {n.label}
+                                                {dot}
+                                            </Link>
+                                        )}
+                                    </li>
+                                );
+                            })}
+                        </ul>
+                    </nav>
 
-                    <div className="flex items-center gap-3">
-                        <Link
-                            to="/contact"
-                            className="hidden sm:inline-flex items-center rounded-full bg-[#C4161C] px-5 py-2.5 text-sm font-semibold text-white hover:bg-[#A31217] transition-colors"
-                        >
-                            Contact Us
-                        </Link>
+                    <div className="flex items-center gap-2">
+                        <ButtonLink to="/contact" size="sm" className="hidden sm:inline-flex">
+                            Let&apos;s talk
+                        </ButtonLink>
                         <button
                             type="button"
                             onClick={() => setMobileOpen((o) => !o)}
                             aria-expanded={mobileOpen}
                             aria-controls="mobile-menu"
                             aria-label={mobileOpen ? 'Close menu' : 'Open menu'}
-                            className="lg:hidden rounded-full p-2 text-[#111111] hover:bg-[#F5F7FA]"
+                            className="flex h-11 w-11 items-center justify-center rounded-full text-kdm-ink ring-1 ring-inset ring-kdm-line hover:bg-white lg:hidden"
                         >
-                            {mobileOpen ? <X className="h-6 w-6" /> : <Menu className="h-6 w-6" />}
+                            {mobileOpen ? <X className="h-5 w-5" /> : <Menu className="h-5 w-5" />}
                         </button>
                     </div>
                 </div>
-            </nav>
+            </div>
 
-            {/* Mobile menu */}
-            <AnimatePresence>
-                {mobileOpen && (
-                    <motion.div
-                        id="mobile-menu"
-                        initial={{ opacity: 0, y: -8 }}
-                        animate={{ opacity: 1, y: 0 }}
-                        exit={{ opacity: 0, y: -8 }}
-                        transition={{ duration: 0.2 }}
-                        className="lg:hidden fixed inset-x-0 top-[72px] bottom-0 overflow-y-auto bg-white border-t border-[#E6EAF0]"
-                    >
-                        <ul className="px-4 py-4">
-                            {NAV.map((item) => (
-                                <li key={item.label} className="border-b border-[#E6EAF0]">
-                                    {item.children ? (
-                                        <>
-                                            <button
-                                                type="button"
-                                                aria-expanded={expanded === item.label}
-                                                onClick={() => setExpanded((e) => (e === item.label ? null : item.label))}
-                                                className="flex w-full items-center justify-between py-4 text-lg font-medium text-[#111111]"
-                                            >
-                                                {item.label}
-                                                <ChevronDown className={cn('h-5 w-5 transition-transform', expanded === item.label && 'rotate-180')} />
-                                            </button>
-                                            {expanded === item.label && (
-                                                <ul className="pb-3">
-                                                    {item.children.map((child) => (
-                                                        <li key={child.to}>
-                                                            <Link to={child.to} className="block rounded-lg px-3 py-2.5 text-[15px] text-gray-600 hover:bg-[#F5F7FA] hover:text-[#C4161C]">
-                                                                {child.label}
-                                                            </Link>
-                                                        </li>
-                                                    ))}
-                                                </ul>
-                                            )}
-                                        </>
-                                    ) : (
-                                        <Link to={item.to} className="block py-4 text-lg font-medium text-[#111111]">
-                                            {item.label}
-                                        </Link>
-                                    )}
-                                </li>
-                            ))}
-                        </ul>
-                        <div className="px-4 pb-10 space-y-3">
-                            <Link to="/contact" className="flex w-full items-center justify-center rounded-full bg-[#C4161C] px-5 py-3 font-semibold text-white">
-                                Contact Us
-                            </Link>
-                            <a href={telHref(hq.phone)} className="flex items-center justify-center gap-2 py-2 text-gray-700">
-                                <Phone className="h-4 w-4" /> {formatPhone(hq.phone)}
-                            </a>
-                        </div>
-                    </motion.div>
-                )}
-            </AnimatePresence>
+            <AnimatePresence>{mobileOpen && <MobileMenu onClose={() => setMobileOpen(false)} />}</AnimatePresence>
         </header>
     );
 }

@@ -1,7 +1,9 @@
 import React, { lazy } from 'react';
 import { BrowserRouter, Navigate, Route, Routes, useLocation } from 'react-router-dom';
 import { QueryClientProvider } from '@tanstack/react-query';
+import { MotionConfig } from 'framer-motion';
 import { queryClientInstance } from '@/lib/query-client';
+import { IntroProvider } from '@/components/brand/IntroLoader';
 import SiteLayout from '@/components/site/SiteLayout';
 import Home from '@/pages/Home';
 import { services } from '@/content/services';
@@ -14,6 +16,7 @@ const Clients = lazy(() => import('@/pages/Clients'));
 const Services = lazy(() => import('@/pages/Services'));
 const ServiceDetail = lazy(() => import('@/pages/ServiceDetail'));
 const ShmPage = lazy(() => import('@/pages/ShmPage'));
+const Projects = lazy(() => import('@/pages/Projects'));
 const ProjectDetail = lazy(() => import('@/pages/ProjectDetail'));
 const Careers = lazy(() => import('@/pages/Careers'));
 const CareerDetail = lazy(() => import('@/pages/CareerDetail'));
@@ -44,27 +47,33 @@ function LegacyRedirect({ to }) {
 export default function App() {
     return (
         <QueryClientProvider client={queryClientInstance}>
-            <BrowserRouter>
-                <Routes>
-                    <Route element={<SiteLayout />}>
-                        <Route index element={<Home />} />
-                        <Route path="about" element={<About />} />
-                        <Route path="clients" element={<Clients />} />
-                        <Route path="services" element={<Services />} />
-                        <Route path="services/structural-health-monitoring" element={<ShmPage />} />
-                        <Route path="services/:slug" element={<ServiceDetail />} />
-                        <Route path="projects/:slug" element={<ProjectDetail />} />
-                        <Route path="careers" element={<Careers />} />
-                        <Route path="careers/:slug" element={<CareerDetail />} />
-                        <Route path="contact" element={<Contact />} />
-                        {Object.entries(LEGACY_REDIRECTS).flatMap(([from, to]) => [
-                            <Route key={from} path={from} element={<LegacyRedirect to={to} />} />,
-                            <Route key={`${from}/`} path={`${from}/`} element={<LegacyRedirect to={to} />} />,
-                        ])}
-                        <Route path="*" element={<NotFound />} />
-                    </Route>
-                </Routes>
-            </BrowserRouter>
+            {/* Transform animations are dropped for people who prefer reduced motion. */}
+            <MotionConfig reducedMotion="user">
+                <IntroProvider>
+                    <BrowserRouter>
+                        <Routes>
+                            <Route element={<SiteLayout />}>
+                                <Route index element={<Home />} />
+                                <Route path="about" element={<About />} />
+                                <Route path="clients" element={<Clients />} />
+                                <Route path="services" element={<Services />} />
+                                <Route path="services/structural-health-monitoring" element={<ShmPage />} />
+                                <Route path="services/:slug" element={<ServiceDetail />} />
+                                <Route path="projects" element={<Projects />} />
+                                <Route path="projects/:slug" element={<ProjectDetail />} />
+                                <Route path="careers" element={<Careers />} />
+                                <Route path="careers/:slug" element={<CareerDetail />} />
+                                <Route path="contact" element={<Contact />} />
+                                {Object.entries(LEGACY_REDIRECTS).flatMap(([from, to]) => [
+                                    <Route key={from} path={from} element={<LegacyRedirect to={to} />} />,
+                                    <Route key={`${from}/`} path={`${from}/`} element={<LegacyRedirect to={to} />} />,
+                                ])}
+                                <Route path="*" element={<NotFound />} />
+                            </Route>
+                        </Routes>
+                    </BrowserRouter>
+                </IntroProvider>
+            </MotionConfig>
         </QueryClientProvider>
     );
 }

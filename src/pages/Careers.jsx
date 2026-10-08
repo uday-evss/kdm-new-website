@@ -3,9 +3,17 @@ import { motion } from 'framer-motion';
 import { Link } from 'react-router-dom';
 import { useQuery } from '@tanstack/react-query';
 import { MapPin, Briefcase, Clock, Users, Building2, ArrowRight, CalendarDays, FileDown } from 'lucide-react';
-import { PageHero, usePageMeta } from '@/components/site/primitives';
+import { PageHero, SectionLabel, usePageMeta } from '@/components/site/primitives';
 import { media } from '@/content/media';
-import { ERP_API_URL, LIST_REFRESH_MS, LIVE_QUERY_OPTIONS, formatDateOnly } from '@/components/careers/careersCommon';
+import { careerTracks } from '@/content/home';
+import {
+    ERP_API_URL,
+    LIST_REFRESH_MS,
+    LIVE_QUERY_OPTIONS,
+    OPENINGS_QUERY_KEY,
+    fetchOpenings,
+    formatDateOnly,
+} from '@/components/careers/careersCommon';
 
 // Open positions come live from the KDM ERP: HR publishes a job opening
 // there and it shows up here; closing or deleting it there removes it.
@@ -21,13 +29,6 @@ const postedAgo = (iso) => {
     const months = Math.floor(days / 30);
     return `Posted ${months} month${months > 1 ? 's' : ''} ago`;
 };
-
-async function fetchOpenings() {
-    const response = await fetch(`${ERP_API_URL}/careers`);
-    if (!response.ok) throw new Error(`Openings request failed (${response.status})`);
-    const data = await response.json();
-    return data.postings ?? [];
-}
 
 function JobCard({ job, index }) {
     const facts = [
@@ -46,12 +47,12 @@ function JobCard({ job, index }) {
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true }}
             transition={{ duration: 0.4, delay: Math.min(index, 6) * 0.06 }}
-            className="group bg-white rounded-2xl border border-[#E6EAF0] shadow-xl p-6 sm:p-8 hover:border-[#C4161C]/30 transition-colors"
+            className="group bg-white rounded-panel border border-kdm-line shadow-soft p-6 sm:p-8 hover:border-kdm-blue/30 transition-colors"
         >
             <div className="flex flex-col lg:flex-row lg:items-start lg:justify-between gap-6">
                 <div className="min-w-0 flex-1">
                     <Link to={`/careers/${job.slug}`}>
-                        <h3 className="text-xl sm:text-2xl font-bold text-[#111111] group-hover:text-[#C4161C] transition-colors">
+                        <h3 className="font-display text-xl sm:text-2xl font-semibold text-kdm-ink group-hover:text-kdm-blue transition-colors">
                             {job.title}
                         </h3>
                     </Link>
@@ -59,7 +60,7 @@ function JobCard({ job, index }) {
                     {facts.length > 0 && (
                         <ul className="mt-3 flex flex-wrap gap-x-4 gap-y-1.5">
                             {facts.map(({ icon: Icon, text }) => (
-                                <li key={text} className="flex items-center gap-1 text-sm text-gray-500">
+                                <li key={text} className="flex items-center gap-1 text-sm text-kdm-muted">
                                     <Icon className="w-3.5 h-3.5" />
                                     {text}
                                 </li>
@@ -68,15 +69,15 @@ function JobCard({ job, index }) {
                     )}
 
                     {teaser && (
-                        <p className="mt-4 text-gray-600 leading-relaxed whitespace-pre-line line-clamp-3">{teaser}</p>
+                        <p className="mt-4 text-kdm-graphite leading-relaxed whitespace-pre-line line-clamp-3">{teaser}</p>
                     )}
 
-                    <div className="mt-5 flex flex-wrap items-center gap-x-4 gap-y-1 text-xs text-gray-500">
+                    <div className="mt-5 flex flex-wrap items-center gap-x-4 gap-y-1 text-xs text-kdm-muted">
                         {postedAgo(job.publishedAt) && <span>{postedAgo(job.publishedAt)}</span>}
                         {job.jdDownloadPath && (
                             <a
                                 href={`${ERP_API_URL}${job.jdDownloadPath}`}
-                                className="flex items-center gap-1 font-medium text-[#C4161C] hover:text-[#A31217]"
+                                className="flex items-center gap-1 font-medium text-kdm-blue hover:text-kdm-navy"
                             >
                                 <FileDown className="w-3.5 h-3.5" />
                                 Download JD
@@ -93,7 +94,7 @@ function JobCard({ job, index }) {
 
                 <Link
                     to={`/careers/${job.slug}`}
-                    className="inline-flex items-center justify-center gap-2 shrink-0 self-start rounded-full bg-[#C4161C] hover:bg-[#A31217] text-white text-sm font-semibold px-5 py-2.5 transition-colors"
+                    className="inline-flex items-center justify-center gap-2 shrink-0 self-start rounded-full bg-kdm-blue hover:bg-kdm-navy text-white text-sm font-semibold px-5 py-2.5 transition-colors"
                 >
                     View &amp; Apply
                     <ArrowRight className="w-4 h-4" />
@@ -106,7 +107,7 @@ function JobCard({ job, index }) {
 export default function Careers() {
     usePageMeta('Careers', 'Open positions at KDM Engineers Group — structural health monitoring, materials testing, geotechnical investigations and infrastructure consulting across India.');
     const { data: openings, isLoading, isError, refetch } = useQuery({
-        queryKey: ['careers-openings'],
+        queryKey: OPENINGS_QUERY_KEY,
         queryFn: fetchOpenings,
         ...LIVE_QUERY_OPTIONS,
         refetchInterval: LIST_REFRESH_MS,
@@ -115,21 +116,32 @@ export default function Careers() {
     return (
         <>
             <PageHero
-                title="Careers at KDM Engineers"
-                eyebrow="Join our team"
-                image={media.banners.find((b) => b.src.includes('/kdmksc-2-1.webp'))}
+                index="01"
+                eyebrow="Careers"
+                title={['Build the infrastructure', 'of tomorrow.']}
+                image={media.hero[0]}
+                imageAlt="Two KDM engineers in hard hats reviewing a site"
+                caption="Fig. 01 — On site"
                 crumbs={[{ label: 'Careers' }]}
             >
                 Join our engineers working on structural health monitoring, materials testing, geotechnical investigations
                 and infrastructure consulting across India.
+                <ul className="mt-6 flex flex-wrap gap-2">
+                    {careerTracks.map((t) => (
+                        <li key={t} className="rounded-full bg-white px-3 py-1.5 text-sm font-medium text-kdm-ink ring-1 ring-inset ring-kdm-line">
+                            {t}
+                        </li>
+                    ))}
+                </ul>
             </PageHero>
 
-            <section className="bg-[#F5F7FA]">
-            <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 py-16 sm:py-20">
-                <div className="mb-8">
-                    <h2 className="text-3xl sm:text-4xl font-bold text-[#111111]">Open Positions</h2>
+            <section className="bg-white">
+            <div className="container-kdm py-20 sm:py-28">
+                <div className="mb-10">
+                    <SectionLabel index="02">Open positions</SectionLabel>
+                    <h2 className="t-h2 mt-5">Current openings.</h2>
                     {openings && openings.length > 0 && (
-                        <p className="mt-3 text-sm font-medium text-gray-700">
+                        <p className="mt-3 text-sm font-medium text-kdm-graphite">
                             {openings.length} {openings.length === 1 ? 'role' : 'roles'} open right now
                         </p>
                     )}
@@ -138,25 +150,25 @@ export default function Careers() {
                 {isLoading && (
                     <div className="space-y-4">
                         {[0, 1, 2].map((i) => (
-                            <div key={i} className="h-40 bg-white rounded-2xl border border-[#E6EAF0] animate-pulse" />
+                            <div key={i} className="h-40 bg-white rounded-panel border border-kdm-line animate-pulse" />
                         ))}
                     </div>
                 )}
 
                 {isError && (
-                    <div className="bg-white rounded-2xl border border-[#E6EAF0] shadow-xl p-10 text-center">
-                        <p className="text-gray-700 font-medium">We couldn't load the open positions right now.</p>
-                        <button onClick={() => refetch()} className="mt-4 text-sm font-semibold text-[#C4161C] hover:text-[#A31217]">
+                    <div className="bg-white rounded-panel border border-kdm-line shadow-soft p-10 text-center">
+                        <p className="text-kdm-graphite font-medium">We couldn't load the open positions right now.</p>
+                        <button onClick={() => refetch()} className="mt-4 text-sm font-semibold text-kdm-blue hover:text-kdm-navy">
                             Try again
                         </button>
                     </div>
                 )}
 
                 {openings && openings.length === 0 && (
-                    <div className="bg-white rounded-2xl border border-[#E6EAF0] shadow-xl p-10 sm:p-14 text-center">
-                        <Briefcase className="w-10 h-10 text-[#C4161C] mx-auto" />
-                        <p className="mt-4 text-xl font-semibold text-[#111111]">No open positions right now</p>
-                        <p className="mt-2 text-gray-500">
+                    <div className="bg-white rounded-panel border border-kdm-line shadow-soft p-10 sm:p-14 text-center">
+                        <Briefcase className="w-10 h-10 text-kdm-blue mx-auto" />
+                        <p className="mt-4 text-xl font-semibold text-kdm-ink">No open positions right now</p>
+                        <p className="mt-2 text-kdm-muted">
                             New opportunities are posted here as soon as they open — please check back soon.
                         </p>
                     </div>

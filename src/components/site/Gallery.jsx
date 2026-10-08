@@ -32,7 +32,7 @@ export function Lightbox({ images, index, onClose, onIndex, label }) {
             role="dialog"
             aria-modal="true"
             aria-label={`${label} — photo ${index + 1} of ${images.length}`}
-            className="fixed inset-0 z-[100] flex items-center justify-center bg-black/90 p-4 sm:p-10"
+            className="fixed inset-0 z-[100] flex items-center justify-center bg-kdm-ink/95 p-4 sm:p-10"
             onClick={onClose}
         >
             <img
@@ -107,12 +107,12 @@ export default function Gallery({ images, label }) {
                             className={cn(
                                 'rounded-full px-4 py-2 text-sm font-medium transition-colors',
                                 category === c
-                                    ? 'bg-[#C4161C] text-white'
-                                    : 'bg-white text-gray-600 border border-[#E6EAF0] hover:border-[#C4161C]/40 hover:text-[#C4161C]',
+                                    ? 'bg-kdm-blue text-white'
+                                    : 'bg-white text-kdm-graphite ring-1 ring-inset ring-kdm-line hover:text-kdm-ink',
                             )}
                         >
                             {c}
-                            <span className={cn('ml-1.5 text-xs', category === c ? 'text-white/70' : 'text-gray-400')}>
+                            <span className={cn('ml-1.5 text-xs', category === c ? 'text-white/70' : 'text-kdm-muted')}>
                                 {c === 'All' ? images.length : images.filter((i) => i.category === c).length}
                             </span>
                         </button>
@@ -127,15 +127,15 @@ export default function Gallery({ images, label }) {
                             type="button"
                             onClick={() => setOpen(i)}
                             aria-label={`Open ${label} photo ${i + 1}${image.category ? ` (${image.category})` : ''}`}
-                            className="group relative block w-full overflow-hidden rounded-xl bg-[#E6EAF0] focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#C4161C]"
+                            className="group relative block w-full overflow-hidden rounded-card bg-kdm-mist"
                         >
                             <Img
                                 image={image}
                                 alt=""
                                 sizes="(min-width: 1024px) 25vw, (min-width: 768px) 33vw, 50vw"
-                                className="h-auto w-full transition-transform duration-500 group-hover:scale-105"
+                                className="h-auto w-full transition-transform duration-500 group-hover:scale-[1.04] duration-700 ease-kdm"
                             />
-                            <span className="absolute inset-0 flex items-center justify-center bg-black/0 group-hover:bg-black/30 transition-colors">
+                            <span className="absolute inset-0 flex items-center justify-center bg-kdm-navy/0 group-hover:bg-kdm-navy/30 transition-colors">
                                 <Maximize2 className="h-6 w-6 text-white opacity-0 group-hover:opacity-100 transition-opacity" aria-hidden="true" />
                             </span>
                         </button>

@@ -2,131 +2,215 @@
 @tailwind components;
 @tailwind utilities;
 
+/* ------------------------------------------------------------------ */
+/* KDM Engineering System — design tokens                              */
+/* Colours come from the KDM logo: the deep ring blue, the cyan field, */
+/* the red ring and sun, and the yellow base. Stored as RGB channels   */
+/* so Tailwind can apply opacity (bg-kdm-blue/10).                     */
+/* ------------------------------------------------------------------ */
 @layer base {
   :root {
-    --background: 0 0% 100%;
-    --foreground: 0 0% 3.9%;
+    --kdm-ink: 15 27 45;        /* #0F1B2D  headings, body text      */
+    --kdm-graphite: 51 66 90;   /* #33425A  secondary text           */
+    --kdm-muted: 91 107 130;    /* #5B6B82  captions (AA on white)   */
+    --kdm-line: 221 229 238;    /* #DDE5EE  hairlines, borders       */
+    --kdm-paper: 247 250 252;   /* #F7FAFC  page canvas              */
+    --kdm-surface: 238 244 248; /* #EEF4F8  quiet section background */
+    --kdm-mist: 227 238 245;    /* #E3EEF5  tinted panels            */
+    --kdm-blue: 21 59 143;      /* #153B8F  primary brand blue       */
+    --kdm-navy: 14 42 94;       /* #0E2A5E  deep blue                */
+    --kdm-cyan: 20 166 218;     /* #14A6DA  data / technical accent  */
+    --kdm-cyan-ink: 8 118 163;  /* #0876A3  cyan for small text (AA) */
+    --kdm-red: 226 50 31;       /* #E2321F  KDM red — signal colour  */
+    --kdm-red-ink: 190 38 22;   /* #BE2616  red for small text (AA)  */
+    --kdm-yellow: 246 196 0;    /* #F6C400  measurement marker       */
+
+    /* shadcn/ui tokens, mapped onto the KDM palette */
+    --background: 210 33% 98%;
+    --foreground: 215 50% 12%;
     --card: 0 0% 100%;
-    --card-foreground: 0 0% 3.9%;
+    --card-foreground: 215 50% 12%;
     --popover: 0 0% 100%;
-    --popover-foreground: 0 0% 3.9%;
-    --primary: 0 0% 9%;
-    --primary-foreground: 0 0% 98%;
-    --secondary: 0 0% 96.1%;
-    --secondary-foreground: 0 0% 9%;
-    --muted: 0 0% 96.1%;
-    --muted-foreground: 0 0% 45.1%;
-    --accent: 0 0% 96.1%;
-    --accent-foreground: 0 0% 9%;
-    --destructive: 0 84.2% 60.2%;
-    --destructive-foreground: 0 0% 98%;
-    --border: 0 0% 89.8%;
-    --input: 0 0% 89.8%;
-    --ring: 0 0% 3.9%;
-    --chart-1: 12 76% 61%;
-    --chart-2: 173 58% 39%;
-    --chart-3: 197 37% 24%;
-    --chart-4: 43 74% 66%;
-    --chart-5: 27 87% 67%;
-    --radius: 0.5rem;
-    --sidebar-background: 0 0% 98%;
-    --sidebar-foreground: 240 5.3% 26.1%;
-    --sidebar-primary: 240 5.9% 10%;
-    --sidebar-primary-foreground: 0 0% 98%;
-    --sidebar-accent: 240 4.8% 95.9%;
-    --sidebar-accent-foreground: 240 5.9% 10%;
-    --sidebar-border: 220 13% 91%;
-    --sidebar-ring: 217.2 91.2% 59.8%;
+    --popover-foreground: 215 50% 12%;
+    --primary: 221 74% 32%;
+    --primary-foreground: 0 0% 100%;
+    --secondary: 205 40% 95%;
+    --secondary-foreground: 215 50% 12%;
+    --muted: 205 40% 95%;
+    --muted-foreground: 215 18% 43%;
+    --accent: 205 40% 95%;
+    --accent-foreground: 215 50% 12%;
+    --destructive: 7 77% 50%;
+    --destructive-foreground: 0 0% 100%;
+    --border: 211 33% 90%;
+    --input: 211 33% 90%;
+    --ring: 221 74% 32%;
+    --radius: 0.875rem;
   }
 
-  .dark {
-    --background: 0 0% 3.9%;
-    --foreground: 0 0% 98%;
-    --card: 0 0% 3.9%;
-    --card-foreground: 0 0% 98%;
-    --popover: 0 0% 3.9%;
-    --popover-foreground: 0 0% 98%;
-    --primary: 0 0% 98%;
-    --primary-foreground: 0 0% 9%;
-    --secondary: 0 0% 14.9%;
-    --secondary-foreground: 0 0% 98%;
-    --muted: 0 0% 14.9%;
-    --muted-foreground: 0 0% 63.9%;
-    --accent: 0 0% 14.9%;
-    --accent-foreground: 0 0% 98%;
-    --destructive: 0 62.8% 30.6%;
-    --destructive-foreground: 0 0% 98%;
-    --border: 0 0% 14.9%;
-    --input: 0 0% 14.9%;
-    --ring: 0 0% 83.1%;
-    --chart-1: 220 70% 50%;
-    --chart-2: 160 60% 45%;
-    --chart-3: 30 80% 55%;
-    --chart-4: 280 65% 60%;
-    --chart-5: 340 75% 55%;
-    --sidebar-background: 240 5.9% 10%;
-    --sidebar-foreground: 240 4.8% 95.9%;
-    --sidebar-primary: 224.3 76.3% 48%;
-    --sidebar-primary-foreground: 0 0% 100%;
-    --sidebar-accent: 240 3.7% 15.9%;
-    --sidebar-accent-foreground: 240 4.8% 95.9%;
-    --sidebar-border: 240 3.7% 15.9%;
-    --sidebar-ring: 217.2 91.2% 59.8%;
-  }
-}
-
-
-
-@layer base {
   * {
-    @apply border-border outline-ring/50;
+    @apply border-border;
   }
 
-  body {
-    @apply bg-background text-foreground;
-  }
-}
-/* ------------------------------------------------------------------ */
-/* KDM site                                                            */
-/* ------------------------------------------------------------------ */
-@layer base {
   html {
-    scroll-behavior: smooth;
     -webkit-text-size-adjust: 100%;
+    scroll-padding-top: 5.5rem;
   }
 
   body {
-    font-family: 'Inter', ui-sans-serif, system-ui, -apple-system, 'Segoe UI', Roboto, sans-serif;
+    @apply bg-kdm-paper font-sans text-kdm-ink antialiased;
     font-feature-settings: 'cv11', 'ss01';
-    -webkit-font-smoothing: antialiased;
-    -moz-osx-font-smoothing: grayscale;
-    color: #111111;
+    text-rendering: optimizeLegibility;
   }
 
   h1, h2, h3, h4 {
-    font-family: 'Plus Jakarta Sans', 'Inter', ui-sans-serif, system-ui, sans-serif;
+    @apply font-display;
+    text-wrap: balance;
+  }
+
+  p {
+    text-wrap: pretty;
   }
 
   ::selection {
-    background: rgba(196, 22, 28, 0.15);
+    background: rgb(var(--kdm-cyan) / 0.22);
+  }
+
+  :focus-visible {
+    outline: 2px solid rgb(var(--kdm-blue));
+    outline-offset: 3px;
+    border-radius: 4px;
+  }
+
+  img {
+    @apply select-none;
   }
 }
 
+/* ------------------------------------------------------------------ */
+/* Typography + layout primitives                                      */
+/* ------------------------------------------------------------------ */
+@layer components {
+  .container-kdm {
+    @apply mx-auto w-full max-w-site px-4 sm:px-6 lg:px-10;
+  }
+
+  .t-display {
+    @apply font-display font-semibold text-kdm-ink;
+    font-size: clamp(2.6rem, 1.4rem + 5.2vw, 6.25rem);
+    line-height: 0.98;
+    letter-spacing: -0.035em;
+  }
+
+  .t-h1 {
+    @apply font-display font-semibold text-kdm-ink;
+    font-size: clamp(2.35rem, 1.5rem + 3.6vw, 4.5rem);
+    line-height: 1.02;
+    letter-spacing: -0.03em;
+  }
+
+  .t-h2 {
+    @apply font-display font-semibold text-kdm-ink;
+    font-size: clamp(1.9rem, 1.3rem + 2.5vw, 3.4rem);
+    line-height: 1.05;
+    letter-spacing: -0.028em;
+  }
+
+  .t-h3 {
+    @apply font-display font-semibold text-kdm-ink;
+    font-size: clamp(1.3rem, 1.1rem + 0.8vw, 1.75rem);
+    line-height: 1.15;
+    letter-spacing: -0.015em;
+  }
+
+  .t-lead {
+    @apply text-kdm-graphite;
+    font-size: clamp(1.05rem, 0.98rem + 0.35vw, 1.25rem);
+    line-height: 1.6;
+  }
+
+  /* Technical annotation: small caps-style label used for eyebrows,
+     coordinates and drawing callouts. */
+  .t-label {
+    @apply font-display text-[11px] font-medium uppercase tracking-[0.18em] sm:text-xs;
+  }
+
+  .t-num {
+    @apply font-display tabular-nums;
+    font-feature-settings: 'tnum';
+  }
+
+  /* Blueprint grid: a fine 24px grid with a stronger 120px module. */
+  .bg-blueprint {
+    background-image:
+      linear-gradient(rgb(var(--kdm-cyan) / 0.09) 1px, transparent 1px),
+      linear-gradient(90deg, rgb(var(--kdm-cyan) / 0.09) 1px, transparent 1px),
+      linear-gradient(rgb(var(--kdm-cyan) / 0.05) 1px, transparent 1px),
+      linear-gradient(90deg, rgb(var(--kdm-cyan) / 0.05) 1px, transparent 1px);
+    background-size: 120px 120px, 120px 120px, 24px 24px, 24px 24px;
+  }
+
+  /* Ruler ticks (minor every 8px, major every 40px). */
+  .bg-ruler {
+    background-image:
+      linear-gradient(90deg, rgb(var(--kdm-ink) / 0.55) 1px, transparent 1px),
+      linear-gradient(90deg, rgb(var(--kdm-ink) / 0.22) 1px, transparent 1px);
+    background-size: 40px 100%, 8px 45%;
+    background-repeat: repeat-x;
+    background-position: 0 0, 0 0;
+  }
+
+  /* Underline that draws in from the left on hover. */
+  .link-draw {
+    background-image: linear-gradient(currentColor, currentColor);
+    background-size: 0% 1px;
+    background-repeat: no-repeat;
+    background-position: 0 100%;
+    transition: background-size 0.45s cubic-bezier(0.22, 1, 0.36, 1);
+  }
+  .link-draw:hover,
+  .link-draw:focus-visible,
+  .group:hover .link-draw {
+    background-size: 100% 1px;
+  }
+
+  .mask-fade-x {
+    mask-image: linear-gradient(to right, transparent, black 7%, black 93%, transparent);
+  }
+
+  .mask-fade-radial {
+    mask-image: radial-gradient(ellipse 75% 70% at 50% 45%, black 35%, transparent 100%);
+  }
+
+  .no-scrollbar {
+    scrollbar-width: none;
+  }
+  .no-scrollbar::-webkit-scrollbar {
+    display: none;
+  }
+}
+
+/* Cheap staggered fade for many small drawing parts (set the delay
+   inline); avoids a JS animation per element. */
+@keyframes kdm-fade {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+.anim-fade {
+  opacity: 0;
+  animation: kdm-fade 0.4s ease forwards;
+}
+
+/* ------------------------------------------------------------------ */
+/* Motion: continuous loops stop for people who prefer reduced motion. */
+/* ------------------------------------------------------------------ */
 @media (prefers-reduced-motion: reduce) {
-  html {
-    scroll-behavior: auto;
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.001ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.001ms !important;
+    scroll-behavior: auto !important;
   }
-}
-
-/* Client logo marquee: the row is rendered twice, so sliding it by half
-   (plus half the gap) loops seamlessly. */
-@keyframes marquee {
-  from { transform: translateX(0); }
-  to { transform: translateX(calc(-50% - 12px)); }
-}
-
-/* Slow zoom on the home hero photos. */
-@keyframes kenburns {
-  from { transform: scale(1); }
-  to { transform: scale(1.12); }
 }

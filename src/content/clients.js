@@ -4,7 +4,7 @@
 
 const logo = (file) => `/media/clients/${file}.webp`;
 
-export const clients = [
+const list = [
     { name: 'National Highways Authority of India', logo: logo('logo-nhai'), sector: 'Government', featured: true },
     { name: 'Ministry of Road Transport & Highways', logo: logo('logo-morth'), sector: 'Government', featured: true },
     { name: 'Electronics Corporation of India Limited', logo: logo('logo-ecil'), sector: 'Government', featured: true },
@@ -47,3 +47,7 @@ export const clients = [
     { name: 'Vishwa Samudra', logo: logo('logo-vshwa-samudra'), sector: 'Private' },
     { name: 'Indian Road Survey and Management Pvt. Ltd.', logo: logo('logo-irsm'), sector: 'Private', featured: true },
 ];
+
+// Each logo also has a small version (≤200 × 112) for rows and grids; the
+// full-size file serves high-density screens.
+export const clients = list.map((c) => ({ ...c, logoSm: c.logo.replace(/\.webp$/, '-sm.webp') }));

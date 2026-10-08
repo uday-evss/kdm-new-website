@@ -8,6 +8,8 @@ export const company = {
     legalName: 'KDM Engineers [India] Pvt. Ltd.',
     tagline: 'Complete Civil Engineering Solutions',
     foundedYear: 2012,
+    // The words set around the gear in the KDM logo.
+    logoWords: ['Kwality', 'Design', 'Measure'],
     values: ['Integrity', 'Customer Delight', 'Social Commitment'],
 
     intro: [
@@ -57,6 +59,9 @@ export const company = {
         'The KDM Engineers Group has never left any stone unturned and is constantly one step ahead of the obstacles, striving to provide the client with satisfactory service as promised.',
     ],
 
+    // Portrait for the MD's message (null shows a monogram instead).
+    mdPortrait: { src: '/media/about/md-portrait.webp', sm: '/media/about/md-portrait-sm.webp', w: 1078, h: 1460 },
+
     directors: [
         { name: 'Er. K. Srinivasulu', role: 'Managing Director' },
         { name: 'Mrs. K. Subhashini', role: 'Director' },
@@ -99,6 +104,9 @@ export const company = {
         },
     ],
 };
+
+// Where the site is served from — used for canonical URLs and share previews.
+export const SITE_URL = (import.meta.env.VITE_SITE_URL || 'https://kdmengineers.com').replace(/\/$/, '');
 
 export const contact = {
     headOffice: {

@@ -1,11 +1,28 @@
 import React from 'react';
-import { Eye, Target, Gem, HeartHandshake, Quote, Users, ArrowRight } from 'lucide-react';
+import { motion } from 'framer-motion';
+import { Award, ShieldCheck } from 'lucide-react';
+import { cn } from '@/lib/utils';
+import { EASE } from '@/lib/motion';
 import { media } from '@/content/media';
 import { company } from '@/content/site';
-import { Container, PageHero, SectionHeading, Reveal, ButtonLink, usePageMeta } from '@/components/site/primitives';
+import { LogoMark } from '@/components/brand/Logo';
+import { BlueprintGrid, CornerMarks, Figure, MeasureRule } from '@/components/engineering';
+import {
+    Container,
+    Img,
+    MaskedImage,
+    PageHero,
+    Reveal,
+    RevealLines,
+    Section,
+    SectionHeading,
+    SectionLabel,
+    Stagger,
+    StaggerItem,
+    TextLink,
+    usePageMeta,
+} from '@/components/site/primitives';
 import { ClientMarquee, ContactBand } from '@/components/site/widgets';
-
-const PILLAR_ICONS = { Vision: Eye, Mission: Target, Strength: Gem };
 
 const initials = (name) =>
     name
@@ -16,176 +33,298 @@ const initials = (name) =>
         .map((w) => w[0])
         .join('');
 
+const PILLAR_STYLE = ['border-kdm-blue', 'border-kdm-cyan', 'border-kdm-red'];
 const CURRENT_YEAR = new Date().getFullYear();
+
+// The three words around the gear in the KDM logo — the name's meaning.
+function KdmMeaning() {
+    return (
+        <div className="relative rounded-panel bg-white p-8 shadow-soft ring-1 ring-kdm-line">
+            <CornerMarks />
+            <div className="flex items-center gap-5">
+                <LogoMark className="h-20" sizes="120px" />
+                <p className="t-label text-kdm-muted">What the letters stand for</p>
+            </div>
+            <ul className="mt-8 space-y-3">
+                {company.logoWords.map((w, i) => (
+                    <motion.li
+                        key={w}
+                        initial={{ opacity: 0, x: -16 }}
+                        animate={{ opacity: 1, x: 0 }}
+                        transition={{ duration: 0.7, ease: EASE, delay: 0.4 + i * 0.12 }}
+                        className="flex items-baseline gap-4 border-t border-kdm-line pt-3"
+                    >
+                        <span className="w-10 font-display text-4xl font-semibold text-kdm-red">{w[0]}</span>
+                        <span className="font-display text-3xl font-semibold tracking-tight text-kdm-ink">{w}</span>
+                    </motion.li>
+                ))}
+            </ul>
+        </div>
+    );
+}
+
+// Two companies, two paths, one group — drawn as converging lines.
+function Wings() {
+    const draw = (delay) => ({
+        initial: { pathLength: 0 },
+        whileInView: { pathLength: 1 },
+        viewport: { once: true, margin: '-15%' },
+        transition: { duration: 1.4, ease: EASE, delay },
+    });
+    return (
+        <div className="relative mx-auto mt-16 max-w-5xl">
+            <svg viewBox="0 0 1000 220" className="absolute inset-x-0 top-[88px] hidden h-[220px] w-full md:block" fill="none" aria-hidden="true">
+                <motion.path d="M250 0 C250 120, 500 90, 500 220" stroke="rgb(var(--kdm-blue))" strokeWidth="2" {...draw(0.2)} />
+                <motion.path d="M750 0 C750 120, 500 90, 500 220" stroke="rgb(var(--kdm-red))" strokeWidth="2" {...draw(0.35)} />
+                <motion.path d="M250 0 C250 120, 500 90, 500 220" stroke="rgb(var(--kdm-cyan))" strokeWidth="2" strokeDasharray="2 10" className="motion-safe:animate-dash-flow" {...draw(1.2)} />
+                <motion.path d="M750 0 C750 120, 500 90, 500 220" stroke="rgb(var(--kdm-yellow))" strokeWidth="2" strokeDasharray="2 10" className="motion-safe:animate-dash-flow" {...draw(1.3)} />
+            </svg>
+            <Stagger className="relative grid gap-6 md:grid-cols-2 md:gap-[18%]">
+                {company.wings.map((w, i) => (
+                    <StaggerItem key={w.abbr} className="relative rounded-panel bg-white p-6 text-center shadow-soft ring-1 ring-kdm-line">
+                        <p className={cn('t-label', i === 0 ? 'text-kdm-blue' : 'text-kdm-red-ink')}>Wing {String(i + 1).padStart(2, '0')}</p>
+                        <p className="mt-3 font-display text-xl font-semibold text-kdm-ink">{w.name}</p>
+                        <p className="t-label mt-2 text-kdm-muted">{w.abbr}</p>
+                    </StaggerItem>
+                ))}
+            </Stagger>
+            <Reveal delay={0.6} className="relative mx-auto mt-10 max-w-sm md:mt-[180px]">
+                <div className="rounded-panel bg-kdm-blue p-7 text-center text-white shadow-lift">
+                    <LogoMark className="mx-auto h-14" sizes="90px" />
+                    <p className="t-label mt-4 text-kdm-yellow">The group</p>
+                    <p className="mt-2 font-display text-2xl font-semibold">{company.name}</p>
+                </div>
+            </Reveal>
+        </div>
+    );
+}
+
+function Milestones() {
+    return (
+        <div className="relative mt-16">
+            <div aria-hidden="true" className="absolute left-0 right-0 top-[11px] hidden h-px bg-kdm-line md:block">
+                <motion.div
+                    className="h-full origin-left bg-gradient-to-r from-kdm-blue via-kdm-cyan to-kdm-red"
+                    initial={{ scaleX: 0 }}
+                    whileInView={{ scaleX: 1 }}
+                    viewport={{ once: true }}
+                    transition={{ duration: 1.8, ease: EASE }}
+                />
+            </div>
+            <Stagger as="ol" gap={0.12} className="relative grid gap-8 md:grid-cols-5 md:gap-6">
+                {company.milestones.map((m) => {
+                    const target = !m.done && Number(m.year) >= CURRENT_YEAR;
+                    return (
+                        <StaggerItem as="li" key={m.year} className="flex gap-5 md:block">
+                            <span
+                                aria-hidden="true"
+                                className={cn(
+                                    'mt-1 block h-[22px] w-[22px] shrink-0 rounded-full ring-4 ring-kdm-paper md:mt-0',
+                                    m.done ? 'bg-kdm-blue' : 'border-2 border-dashed border-kdm-red bg-white',
+                                )}
+                            />
+                            <div className="md:mt-6">
+                                <p className="t-num font-display text-4xl font-semibold text-kdm-ink">{m.year}</p>
+                                <p className="mt-2 leading-relaxed text-kdm-graphite">{m.text}</p>
+                                {(target || !m.done) && <p className="t-label mt-2 text-kdm-red-ink">{target ? 'Target' : 'Goal'}</p>}
+                            </div>
+                        </StaggerItem>
+                    );
+                })}
+            </Stagger>
+        </div>
+    );
+}
 
 export default function About() {
     usePageMeta('About Us', company.foreword[0]);
-    const banner = media.banners.find((b) => b.src.includes('/about-us.webp'));
     const md = company.directors[0];
+    const accreditation = company.accreditations[0];
+    const [lead, ...rest] = company.mdMessage;
+    const pull = company.mdMessage[1];
 
     return (
         <>
-            <PageHero title="About Us" eyebrow={company.tagline} image={banner} crumbs={[{ label: 'About Us' }]} />
+            <PageHero
+                index="01"
+                eyebrow="About KDM"
+                title={['Engineering credibility,', `built since ${company.foundedYear}.`]}
+                crumbs={[{ label: 'About Us' }]}
+                aside={<KdmMeaning />}
+            >
+                {company.foreword[0]}
+            </PageHero>
 
-            {/* Foreword + milestones */}
-            <section id="company" className="scroll-mt-28 bg-white py-20 sm:py-28">
-                <Container className="grid gap-16 lg:grid-cols-2 lg:gap-20">
-                    <Reveal>
-                        <SectionHeading eyebrow="About the Company" title="Foreword" />
-                        <div className="mt-8 space-y-5 text-lg leading-relaxed text-gray-600">
-                            {company.foreword.map((p) => (
-                                <p key={p}>{p}</p>
+            {/* Story */}
+            <Section id="company" tone="white">
+                <Container className="grid gap-14 lg:grid-cols-12 lg:gap-16">
+                    <div className="lg:col-span-6">
+                        <SectionHeading index="02" label="Our story" title={['Consultancy, testing', 'and training —', 'under one roof.']} />
+                        <div className="mt-8 space-y-5 text-lg leading-relaxed text-kdm-graphite">
+                            {company.intro.map((p) => (
+                                <Reveal key={p}>
+                                    <p>{p}</p>
+                                </Reveal>
                             ))}
                         </div>
-                        <div className="mt-10 rounded-2xl bg-[#F5F7FA] p-6 ring-1 ring-[#E6EAF0]">
-                            <p className="flex items-center gap-2 text-sm font-semibold uppercase tracking-wider text-[#C4161C]">
-                                <HeartHandshake className="h-4 w-4" aria-hidden="true" /> Our Values
-                            </p>
-                            <ul className="mt-4 flex flex-wrap gap-3">
-                                {company.values.map((v) => (
-                                    <li key={v} className="rounded-full bg-white px-4 py-2 text-sm font-semibold text-[#111111] ring-1 ring-[#E6EAF0]">
+                        <div className="mt-10">
+                            <p className="t-label text-kdm-muted">Our values</p>
+                            <ul className="mt-4 flex flex-wrap gap-2">
+                                {company.values.map((v, i) => (
+                                    <li key={v} className="flex items-center gap-2 rounded-full bg-kdm-paper px-4 py-2 font-semibold text-kdm-ink ring-1 ring-kdm-line">
+                                        <span aria-hidden="true" className={cn('h-2 w-2 rounded-full', ['bg-kdm-blue', 'bg-kdm-yellow', 'bg-kdm-red'][i])} />
                                         {v}
                                     </li>
                                 ))}
                             </ul>
                         </div>
-                    </Reveal>
-
-                    <Reveal delay={0.1}>
-                        <h3 className="text-sm font-semibold uppercase tracking-[0.2em] text-[#C4161C]">KDM Milestones</h3>
-                        <ol className="relative mt-8 border-l-2 border-[#E6EAF0] pl-8">
-                            {company.milestones.map((m) => (
-                                <li key={m.year} className="relative pb-10 last:pb-0">
-                                    <span
-                                        aria-hidden="true"
-                                        className={`absolute -left-[41px] top-0.5 flex h-5 w-5 items-center justify-center rounded-full ring-4 ring-white ${m.done ? 'bg-[#C4161C]' : 'border-2 border-[#C4161C] bg-white'}`}
-                                    />
-                                    <p className="text-2xl font-bold text-[#111111]">{m.year}</p>
-                                    <p className="mt-1 text-gray-600">{m.text}</p>
-                                    {!m.done && Number(m.year) >= CURRENT_YEAR && (
-                                        <p className="mt-1 text-xs font-semibold uppercase tracking-wider text-[#0E3A5D]">Target</p>
-                                    )}
-                                </li>
-                            ))}
-                        </ol>
-                    </Reveal>
+                    </div>
+                    <div className="lg:col-span-6">
+                        <Figure caption={`Fig. 01 — ${company.name}`}>
+                            <MaskedImage image={media.banners[0]} alt="Inside the KDM Engineers office" sizes="(min-width: 1024px) 45vw, 100vw" className="aspect-[4/3] rounded-panel" />
+                        </Figure>
+                    </div>
                 </Container>
-            </section>
+            </Section>
 
             {/* Vision / Mission / Strength */}
-            <section className="bg-[#F5F7FA] py-20 sm:py-28">
-                <Container>
-                    <SectionHeading eyebrow="We believe in our" title="Vision, Mission & Strength" align="center" />
-                    <ul className="mt-14 grid gap-6 md:grid-cols-3">
-                        {company.pillars.map((p, i) => {
-                            const Icon = PILLAR_ICONS[p.title];
-                            return (
-                                <Reveal as="li" key={p.title} delay={i * 0.08} className="rounded-3xl bg-white p-8 ring-1 ring-[#E6EAF0] shadow-sm">
-                                    <span className="flex h-12 w-12 items-center justify-center rounded-2xl bg-[#C4161C] text-white">
-                                        <Icon className="h-6 w-6" aria-hidden="true" />
-                                    </span>
-                                    <h3 className="mt-6 text-xl font-bold text-[#111111]">{p.title}</h3>
-                                    <p className="mt-3 leading-relaxed text-gray-600">{p.text}</p>
-                                </Reveal>
-                            );
-                        })}
-                    </ul>
+            <Section tone="paper">
+                <BlueprintGrid />
+                <Container className="relative">
+                    <SectionHeading index="03" label="We believe in our" title={['Vision, mission', '& strength.']} />
+                    <Stagger className="mt-14 grid gap-6 md:grid-cols-3">
+                        {company.pillars.map((p, i) => (
+                            <StaggerItem key={p.title} className={cn('rounded-panel border-t-4 bg-white p-8 shadow-soft', PILLAR_STYLE[i])}>
+                                <p className="t-num t-label text-kdm-muted">{String(i + 1).padStart(2, '0')}</p>
+                                <h3 className="t-h3 mt-4">{p.title}</h3>
+                                <p className="mt-4 leading-relaxed text-kdm-graphite">{p.text}</p>
+                            </StaggerItem>
+                        ))}
+                    </Stagger>
                 </Container>
-            </section>
+            </Section>
 
-            {/* Wings of KDM */}
-            <section id="wings" className="scroll-mt-28 bg-white py-20 sm:py-28">
+            {/* Wings */}
+            <Section id="wings" tone="white">
                 <Container>
-                    <SectionHeading eyebrow="Our structure" title="Wings of KDM Group" align="center">
-                        Two companies under one group, providing optimum engineering solutions in all aspects.
+                    <SectionHeading index="04" label="Wings of KDM" title={['Two companies.', 'One group.']} align="center">
+                        Two wings established to provide optimum engineering solutions in all aspects.
                     </SectionHeading>
-                    <Reveal className="mx-auto mt-14 max-w-4xl">
-                        <div className="flex flex-col items-center">
-                            <div className="rounded-2xl bg-[#111111] px-8 py-5 text-center shadow-xl">
-                                <p className="text-xs font-semibold uppercase tracking-[0.2em] text-[#F2B705]">The Group</p>
-                                <p className="mt-1 text-xl font-bold text-white">{company.name}</p>
-                            </div>
-                            <span aria-hidden="true" className="h-10 w-0.5 bg-[#E6EAF0]" />
-                            <span aria-hidden="true" className="hidden sm:block h-0.5 w-1/2 bg-[#E6EAF0]" />
-                            <div className="grid w-full gap-6 sm:grid-cols-2">
-                                {company.wings.map((w) => (
-                                    <div key={w.abbr} className="relative flex flex-col items-center">
-                                        <span aria-hidden="true" className="hidden sm:block h-8 w-0.5 bg-[#E6EAF0]" />
-                                        <div className="w-full rounded-2xl border-t-4 border-[#C4161C] bg-[#F5F7FA] p-6 text-center ring-1 ring-[#E6EAF0]">
-                                            <p className="text-lg font-bold text-[#111111]">{w.name}</p>
-                                            <p className="mt-1 text-sm font-semibold text-[#C4161C]">{w.abbr}</p>
-                                        </div>
-                                    </div>
-                                ))}
-                            </div>
-                        </div>
-                    </Reveal>
+                    <Wings />
                 </Container>
-            </section>
+            </Section>
 
             {/* MD's message */}
-            <section id="md-message" className="scroll-mt-28 bg-[#111111] py-20 sm:py-28">
-                <Container className="grid gap-12 lg:grid-cols-12 lg:gap-16">
-                    <Reveal className="lg:col-span-4">
-                        <SectionHeading eyebrow="Leadership" title="Message from MD's Desk" tone="dark" />
-                        <div className="mt-10 flex items-center gap-4">
-                            <span className="flex h-16 w-16 items-center justify-center rounded-full bg-[#C4161C] text-xl font-bold text-white" aria-hidden="true">
-                                {initials(md.name)}
-                            </span>
-                            <span>
-                                <span className="block text-lg font-semibold text-white">{md.name}</span>
-                                <span className="text-sm text-gray-400">{md.role}</span>
-                            </span>
+            <Section id="md-message" tone="surface" className="overflow-hidden">
+                <BlueprintGrid />
+                <Container className="relative grid gap-14 lg:grid-cols-12 lg:gap-16">
+                    <div className="lg:col-span-4">
+                        <SectionLabel index="05">Message from the MD&apos;s desk</SectionLabel>
+                        <div className="relative mt-8 max-w-[240px] sm:max-w-sm">
+                            {company.mdPortrait ? (
+                                <Img image={company.mdPortrait} alt={`${md.name}, ${md.role}`} sizes="(min-width: 640px) 384px, 240px" className="aspect-[4/5] w-full rounded-panel object-cover object-[40%_30%]" />
+                            ) : (
+                                <div className="flex aspect-[4/5] w-full items-center justify-center rounded-panel bg-white ring-1 ring-kdm-line">
+                                    <span className="font-display text-8xl font-semibold tracking-tight text-kdm-blue/90">{initials(md.name)}</span>
+                                </div>
+                            )}
+                            <CornerMarks />
                         </div>
-                    </Reveal>
-                    <Reveal delay={0.1} className="lg:col-span-8">
-                        <figure className="relative rounded-3xl bg-white/5 p-8 sm:p-12 ring-1 ring-white/10">
-                            <Quote className="absolute -top-5 left-8 h-10 w-10 rounded-full bg-[#C4161C] p-2 text-white" aria-hidden="true" />
-                            <blockquote className="space-y-5 text-lg leading-relaxed text-gray-300">
-                                {company.mdMessage.map((p) => (
-                                    <p key={p}>{p}</p>
-                                ))}
-                            </blockquote>
-                            <figcaption className="mt-8 text-sm font-semibold text-[#F2B705]">
-                                — {md.name}, {md.role}
-                            </figcaption>
-                        </figure>
-                    </Reveal>
-                </Container>
-            </section>
-
-            {/* Core team */}
-            <section id="team" className="scroll-mt-28 bg-white py-20 sm:py-28">
-                <Container>
-                    <SectionHeading eyebrow="Board of Directors" title="Meet our Core Team" align="center" />
-                    <ul className="mx-auto mt-14 grid max-w-4xl gap-6 sm:grid-cols-3">
-                        {company.directors.map((d, i) => (
-                            <Reveal as="li" key={d.name} delay={i * 0.08} className="rounded-3xl bg-[#F5F7FA] p-8 text-center ring-1 ring-[#E6EAF0]">
-                                <span className="mx-auto flex h-20 w-20 items-center justify-center rounded-full bg-white text-2xl font-bold text-[#C4161C] ring-4 ring-[#C4161C]/15" aria-hidden="true">
-                                    {initials(d.name)}
-                                </span>
-                                <h3 className="mt-6 text-lg font-bold text-[#111111]">{d.name}</h3>
-                                <p className="mt-1 text-sm font-medium text-[#C4161C]">{d.role}</p>
+                        <p className="mt-6 font-display text-xl font-semibold text-kdm-ink">{md.name}</p>
+                        <p className="text-kdm-muted">{md.role}</p>
+                    </div>
+                    <div className="lg:col-span-8">
+                        <RevealLines as="blockquote" lines={[`“${pull}”`]} className="t-h2 !leading-[1.12] lg:mt-10" />
+                        <MeasureRule className="my-12" at="20%" />
+                        <div className="grid gap-6 text-lg leading-relaxed text-kdm-graphite md:grid-cols-2">
+                            <Reveal>
+                                <p>{lead}</p>
                             </Reveal>
-                        ))}
-                    </ul>
+                            <Reveal delay={0.1}>
+                                {rest
+                                    .filter((p) => p !== pull)
+                                    .map((p) => (
+                                        <p key={p}>{p}</p>
+                                    ))}
+                                <p className="mt-6 font-display font-semibold text-kdm-ink">— {md.name}, {md.role}</p>
+                            </Reveal>
+                        </div>
+                    </div>
                 </Container>
-            </section>
+            </Section>
+
+            {/* Leadership */}
+            <Section id="team" tone="white">
+                <Container>
+                    <SectionHeading index="06" label="Board of directors" title="Leadership." />
+                    <Stagger className="mt-14 grid gap-6 sm:grid-cols-3">
+                        {company.directors.map((d, i) => (
+                            <StaggerItem key={d.name} className="group relative rounded-panel bg-kdm-paper p-8 ring-1 ring-kdm-line">
+                                <span className="t-num t-label text-kdm-muted">{String(i + 1).padStart(2, '0')}</span>
+                                {i === 0 && company.mdPortrait ? (
+                                    <Img image={company.mdPortrait} alt="" sizes="80px" className="mt-6 h-20 w-20 rounded-full object-cover object-[40%_25%] ring-1 ring-kdm-line" />
+                                ) : (
+                                    <span
+                                        aria-hidden="true"
+                                        className="mt-6 flex h-20 w-20 items-center justify-center rounded-full bg-white font-display text-2xl font-semibold text-kdm-blue ring-1 ring-kdm-line transition-colors duration-500 group-hover:bg-kdm-blue group-hover:text-white"
+                                    >
+                                        {initials(d.name)}
+                                    </span>
+                                )}
+                                <h3 className="t-h3 mt-6">{d.name}</h3>
+                                <p className="mt-1 font-medium text-kdm-red-ink">{d.role}</p>
+                            </StaggerItem>
+                        ))}
+                    </Stagger>
+                </Container>
+            </Section>
+
+            {/* Milestones */}
+            <Section id="milestones" tone="paper">
+                <Container>
+                    <SectionHeading index="07" label="KDM milestones" title={['From one company', 'to a group with a goal.']} />
+                    <Milestones />
+                </Container>
+            </Section>
+
+            {/* Accreditation */}
+            <Section tone="white">
+                <Container className="grid items-center gap-14 lg:grid-cols-12">
+                    <div className="lg:col-span-7">
+                        <SectionLabel index="08">Accreditation</SectionLabel>
+                        <h2 className="t-h2 mt-5">{accreditation.title}</h2>
+                        <p className="t-lead mt-6">{accreditation.text}</p>
+                        <p className="mt-6 inline-flex items-center gap-2 rounded-full bg-kdm-surface px-4 py-2 text-sm font-semibold text-kdm-blue">
+                            <ShieldCheck className="h-4 w-4" aria-hidden="true" /> Certificate No. {accreditation.certificateNo}
+                        </p>
+                    </div>
+                    <div className="lg:col-span-5">
+                        <a
+                            href={accreditation.image.src}
+                            target="_blank"
+                            rel="noopener noreferrer"
+                            aria-label="View the NABL accreditation certificate"
+                            className="group relative mx-auto block max-w-xs"
+                        >
+                            <Img image={accreditation.image} alt="NABL accreditation certificate" sizes="320px" className="w-full rounded-card shadow-lift ring-1 ring-kdm-line transition-transform duration-500 group-hover:-translate-y-1" />
+                            <span className="absolute -right-4 -top-4 flex h-12 w-12 items-center justify-center rounded-full bg-kdm-yellow text-kdm-ink shadow-soft">
+                                <Award className="h-6 w-6" aria-hidden="true" />
+                            </span>
+                        </a>
+                    </div>
+                </Container>
+            </Section>
 
             {/* Clients */}
-            <section className="bg-[#F5F7FA] py-20">
-                <Container>
-                    <div className="flex flex-wrap items-end justify-between gap-6">
-                        <SectionHeading eyebrow="Trusted by" title="Our Clients" />
-                        <ButtonLink to="/clients" variant="outline">
-                            <Users className="h-4 w-4" aria-hidden="true" /> Full Clientele <ArrowRight className="h-4 w-4" aria-hidden="true" />
-                        </ButtonLink>
-                    </div>
-                    <div className="mt-12">
-                        <ClientMarquee />
-                    </div>
+            <Section tone="paper" className="overflow-hidden">
+                <Container className="flex flex-wrap items-end justify-between gap-6">
+                    <SectionHeading index="09" label="Trusted by" title="Our clients." />
+                    <TextLink to="/clients">Full clientele</TextLink>
                 </Container>
-            </section>
+                <div className="mt-12">
+                    <ClientMarquee />
+                </div>
+            </Section>
 
             <ContactBand />
         </>

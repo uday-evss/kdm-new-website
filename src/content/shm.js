@@ -186,3 +186,68 @@ export const shm = {
         },
     ],
 };
+
+// The sensor guide on the home page and SHM page: what each instrument
+// measures and why it matters, written from the instrumentation notes above
+// and from the scope of KDM's completed projects (no new specifications).
+// `signal` picks the shape of the illustrative trace drawn for it.
+export const sensorGuide = [
+    {
+        id: 'accelerometer',
+        name: 'Accelerometer',
+        measures: 'Vibration and acceleration — tri-axial, recording up to ±8g with extremely low noise and drift.',
+        why: 'Ambient vibration testing reveals natural frequencies and how the structure responds to live loads from passing trains and traffic.',
+        signal: 'vibration',
+    },
+    {
+        id: 'tilt',
+        name: 'Tilt sensor / inclinometer',
+        measures: 'Rotation and tilt of piers and structural members.',
+        why: 'Pier tilt and rotation monitoring tracks how supports behave under load and over time.',
+        signal: 'drift',
+    },
+    {
+        id: 'strain',
+        name: 'Strain gauge',
+        measures: 'Strain — its electrical resistance varies with the force applied to the member.',
+        why: 'Shows the stresses carried by girders, arches and hangers — such as the DINA hangers of the Rajahmundry arch bridge.',
+        signal: 'cyclic',
+    },
+    {
+        id: 'displacement',
+        name: 'Displacement sensor (LVDT)',
+        measures: 'Linear movement, converted into a corresponding electrical signal.',
+        why: 'Deck deflections and the relative displacement between rail and deck in rail–structure interaction studies.',
+        signal: 'step',
+    },
+    {
+        id: 'load-cell',
+        name: 'Load cell',
+        measures: 'Force — strain gauges in a Wheatstone bridge, calibrated so force relates directly to resistance change.',
+        why: 'Bridge load testing and verifying the forces in structural members.',
+        signal: 'step',
+    },
+    {
+        id: 'temperature',
+        name: 'Temperature sensor',
+        measures: 'Temperature of the structure and its surroundings.',
+        why: 'Expansion and contraction under temperature change drive rail–structure interaction forces, so temperature frames every other reading.',
+        signal: 'diurnal',
+    },
+    {
+        id: 'water-level',
+        name: 'Water level & scour',
+        measures: 'River water level and scour around foundations.',
+        why: 'Keeps watch on the hydraulic conditions around bridge piers and their foundations.',
+        signal: 'drift',
+    },
+    {
+        id: 'aggregator',
+        name: 'Data aggregator',
+        measures: 'Collects data from wireless and inertial sensors.',
+        why: 'Data is securely stored, viewed and analysed with alerts set up — collected over Ethernet, SensorCloud or MicroUSB.',
+        signal: 'packets',
+    },
+];
+
+export const analysisSoftware = ['SensorConnect', 'MATLAB', 'MIDAS', 'ANSYS', 'STAAD Pro'];

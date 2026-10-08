@@ -1,11 +1,13 @@
 import React, { Suspense, useEffect } from 'react';
-import { Outlet, useLocation } from 'react-router-dom';
+import { useLocation, useOutlet } from 'react-router-dom';
+import { motion, useScroll, useSpring } from 'framer-motion';
+import { EASE } from '@/lib/motion';
 import Navbar from './Navbar';
 import Footer from './Footer';
 
 // Scrolls to the top on every new page, or to the #section a link points at
 // (e.g. /about#md-message) once that page has rendered. Sections offset the
-// fixed header with scroll-margin (scroll-mt-*).
+// fixed header with scroll-margin.
 function ScrollManager() {
     const { pathname, hash } = useLocation();
     useEffect(() => {
@@ -29,21 +31,41 @@ function ScrollManager() {
     return null;
 }
 
+// A hairline across the top of the window that follows the reading position.
+function ScrollProgress() {
+    const { scrollYProgress } = useScroll();
+    const scaleX = useSpring(scrollYProgress, { stiffness: 200, damping: 40, restDelta: 0.001 });
+    return (
+        <motion.div
+            aria-hidden="true"
+            style={{ scaleX }}
+            className="fixed inset-x-0 top-0 z-[60] h-[2px] origin-left bg-gradient-to-r from-kdm-cyan via-kdm-blue to-kdm-red"
+        />
+    );
+}
+
 export default function SiteLayout() {
+    const { pathname } = useLocation();
+    const outlet = useOutlet();
+
     return (
         <>
             <a
                 href="#main"
-                className="sr-only focus:not-sr-only focus:fixed focus:left-4 focus:top-4 focus:z-[100] focus:rounded-full focus:bg-white focus:px-4 focus:py-2 focus:text-sm focus:font-semibold focus:shadow-lg"
+                className="sr-only focus:not-sr-only focus:fixed focus:left-4 focus:top-4 focus:z-[100] focus:rounded-full focus:bg-white focus:px-4 focus:py-2 focus:text-sm focus:font-semibold focus:shadow-lift"
             >
                 Skip to content
             </a>
             <ScrollManager />
+            <ScrollProgress />
             <Navbar />
-            <main id="main">
-                {/* Lazy pages: hold the space with a quiet placeholder while they load. */}
-                <Suspense fallback={<div className="min-h-[70vh] bg-[#F5F7FA]" aria-busy="true" />}>
-                    <Outlet />
+            <main id="main" tabIndex={-1} className="outline-none">
+                {/* Lazy pages: hold more than a screen of space while they load, so the footer never flashes into view and jumps. */}
+                <Suspense fallback={<div className="min-h-[120vh] bg-kdm-paper" aria-busy="true" />}>
+                    {/* A short settle on every page change — quick enough never to slow navigation. */}
+                    <motion.div key={pathname} initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.4, ease: EASE }}>
+                        {outlet}
+                    </motion.div>
                 </Suspense>
             </main>
             <Footer />

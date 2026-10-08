@@ -2,6 +2,15 @@ import { media } from './media';
 
 // Completed Structural Health Monitoring projects — the project posts of the
 // live site. Slugs match the old WordPress URLs (redirected from /<slug>/).
+//
+// `facts` and `methods` are lifted from each project's own text (overview and
+// scope of work) for the spec sheets and story panels. `place` is the place
+// named in the project title; `approx` is that place's approximate
+// latitude/longitude, used only to position it on the regional map (shown as
+// "approximate", never as a survey coordinate). `cover` is the strongest
+// photo from the project's own set.
+
+const pick = (slug, name) => media[`projects/${slug}`].find((m) => m.src.includes(`/${name}.webp`));
 
 export const projects = [
     {
@@ -11,6 +20,11 @@ export const projects = [
         subject: "Bridge No. 175 - Navadgi",
         client: "South Central Railway, India",
         images: media["projects/navadgi-bridge"],
+        cover: pick("navadgi-bridge", "gulbarga-1"),
+        place: "Navadgi",
+        approx: [17.1, 76.95],
+        facts: ["81.00 m overall", "4 spans × 20.00 m", "PSC 'I' girders"],
+        methods: ["Rail Structure Interaction", "MIDAS finite element model"],
         sections: [
             { heading: "Overview of the Structure", paragraphs: ["This bridge is constructed on the river with pre-stressed concrete ‘I’ Girder supported on circular pier. The overall length of bridge is 81.00 m comprising 4 spans of each 20.00 m."] },
             { heading: "Scope of Work", paragraphs: ["The scope of work includes finding out the following parameters. Maximum horizontal displacement of the deck due to longitudinal loads. Relative displacement between rail and deck due to longitudinal loads. Additional tensile and compressive stresses in rails due to thermal loads in summer. Finding out the Maximum displacement in the deck due to rotation. Maximum vertical displacement of the deck at ends. Numerical Modelling and analysis. Generation of Finite element model using MIDAS."] },
@@ -24,6 +38,11 @@ export const projects = [
         subject: "Bridge No. 832 - Jagdalpur",
         client: "East Coast Railway, India",
         images: media["projects/jagdalpur-bridge"],
+        cover: pick("jagdalpur-bridge", "jagdalpur-1"),
+        place: "Jagdalpur",
+        approx: [19.07, 82.02],
+        facts: ["61.00 m overall", "3 spans", "Composite girder"],
+        methods: ["Rail Structure Interaction"],
         sections: [
             { heading: "Overview of the Structure", paragraphs: ["This bridge is constructed on the canal with a composite Girder. The overall length of the bridge is 61.00 m comprising 3 spans."] },
             { heading: "Scope of Work", paragraphs: ["Scope of work includes finding out the following parameters like the interaction takes place due to expansion or contraction of deck and rails under change of temperature, longitudinal deformation of sub structure under braking, tractive forces from rolling stock (locomotive, wagons, other railway vehicles) and vertical bending/flexure of the deck under live loads."] },
@@ -37,6 +56,11 @@ export const projects = [
         subject: "Bridge No. 176 Between Khariar-Nawapara Stations",
         client: "East Coast Railway, India",
         images: media["projects/raipur-bridge"],
+        cover: pick("raipur-bridge", "raipur-1"),
+        place: "Khariar – Nawapara",
+        approx: [20.85, 82.5],
+        facts: ["36.60 m overall", "3 spans × 12.20 m", "PSC 'I' girders"],
+        methods: ["Rail Structure Interaction", "MIDAS finite element model"],
         sections: [
             { heading: "Overview of the Structure", paragraphs: ["This bridge is constructed on the river with Pre-stressed concrete ‘I’ Girder supported on the circular pier. The overall length of the bridge is 36.60 m comprising 3 spans of each 12.20 m."] },
             { heading: "Scope of Work", paragraphs: ["Scope of work includes finding out the following parameters. Maximum horizontal displacement of the deck due to longitudinal loads. Relative displacement between rail and deck due to longitudinal loads. Additional tensile and compressive stresses in rails due to thermal loads in summer. Finding out the Maximum displacement in the deck due to rotation. Maximum vertical displacement of the deck at ends. Numerical Modelling and analysis. Generation of Finite element model using MIDAS."] },
@@ -50,6 +74,11 @@ export const projects = [
         subject: "Bridge No. 142 – Mancherial Stone Masonry",
         client: "South Central Railway, India",
         images: media["projects/mancherial-godavari-bridge"],
+        cover: pick("mancherial-godavari-bridge", "mancherial-7"),
+        place: "Mancherial",
+        approx: [18.87, 79.45],
+        facts: ["Stone masonry bridge", "Across the Godavari"],
+        methods: ["Ambient Vibration Test", "Operational Modal Analysis", "Numerical modal analysis"],
         sections: [
             { heading: "Overview of the Structure", paragraphs: ["This bridge is constructed on the river with Pre-stressed concrete ‘I’ Girder supported on the circular pier. The overall length of the bridge is 36.60 m comprising 3 spans of each 12.20 m."] },
             { heading: "Scope of Work", paragraphs: ["Instrumentation for Structural condition assessment & validation of results by evaluation of natural frequencies, stiffness, and parameters by Ambient Vibration Test (AVT), OMA, and Numerical modal analysis."] },
@@ -64,6 +93,11 @@ export const projects = [
         subject: "Bridge No. 375 – Gadwal Before and After Bearing Replacement",
         client: "South Central Railway, India",
         images: media["projects/gadwal-bridge"],
+        cover: pick("gadwal-bridge", "dscn9124"),
+        place: "Gadwal",
+        approx: [16.23, 77.8],
+        facts: ["254.40 m overall", "21 spans × 12.20 m", "PSC box girders"],
+        methods: ["Ambient Vibration Test", "Accelerometers", "Before / after bearing replacement"],
         sections: [
             { heading: "Overview of the Structure", paragraphs: ["The bridge is constructed across Okku Setty river which is a tributary river of Krishna. The overall length of bridge is 254.40m with 21 spans of 12.20 m. The superstructure of bridge is PSC box girders supported on RCC piers and resting on open foundation."] },
             { heading: "Scope of Work", paragraphs: ["Carrying out visual inspection, Ambient Vibration Test (AVT) to check condition of bridge and to identify the system properties for bridge deck. Accelerometer sensors are used to record the vibration data from current ongoing traffic/train before and after bearing replacement on the bridge."] },
@@ -78,6 +112,11 @@ export const projects = [
         subject: "Bridge No. 248 – Rajahmundry Bow String Arch Bridge",
         client: "East Coast Railway, India",
         images: media["projects/rajamundry-bridge"],
+        cover: pick("rajamundry-bridge", "rajamundry-3"),
+        place: "Rajahmundry",
+        approx: [17.0, 81.78],
+        facts: ["28 spans × 97.552 m", "Bowstring arches", "Twin RCC arches, DINA hangers"],
+        methods: ["Hanger strain", "Tri-axial accelerometers", "Pier tilt", "Camber & profile survey"],
         sections: [
             { heading: "Overview of the Structure", paragraphs: ["The III-Godavari Bridge consists of PSC boxes with Bowstring arches and having 28 spans of 97.552m each. The bridge was opened for rail transport in 1997. The prestressed box is connected to the twin RCC arches by means of 12 DINA hangers. The bridge is one of the iconic constructions built across Godavari bridge on Kovvuru Rajhamundry section."] },
             { heading: "Scope of Work", paragraphs: ["Visual inspection of bridge. Checking existing profile of superstructure i.e., Arch, Tie girder & compare with original profile. Strain in all DINA Hangers and observations of expansion/contraction during live loads at different speeds of passenger and Goods trains to assess the behavior of Hangers. Measuring existing camber, bearing moments and checking with design standards. Carrying out Ambient Vibration Test (AVT) using Tri Axial Accelerometer sensors to record the vibrations of deck, Deflections / displacements of Deck & Soffit slabs of Tie Girder at different loading conditions at different speeds and Observation of Tilt on Piers."] },
@@ -91,6 +130,11 @@ export const projects = [
         subject: "Bridge No. 325 between Rahenbhata-Titlagarh stations",
         client: "East Coast Railway, India",
         images: media["projects/bridge-between-rahenbhata-titlagarh-station"],
+        cover: pick("bridge-between-rahenbhata-titlagarh-station", "titlagarh-10"),
+        place: "Rahenbhata – Titlagarh",
+        approx: [20.29, 83.12],
+        facts: ["36.60 m overall", "3 spans × 12.20 m", "PSC 'I' girders"],
+        methods: ["Rail Structure Interaction", "MIDAS finite element model"],
         sections: [
             { heading: "Overview of the Structure", paragraphs: ["This bridge is constructed on the river with Pre-stressed concrete ‘I’ Girder supported on circular pier. The overall length of bridge is 36.60 m comprising 3 spans of each 12.20 m."] },
             { heading: "Scope of Work", paragraphs: ["The scope of work includes finding out the following parameters.", "Maximum horizontal displacement of deck due to longitudinal loads. Relative displacement between rail and deck due to longitudinal loads. Additional tensile and compressive stresses in rails due to thermal loads in summer. Finding out the Maximum displacement in deck due to rotation. Maximum vertical displacement of deck at ends. Numerical Modelling and analysis. Generation of Finite element model using MIDAS."] },

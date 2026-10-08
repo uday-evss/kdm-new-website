@@ -1,7 +1,7 @@
 import React from 'react';
 
-// Shared by the Careers list and the job detail/apply page, which use the
-// website's own look (KDM red/dark palette, normal site title and logo).
+// Shared by the Careers list, the job detail/apply page and the home page's
+// careers section.
 
 // Open positions, JDs and applications all come live from the KDM ERP.
 export const ERP_API_URL = (import.meta.env.VITE_ERP_API_URL || 'https://erp.kdmengineers.com/api').replace(/\/$/, '');
@@ -11,6 +11,16 @@ export const ERP_API_URL = (import.meta.env.VITE_ERP_API_URL || 'https://erp.kdm
 // and, for the list, every 30 seconds while it's open.
 export const LIVE_QUERY_OPTIONS = { refetchOnWindowFocus: 'always', staleTime: 0 };
 export const LIST_REFRESH_MS = 30000;
+
+// The open postings list (shared by the Careers page and the home page's
+// careers section, so both read the same cached query).
+export const OPENINGS_QUERY_KEY = ['careers-openings'];
+export async function fetchOpenings() {
+    const response = await fetch(`${ERP_API_URL}/careers`);
+    if (!response.ok) throw new Error(`Openings request failed (${response.status})`);
+    const data = await response.json();
+    return data.postings ?? [];
+}
 
 const MONTHS = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
 
@@ -62,11 +72,11 @@ const renderBody = (body) => {
 // The JD exactly as the ERP renders it: summary, then each section.
 export function JdContent({ summary, sections }) {
     return (
-        <div className="space-y-5 text-[15px] text-gray-600 leading-relaxed">
+        <div className="space-y-5 text-[15px] text-kdm-graphite leading-relaxed">
             {summary && <p className="whitespace-pre-line">{summary}</p>}
             {sections.map((s, i) => (
                 <section key={i}>
-                    <h3 className="font-semibold text-[#111111] mb-1.5">{s.heading}</h3>
+                    <h3 className="font-semibold text-kdm-ink mb-1.5">{s.heading}</h3>
                     <div className="space-y-2">{renderBody(s.body)}</div>
                 </section>
             ))}

@@ -1,116 +1,172 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
-import { Facebook, Instagram, Linkedin, Youtube, Mail, MapPin, Phone, ArrowUp } from 'lucide-react';
+import { motion } from 'framer-motion';
+import { Facebook, Instagram, Linkedin, Youtube, ArrowUp } from 'lucide-react';
 import { company, contact, socials, formatPhone, telHref } from '@/content/site';
 import { services } from '@/content/services';
+import { EASE } from '@/lib/motion';
+import { LogoMark } from '@/components/brand/Logo';
+import { BlueprintGrid } from '@/components/engineering';
+import { ABOUT_LINKS } from './Navbar';
 
 const SOCIAL_ICONS = { LinkedIn: Linkedin, Facebook, Instagram, YouTube: Youtube };
 
-const COMPANY_LINKS = [
-    { label: 'About the Company', to: '/about' },
-    { label: 'Wings of KDM', to: '/about#wings' },
-    { label: "MD's Message", to: '/about#md-message' },
-    { label: 'Our Team', to: '/about#team' },
-    { label: 'Our Clients', to: '/clients' },
+const EXPLORE = [
+    { label: 'Structural Health Monitoring', to: '/services/structural-health-monitoring' },
+    { label: 'Projects', to: '/projects' },
+    { label: 'Knowledge Share Center', to: '/services/kdm-knowledge-share-center' },
     { label: 'Careers', to: '/careers' },
-    { label: 'Contact Us', to: '/contact' },
+    { label: 'Contact', to: '/contact' },
 ];
+
+// The logo's four colours as a measuring strip.
+function ColourRule() {
+    const segments = ['bg-kdm-blue', 'bg-kdm-cyan', 'bg-kdm-yellow', 'bg-kdm-red'];
+    return (
+        <div aria-hidden="true" className="flex h-1.5">
+            {segments.map((c, i) => (
+                <motion.span
+                    key={c}
+                    className={`${c} h-full flex-1 origin-left`}
+                    initial={{ scaleX: 0 }}
+                    whileInView={{ scaleX: 1 }}
+                    viewport={{ once: true }}
+                    transition={{ duration: 0.8, ease: EASE, delay: i * 0.12 }}
+                />
+            ))}
+        </div>
+    );
+}
+
+function FooterColumn({ title, children }) {
+    return (
+        <div>
+            <h2 className="t-label text-kdm-muted">{title}</h2>
+            <ul className="mt-5 space-y-2.5 text-[15px]">{children}</ul>
+        </div>
+    );
+}
+
+function FooterLink({ to, children }) {
+    return (
+        <li>
+            <Link to={to} className="link-draw text-kdm-graphite hover:text-kdm-blue">
+                {children}
+            </Link>
+        </li>
+    );
+}
 
 export default function Footer() {
     const year = new Date().getFullYear();
 
     return (
-        <footer className="relative bg-[#111111] text-gray-400">
-            <div aria-hidden="true" className="h-1 bg-gradient-to-r from-[#C4161C] via-[#F2B705] to-[#0E3A5D]" />
-            <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-16 grid gap-12 md:grid-cols-2 lg:grid-cols-12">
-                <div className="lg:col-span-4">
-                    <Link to="/" className="inline-flex items-center gap-3" aria-label="KDM Engineers Group — home">
-                        <img src="/images/logo.png" alt="" width="48" height="48" className="h-12 w-auto" />
-                        <span className="leading-none">
-                            <span className="block text-2xl font-extrabold text-[#C4161C]">KDM</span>
-                            <span className="mt-1 block text-[10px] font-semibold uppercase tracking-[0.28em] text-white">Engineers Group</span>
-                        </span>
-                    </Link>
-                    <p className="mt-6 text-sm leading-relaxed">{company.intro[0]}</p>
-                    <ul className="mt-6 flex gap-3" aria-label="KDM Engineers on social media">
-                        {socials.map((s) => {
-                            const Icon = SOCIAL_ICONS[s.name];
-                            return (
-                                <li key={s.name}>
-                                    <a
-                                        href={s.href}
-                                        target="_blank"
-                                        rel="noopener noreferrer"
-                                        aria-label={s.name}
-                                        className="flex h-10 w-10 items-center justify-center rounded-full bg-white/5 text-gray-300 hover:bg-[#C4161C] hover:text-white transition-colors"
-                                    >
-                                        <Icon className="h-4 w-4" aria-hidden="true" />
+        <footer className="relative overflow-hidden bg-white">
+            <ColourRule />
+            <BlueprintGrid className="opacity-70" />
+
+            <div className="container-kdm relative pt-20">
+                {/* Statement + logo */}
+                <div className="grid gap-12 border-b border-kdm-line pb-16 lg:grid-cols-12">
+                    <div className="lg:col-span-7">
+                        <LogoMark className="h-20 sm:h-24" sizes="140px" loading="lazy" />
+                        <p className="t-h2 mt-8 max-w-xl">
+                            {company.tagline}
+                            <span className="text-kdm-red">.</span>
+                        </p>
+                        <p className="mt-5 max-w-xl text-kdm-graphite">
+                            Consultancy, testing services and training under one roof — since {company.foundedYear}.
+                        </p>
+                    </div>
+                    <div className="grid gap-8 sm:grid-cols-2 lg:col-span-5">
+                        {contact.branches.map((b) => (
+                            <address key={b.city} className="not-italic">
+                                <p className="t-label text-kdm-red-ink">{b.city}</p>
+                                <p className="mt-3 text-sm leading-relaxed text-kdm-graphite">{b.address}</p>
+                                <a href={telHref(b.phone)} className="mt-3 block font-display text-lg font-semibold text-kdm-ink hover:text-kdm-blue">
+                                    {formatPhone(b.phone)}
+                                </a>
+                                <a href={`mailto:${b.email}`} className="mt-1 block break-all text-sm text-kdm-graphite hover:text-kdm-blue">
+                                    {b.email}
+                                </a>
+                            </address>
+                        ))}
+                    </div>
+                </div>
+
+                {/* Link columns */}
+                <div className="grid gap-10 py-14 sm:grid-cols-2 lg:grid-cols-4">
+                    <FooterColumn title="Services">
+                        {services.slice(0, 8).map((s) => (
+                            <FooterLink key={s.slug} to={`/services/${s.slug}`}>
+                                {s.shortTitle}
+                            </FooterLink>
+                        ))}
+                    </FooterColumn>
+                    <FooterColumn title="Company">
+                        {ABOUT_LINKS.map((l) => (
+                            <FooterLink key={l.to} to={l.to}>
+                                {l.label}
+                            </FooterLink>
+                        ))}
+                    </FooterColumn>
+                    <FooterColumn title="Explore">
+                        {EXPLORE.map((l) => (
+                            <FooterLink key={l.to} to={l.to}>
+                                {l.label}
+                            </FooterLink>
+                        ))}
+                    </FooterColumn>
+                    <div>
+                        <h2 className="t-label text-kdm-muted">Resources</h2>
+                        <ul className="mt-5 space-y-2.5 text-[15px]">
+                            {company.brochures.map((b) => (
+                                <li key={b.href}>
+                                    <a href={b.href} target="_blank" rel="noopener noreferrer" className="link-draw text-kdm-graphite hover:text-kdm-blue">
+                                        {b.title} (PDF)
                                     </a>
                                 </li>
-                            );
-                        })}
-                    </ul>
-                </div>
-
-                <div className="lg:col-span-3">
-                    <h2 className="text-sm font-semibold uppercase tracking-wider text-white">Our Services</h2>
-                    <ul className="mt-5 space-y-2.5 text-sm">
-                        {services.map((s) => (
-                            <li key={s.slug}>
-                                <Link to={`/services/${s.slug}`} className="hover:text-[#F2B705] transition-colors">
-                                    {s.shortTitle}
-                                </Link>
-                            </li>
-                        ))}
-                    </ul>
-                </div>
-
-                <div className="lg:col-span-2">
-                    <h2 className="text-sm font-semibold uppercase tracking-wider text-white">Company</h2>
-                    <ul className="mt-5 space-y-2.5 text-sm">
-                        {COMPANY_LINKS.map((l) => (
-                            <li key={l.label}>
-                                <Link to={l.to} className="hover:text-[#F2B705] transition-colors">
-                                    {l.label}
-                                </Link>
-                            </li>
-                        ))}
-                    </ul>
-                </div>
-
-                <div className="lg:col-span-3">
-                    <h2 className="text-sm font-semibold uppercase tracking-wider text-white">Get in Touch</h2>
-                    <address className="mt-5 not-italic space-y-5 text-sm">
-                        {contact.branches.map((b) => (
-                            <div key={b.city}>
-                                <p className="font-semibold text-gray-200">{b.city}</p>
-                                <p className="mt-1.5 flex gap-2.5">
-                                    <MapPin className="mt-0.5 h-4 w-4 shrink-0 text-[#C4161C]" aria-hidden="true" />
-                                    {b.address}
-                                </p>
-                                <p className="mt-1.5 flex gap-2.5">
-                                    <Phone className="mt-0.5 h-4 w-4 shrink-0 text-[#C4161C]" aria-hidden="true" />
-                                    <a href={telHref(b.phone)} className="hover:text-white">{formatPhone(b.phone)}</a>
-                                </p>
-                                <p className="mt-1.5 flex gap-2.5">
-                                    <Mail className="mt-0.5 h-4 w-4 shrink-0 text-[#C4161C]" aria-hidden="true" />
-                                    <a href={`mailto:${b.email}`} className="break-all hover:text-white">{b.email}</a>
-                                </p>
-                            </div>
-                        ))}
-                    </address>
+                            ))}
+                        </ul>
+                        <h2 className="t-label mt-10 text-kdm-muted">Follow</h2>
+                        <ul className="mt-4 flex gap-2" aria-label="KDM Engineers on social media">
+                            {socials.map((s) => {
+                                const Icon = SOCIAL_ICONS[s.name];
+                                return (
+                                    <li key={s.name}>
+                                        <a
+                                            href={s.href}
+                                            target="_blank"
+                                            rel="noopener noreferrer"
+                                            aria-label={s.name}
+                                            className="flex h-11 w-11 items-center justify-center rounded-full text-kdm-graphite ring-1 ring-inset ring-kdm-line transition-colors hover:bg-kdm-blue hover:text-white hover:ring-kdm-blue"
+                                        >
+                                            <Icon className="h-4 w-4" aria-hidden="true" />
+                                        </a>
+                                    </li>
+                                );
+                            })}
+                        </ul>
+                    </div>
                 </div>
             </div>
 
-            <div className="border-t border-white/10">
-                <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6 flex flex-col sm:flex-row items-center justify-between gap-4 text-xs">
-                    <p>Copyright © {year} {company.legalName}. All rights reserved.</p>
+            {/* Base line */}
+            <div className="relative border-t border-kdm-line">
+                <div className="container-kdm flex flex-col items-start justify-between gap-4 py-6 text-xs text-kdm-muted sm:flex-row sm:items-center">
+                    <p>
+                        © {year} {company.legalName}. All rights reserved.
+                    </p>
+                    <p className="t-label hidden text-kdm-muted md:block">
+                        {company.logoWords.join(' · ')}
+                    </p>
                     <button
                         type="button"
                         onClick={() => window.scrollTo({ top: 0, behavior: 'smooth' })}
-                        className="inline-flex items-center gap-1.5 hover:text-white"
+                        className="group inline-flex items-center gap-2 font-medium text-kdm-graphite hover:text-kdm-blue"
                     >
-                        Back to top <ArrowUp className="h-3.5 w-3.5" aria-hidden="true" />
+                        Back to top
+                        <ArrowUp className="h-3.5 w-3.5 transition-transform group-hover:-translate-y-0.5" aria-hidden="true" />
                     </button>
                 </div>
             </div>

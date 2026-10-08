@@ -1,0 +1,69 @@
+import React from 'react';
+import { FileDown } from 'lucide-react';
+import { shm } from '@/content/shm';
+import { projects } from '@/content/projects';
+import { company } from '@/content/site';
+import { BlueprintGrid } from '@/components/engineering';
+import { ButtonLink, Container, RevealLines, SectionLabel, Reveal, Stagger, StaggerItem } from '@/components/site/primitives';
+import { StatCounter } from '@/components/site/widgets';
+import SensorExplorer from './SensorExplorer';
+
+// 05 — Structural Health Monitoring: KDM's signature capability, told
+// through the sensors themselves.
+export default function ShmSignature() {
+    const brochure = company.brochures.find((b) => b.title.includes('SHM'));
+    const figures = [
+        { value: projects.length, label: 'Completed railway bridge projects' },
+        { value: shm.services.length, label: 'SHM services offered' },
+        { value: shm.infrastructure.sensors.length, label: 'Sensing technologies in use' },
+        { value: shm.installationTypes.length, label: 'Installation types' },
+    ];
+
+    return (
+        <section aria-labelledby="shm-title" className="relative isolate overflow-hidden bg-kdm-surface py-20 sm:py-28 lg:py-32">
+            <BlueprintGrid />
+            <div aria-hidden="true" className="absolute -left-40 top-20 -z-10 h-[480px] w-[480px] rounded-full bg-kdm-cyan/15 blur-3xl" />
+            <Container className="relative">
+                <div className="grid items-end gap-8 lg:grid-cols-12">
+                    <div className="lg:col-span-7">
+                        <SectionLabel index="05">Structural Health Monitoring</SectionLabel>
+                        <RevealLines lines={["We don't just inspect", 'structures.', 'We listen to them.']} className="t-h2 mt-5" />
+                        <span id="shm-title" className="sr-only">Structural Health Monitoring</span>
+                    </div>
+                    <Reveal delay={0.1} className="t-lead lg:col-span-5">
+                        {shm.intro}
+                    </Reveal>
+                </div>
+
+                <Reveal className="mt-14">
+                    <SensorExplorer />
+                </Reveal>
+
+                <Stagger as="dl" className="mt-14 grid grid-cols-2 gap-6 border-t border-kdm-ink/10 pt-10 lg:grid-cols-4">
+                    {figures.map((f) => (
+                        <StaggerItem key={f.label} className="flex flex-col-reverse">
+                            <dt className="mt-2 text-sm leading-snug text-kdm-graphite">{f.label}</dt>
+                            <dd className="font-display text-4xl font-semibold text-kdm-blue sm:text-5xl">
+                                <StatCounter value={f.value} duration={1200} />
+                            </dd>
+                        </StaggerItem>
+                    ))}
+                </Stagger>
+
+                <div className="mt-12 flex flex-wrap items-center gap-4">
+                    <ButtonLink to="/services/structural-health-monitoring">Explore structural health monitoring</ButtonLink>
+                    {brochure && (
+                        <a
+                            href={brochure.href}
+                            target="_blank"
+                            rel="noopener noreferrer"
+                            className="inline-flex items-center gap-2 px-2 text-sm font-semibold text-kdm-blue hover:text-kdm-navy"
+                        >
+                            <FileDown className="h-4 w-4" aria-hidden="true" /> {brochure.title} (PDF)
+                        </a>
+                    )}
+                </div>
+            </Container>
+        </section>
+    );
+}
