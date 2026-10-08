@@ -18,12 +18,12 @@ export default function HomeBelowFold() {
             <Ecosystem />
             <Capabilities />
             <ShmSignature />
-            <ProjectStories />
-            <Difference />
             <DataPipeline />
-            <ClientsShowcase />
             <KnowledgeTeaser />
             <CareersTeaser />
+            <ProjectStories />
+            <Difference />
+            <ClientsShowcase />
             <ContactBand />
         </>
     );

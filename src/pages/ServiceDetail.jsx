@@ -70,7 +70,7 @@ export default function ServiceDetail() {
                         <div className="lg:sticky lg:top-24 space-y-6">
                             <div className="rounded-panel bg-kdm-blue p-7 text-white shadow-lift">
                                 <p className="t-label text-kdm-yellow">Talk to our team</p>
-                                <p className="mt-3 font-display text-xl font-semibold">{hq.person}</p>
+                                <p className="t-h3 mt-3 text-white">{hq.person}</p>
                                 <p className="text-sm text-white/70">{hq.city} head office</p>
                                 <a href={telHref(hq.phone)} className="mt-6 flex items-center gap-3 text-sm hover:text-kdm-yellow">
                                     <Phone className="h-4 w-4" aria-hidden="true" /> {formatPhone(hq.phone)}

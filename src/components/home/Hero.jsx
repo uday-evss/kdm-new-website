@@ -107,7 +107,7 @@ export default function Hero() {
                         )}
                         animate={ready}
                         delay={0.1}
-                        className="mt-6 font-display text-[clamp(2.6rem,1rem+4.6vw,5.75rem)] font-semibold leading-[0.98] tracking-[-0.035em] text-kdm-ink"
+                        className="t-display mt-6"
                     />
 
                     <motion.p {...enter(0.55)} className="t-lead mt-8 max-w-xl">

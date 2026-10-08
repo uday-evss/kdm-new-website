@@ -42,7 +42,7 @@ export default function ProjectMap() {
                             <g key={`lon${lon}`}>
                                 <line x1={toX(lon)} x2={toX(lon)} y1="0" y2={H} stroke="rgb(var(--kdm-cyan) / 0.18)" strokeWidth={lon % 2 ? 0.6 : 1} />
                                 {lon % 2 === 0 && lon < LON[1] && (
-                                    <text x={toX(lon) + 6} y={H - 10} fontSize="13" className="fill-kdm-muted font-display" letterSpacing="1">
+                                    <text x={toX(lon) + 6} y={H - 10} fontSize="26" className="fill-kdm-muted font-display" letterSpacing="1">
                                         {lon}°E
                                     </text>
                                 )}
@@ -52,7 +52,7 @@ export default function ProjectMap() {
                             <g key={`lat${lat}`}>
                                 <line x1="0" x2={W} y1={toY(lat)} y2={toY(lat)} stroke="rgb(var(--kdm-cyan) / 0.18)" strokeWidth={lat % 2 ? 0.6 : 1} />
                                 {lat % 2 === 0 && lat > LAT[0] && (
-                                    <text x="8" y={toY(lat) - 6} fontSize="13" className="fill-kdm-muted font-display" letterSpacing="1">
+                                    <text x="8" y={toY(lat) - 6} fontSize="26" className="fill-kdm-muted font-display" letterSpacing="1">
                                         {lat}°N
                                     </text>
                                 )}
@@ -91,7 +91,7 @@ export default function ProjectMap() {
                         {OFFICES.map((o) => (
                             <g key={o.name} transform={`translate(${toX(o.at[1])} ${toY(o.at[0])})`}>
                                 <rect x="-7" y="-7" width="14" height="14" fill="rgb(var(--kdm-blue))" />
-                                <text x="12" y="5" fontSize="14" fontWeight="600" className="fill-kdm-blue font-display">
+                                <text x="12" y="5" fontSize="30" fontWeight="600" className="fill-kdm-blue font-display">
                                     {o.name}
                                 </text>
                             </g>
@@ -111,14 +111,14 @@ export default function ProjectMap() {
                                 aria-pressed={on}
                                 aria-label={`${p.title} — ${p.place}`}
                                 style={{ left: `${(toX(p.approx[1]) / W) * 100}%`, top: `${(toY(p.approx[0]) / H) * 100}%` }}
-                                className="group absolute flex h-9 w-9 -translate-x-1/2 -translate-y-1/2 items-center justify-center"
+                                className="group absolute flex h-11 w-11 -translate-x-1/2 -translate-y-1/2 items-center justify-center"
                             >
                                 <span aria-hidden="true" className={cn('absolute h-3 w-3 rounded-full motion-safe:animate-ping-ring', on ? 'bg-kdm-red' : 'bg-kdm-cyan')} style={{ animationDelay: `${i * 0.3}s` }} />
                                 <span
                                     aria-hidden="true"
                                     className={cn('relative rounded-full border-2 border-white shadow transition-all duration-300', on ? 'h-5 w-5 bg-kdm-red' : 'h-3.5 w-3.5 bg-kdm-cyan group-hover:h-4 group-hover:w-4')}
                                 />
-                                <span className="t-num pointer-events-none absolute left-7 top-1/2 hidden -translate-y-1/2 whitespace-nowrap text-[11px] font-semibold text-kdm-ink sm:block">
+                                <span className="t-num pointer-events-none absolute left-7 top-1/2 -translate-y-1/2 whitespace-nowrap text-[11px] font-semibold text-kdm-ink">
                                     {String(i + 1).padStart(2, '0')}
                                 </span>
                             </button>
@@ -138,7 +138,7 @@ export default function ProjectMap() {
                             <p className="t-label text-kdm-yellow">
                                 {String(projects.indexOf(current) + 1).padStart(2, '0')} · {current.place}
                             </p>
-                            <h3 className="mt-3 font-display text-2xl font-semibold">{current.title}</h3>
+                            <h3 className="t-h3 mt-3">{current.title}</h3>
                             <p className="mt-2 text-sm text-white/75">{current.workType}</p>
                             <p className="mt-1 text-sm text-white/75">{current.client}</p>
                             <ul className="mt-5 space-y-1.5 text-sm text-white/90">

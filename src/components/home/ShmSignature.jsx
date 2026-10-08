@@ -20,30 +20,32 @@ export default function ShmSignature() {
     ];
 
     return (
-        <section aria-labelledby="shm-title" className="relative isolate overflow-hidden bg-kdm-surface py-20 sm:py-28 lg:py-32">
+        <section aria-labelledby="shm-title" className="relative isolate overflow-hidden bg-kdm-navy py-20 sm:py-28 lg:py-32">
             <BlueprintGrid />
             <div aria-hidden="true" className="absolute -left-40 top-20 -z-10 h-[480px] w-[480px] rounded-full bg-kdm-cyan/15 blur-3xl" />
             <Container className="relative">
                 <div className="grid items-end gap-8 lg:grid-cols-12">
                     <div className="lg:col-span-7">
-                        <SectionLabel index="05">Structural Health Monitoring</SectionLabel>
-                        <RevealLines lines={["We don't just inspect", 'structures.', 'We listen to them.']} className="t-h2 mt-5" />
+                        <SectionLabel index="05" tone="light">Structural Health Monitoring</SectionLabel>
+                        <RevealLines lines={["We don't just inspect", 'structures.', 'We listen to them.']} className="t-h1 mt-5 text-white" />
                         <span id="shm-title" className="sr-only">Structural Health Monitoring</span>
                     </div>
-                    <Reveal delay={0.1} className="t-lead lg:col-span-5">
+                    <Reveal delay={0.1} className="t-lead lg:col-span-5 text-white/75">
                         {shm.intro}
                     </Reveal>
                 </div>
 
                 <Reveal className="mt-14">
-                    <SensorExplorer />
+                    <div className="rounded-panel bg-white p-5 shadow-lift sm:p-8">
+                        <SensorExplorer />
+                    </div>
                 </Reveal>
 
-                <Stagger as="dl" className="mt-14 grid grid-cols-2 gap-6 border-t border-kdm-ink/10 pt-10 lg:grid-cols-4">
+                <Stagger as="dl" className="mt-14 grid grid-cols-2 gap-6 border-t border-white/15 pt-10 lg:grid-cols-4">
                     {figures.map((f) => (
                         <StaggerItem key={f.label} className="flex flex-col-reverse">
-                            <dt className="mt-2 text-sm leading-snug text-kdm-graphite">{f.label}</dt>
-                            <dd className="font-display text-4xl font-semibold text-kdm-blue sm:text-5xl">
+                            <dt className="mt-2 text-sm leading-snug text-white/70">{f.label}</dt>
+                            <dd className="t-stat text-white">
                                 <StatCounter value={f.value} duration={1200} />
                             </dd>
                         </StaggerItem>
@@ -51,13 +53,13 @@ export default function ShmSignature() {
                 </Stagger>
 
                 <div className="mt-12 flex flex-wrap items-center gap-4">
-                    <ButtonLink to="/services/structural-health-monitoring">Explore structural health monitoring</ButtonLink>
+                    <ButtonLink to="/services/structural-health-monitoring" variant="light">Explore structural health monitoring</ButtonLink>
                     {brochure && (
                         <a
                             href={brochure.href}
                             target="_blank"
                             rel="noopener noreferrer"
-                            className="inline-flex items-center gap-2 px-2 text-sm font-semibold text-kdm-blue hover:text-kdm-navy"
+                            className="inline-flex items-center gap-2 px-2 text-sm font-semibold text-white/80 hover:text-white"
                         >
                             <FileDown className="h-4 w-4" aria-hidden="true" /> {brochure.title} (PDF)
                         </a>

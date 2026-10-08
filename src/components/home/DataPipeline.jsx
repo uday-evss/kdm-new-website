@@ -93,7 +93,7 @@ export default function DataPipeline() {
             <Container>
                 <div className="grid items-end gap-8 lg:grid-cols-12">
                     <div className="lg:col-span-6">
-                        <SectionLabel index="08">Technology</SectionLabel>
+                        <SectionLabel index="06">Technology</SectionLabel>
                         <RevealLines lines={['Engineering', 'meets data.']} className="t-h2 mt-5" />
                         <span id="tech-title" className="sr-only">Technology</span>
                     </div>

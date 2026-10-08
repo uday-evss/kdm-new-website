@@ -2,6 +2,7 @@ import React, { useRef, useState } from 'react';
 import { Link } from 'react-router-dom';
 import { AnimatePresence, motion, useMotionValue, useSpring } from 'framer-motion';
 import { EASE } from '@/lib/motion';
+import { cn } from '@/lib/utils';
 import { company } from '@/content/site';
 import { services, serviceSummary } from '@/content/services';
 import { useFinePointer } from '@/hooks/useMediaQuery';
@@ -33,13 +34,24 @@ function ServiceIndex() {
                     const Icon = serviceIcons[s.slug];
                     return (
                         <li key={s.slug} onPointerEnter={() => setHovered(s)} className="border-t border-kdm-line">
-                            <Link to={`/services/${s.slug}`} className="group grid grid-cols-12 items-center gap-4 py-7 sm:py-9">
+                            <Link
+                                to={`/services/${s.slug}`}
+                                className={cn(
+                                    'group grid grid-cols-12 items-center gap-4 py-7 sm:py-9',
+                                    s.featured && 'relative -mx-4 rounded-card bg-kdm-yellow/10 px-4 ring-1 ring-kdm-yellow/40 sm:-mx-6 sm:px-6',
+                                )}
+                            >
                                 <span className="t-num col-span-2 font-display text-sm text-kdm-muted sm:col-span-1">{String(i + 1).padStart(2, '0')}</span>
-                                <span className="col-span-10 flex items-center gap-4 sm:col-span-6">
+                                <span className="col-span-10 flex items-center gap-3 sm:col-span-6">
                                     <Icon className="hidden h-6 w-6 shrink-0 text-kdm-red sm:block" aria-hidden="true" />
                                     <span className="font-display text-2xl font-semibold tracking-tight text-kdm-ink transition-[color,transform] duration-500 ease-kdm group-hover:translate-x-2 group-hover:text-kdm-blue sm:text-[34px] sm:leading-tight">
                                         {s.shortTitle}
                                     </span>
+                                    {s.featured && (
+                                        <span className="inline-flex shrink-0 items-center rounded-full bg-kdm-yellow px-2.5 py-1 text-[11px] font-bold uppercase tracking-wide text-kdm-ink">
+                                            Flagship
+                                        </span>
+                                    )}
                                 </span>
                                 <span className="col-span-10 col-start-3 text-[15px] leading-relaxed text-kdm-graphite sm:col-span-4 sm:col-start-auto">
                                     {serviceSummary(s)}

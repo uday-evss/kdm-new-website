@@ -4,7 +4,7 @@ import { AnimatePresence, motion } from 'framer-motion';
 import { ChevronDown, Menu, X, Phone, Mail, FileDown } from 'lucide-react';
 import { cn } from '@/lib/utils';
 import { EASE } from '@/lib/motion';
-import { services, serviceSummary } from '@/content/services';
+import { servicesNav as services, serviceSummaryNav as serviceSummary } from '@/content/servicesNav';
 import { company, contact, formatPhone, telHref } from '@/content/site';
 import Logo from '@/components/brand/Logo';
 import { BlueprintGrid, CornerMarks } from '@/components/engineering';
@@ -49,8 +49,8 @@ function PanelShell({ id, children, onEnter, onLeave }) {
             id={id}
             initial={{ opacity: 0, y: -8 }}
             animate={{ opacity: 1, y: 0 }}
-            exit={{ opacity: 0, y: -6, transition: { duration: 0.15 } }}
-            transition={{ duration: 0.3, ease: EASE }}
+            exit={{ opacity: 0, transition: { duration: 0.1, ease: 'linear' } }}
+            transition={{ duration: 0.22, ease: EASE, delay: 0.08 }}
             onMouseEnter={onEnter}
             onMouseLeave={onLeave}
             className="absolute inset-x-0 top-full hidden border-b border-kdm-line bg-white shadow-lift lg:block"
@@ -60,8 +60,12 @@ function PanelShell({ id, children, onEnter, onLeave }) {
     );
 }
 
+// Structural Health Monitoring already has its own top-level "Monitoring"
+// nav entry — leaving it out here avoids listing it twice.
+const NON_FEATURED = services.filter((s) => !s.featured);
+
 function ServicesPanel({ onNavigate, ...shell }) {
-    const [active, setActive] = useState(services.find((s) => s.featured) ?? services[0]);
+    const [active, setActive] = useState(NON_FEATURED[0]);
     const Icon = serviceIcons[active.slug];
 
     return (
@@ -69,12 +73,12 @@ function ServicesPanel({ onNavigate, ...shell }) {
             <div className="container-kdm grid grid-cols-12 gap-10 py-10">
                 <div className="col-span-7">
                     <p className="t-label flex items-center gap-3 text-kdm-muted">
-                        <span className="t-num text-kdm-red-ink">{String(services.length).padStart(2, '0')}</span>
+                        <span className="t-num text-kdm-red-ink">{String(NON_FEATURED.length).padStart(2, '0')}</span>
                         <span aria-hidden="true" className="h-px w-8 bg-kdm-ink/30" />
                         Disciplines under one roof
                     </p>
                     <ul className="mt-6 grid grid-cols-2 gap-x-6">
-                        {services.map((s, i) => {
+                        {NON_FEATURED.map((s, i) => {
                             const ItemIcon = serviceIcons[s.slug];
                             const isActive = s.slug === active.slug;
                             return (
@@ -138,7 +142,7 @@ function ServicesPanel({ onNavigate, ...shell }) {
                                     </motion.div>
                                 </AnimatePresence>
                                 <span className="t-label absolute left-3 top-3 rounded-full bg-white/90 px-2.5 py-1 text-kdm-ink">
-                                    Fig. {String(services.indexOf(active) + 1).padStart(2, '0')}
+                                    Fig. {String(NON_FEATURED.indexOf(active) + 1).padStart(2, '0')}
                                 </span>
                             </div>
                             <motion.div key={`${active.slug}-text`} initial={{ opacity: 0, y: 8 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.35, ease: EASE }} className="mt-5">
@@ -179,7 +183,7 @@ function AboutPanel({ onNavigate, ...shell }) {
                 <div className="relative col-span-4 rounded-panel bg-kdm-paper p-6 ring-1 ring-kdm-line">
                     <CornerMarks />
                     <p className="t-label text-kdm-muted">Est. {company.foundedYear}</p>
-                    <p className="mt-3 font-display text-2xl font-semibold leading-tight text-kdm-ink">
+                    <p className="t-h3 mt-3 leading-tight">
                         {company.logoWords.map((w) => (
                             <span key={w} className="block">
                                 <span className="text-kdm-red">{w[0]}</span>
@@ -202,13 +206,42 @@ function AboutPanel({ onNavigate, ...shell }) {
 
 function MobileMenu({ onClose }) {
     const [servicesOpen, setServicesOpen] = useState(false);
+    const panelRef = useRef(null);
     const item = {
         hidden: { opacity: 0, y: 18 },
         show: (i) => ({ opacity: 1, y: 0, transition: { duration: 0.5, ease: EASE, delay: 0.05 + i * 0.05 } }),
     };
+
+    useEffect(() => {
+        const panel = panelRef.current;
+        if (!panel) return undefined;
+        const focusables = () => Array.from(panel.querySelectorAll('a[href], button:not([disabled])'));
+        focusables()[0]?.focus();
+        const onKeyDown = (e) => {
+            if (e.key !== 'Tab') return;
+            const list = focusables();
+            if (!list.length) return;
+            const first = list[0];
+            const last = list[list.length - 1];
+            if (e.shiftKey && document.activeElement === first) {
+                e.preventDefault();
+                last.focus();
+            } else if (!e.shiftKey && document.activeElement === last) {
+                e.preventDefault();
+                first.focus();
+            }
+        };
+        panel.addEventListener('keydown', onKeyDown);
+        return () => panel.removeEventListener('keydown', onKeyDown);
+    }, []);
+
     return (
         <motion.div
             id="mobile-menu"
+            ref={panelRef}
+            role="dialog"
+            aria-modal="true"
+            aria-label="Mobile menu"
             initial={{ clipPath: 'inset(0% 0% 100% 0%)' }}
             animate={{ clipPath: 'inset(0% 0% 0% 0%)' }}
             exit={{ clipPath: 'inset(0% 0% 100% 0%)' }}
@@ -243,7 +276,7 @@ function MobileMenu({ onClose }) {
                                                 transition={{ duration: 0.35, ease: EASE }}
                                                 className="overflow-hidden"
                                             >
-                                                {services.map((s) => {
+                                                {NON_FEATURED.map((s) => {
                                                     const Icon = serviceIcons[s.slug];
                                                     return (
                                                         <li key={s.slug}>
@@ -301,6 +334,11 @@ export default function Navbar() {
     const [mobileOpen, setMobileOpen] = useState(false);
     const closeTimer = useRef();
     const triggerRefs = useRef({});
+    const mobileTriggerRef = useRef(null);
+    const closeMobile = () => {
+        setMobileOpen(false);
+        mobileTriggerRef.current?.focus();
+    };
 
     useEffect(() => {
         const onScroll = () => setScrolled(window.scrollY > 16);
@@ -319,7 +357,7 @@ export default function Navbar() {
         if (!mobileOpen) return undefined;
         const previous = document.body.style.overflow;
         document.body.style.overflow = 'hidden';
-        const onKey = (e) => e.key === 'Escape' && setMobileOpen(false);
+        const onKey = (e) => e.key === 'Escape' && closeMobile();
         document.addEventListener('keydown', onKey);
         return () => {
             document.body.style.overflow = previous;
@@ -441,8 +479,9 @@ export default function Navbar() {
                             Let&apos;s talk
                         </ButtonLink>
                         <button
+                            ref={mobileTriggerRef}
                             type="button"
-                            onClick={() => setMobileOpen((o) => !o)}
+                            onClick={() => (mobileOpen ? closeMobile() : setMobileOpen(true))}
                             aria-expanded={mobileOpen}
                             aria-controls="mobile-menu"
                             aria-label={mobileOpen ? 'Close menu' : 'Open menu'}
@@ -454,7 +493,7 @@ export default function Navbar() {
                 </div>
             </div>
 
-            <AnimatePresence>{mobileOpen && <MobileMenu onClose={() => setMobileOpen(false)} />}</AnimatePresence>
+            <AnimatePresence>{mobileOpen && <MobileMenu onClose={closeMobile} />}</AnimatePresence>
         </header>
     );
 }

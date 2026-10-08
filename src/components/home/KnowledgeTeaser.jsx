@@ -15,7 +15,7 @@ export default function KnowledgeTeaser() {
         <section aria-labelledby="knowledge-title" className="relative bg-kdm-paper py-20 sm:py-28 lg:py-32">
             <Container className="grid gap-14 lg:grid-cols-12 lg:gap-16">
                 <div className="lg:col-span-5">
-                    <SectionLabel index="10">Knowledge Share Center</SectionLabel>
+                    <SectionLabel index="07">Knowledge Share Center</SectionLabel>
                     <RevealLines lines={['Knowledge,', 'shared.']} className="t-h2 mt-5" />
                     <span id="knowledge-title" className="sr-only">KDM Knowledge Share Center</span>
                     <Reveal delay={0.1} className="mt-6 leading-relaxed text-kdm-graphite">

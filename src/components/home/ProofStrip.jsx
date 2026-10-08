@@ -40,7 +40,7 @@ export default function ProofStrip() {
                         {stats.map((s) => (
                             <StaggerItem key={s.label} className="flex flex-col-reverse border-l border-kdm-line pl-5">
                                 <dt className="t-label mt-3 text-kdm-muted">{s.label}</dt>
-                                <dd className="font-display text-5xl font-semibold tracking-tight text-kdm-ink lg:text-[64px] lg:leading-none">
+                                <dd className="t-stat lg:leading-none">
                                     <StatCounter value={s.value} suffix={s.suffix} />
                                 </dd>
                             </StaggerItem>

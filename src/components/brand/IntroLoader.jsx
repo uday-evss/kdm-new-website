@@ -11,7 +11,7 @@ import { LogoMark } from './Logo';
 // prefer reduced motion; click or press any key to skip it.
 
 const SESSION_KEY = 'kdm-intro-seen';
-const HOLD_MS = 1700;
+const HOLD_MS = 700;
 
 const IntroContext = createContext(true);
 
@@ -66,7 +66,7 @@ function IntroOverlay({ onSkip }) {
             onClick={onSkip}
             initial={{ clipPath: 'inset(0% 0% 0% 0%)' }}
             exit={{ clipPath: 'inset(0% 0% 100% 0%)' }}
-            transition={{ duration: 0.6, ease: [0.76, 0, 0.24, 1] }}
+            transition={{ duration: 0.4, ease: [0.76, 0, 0.24, 1] }}
             className="fixed inset-0 z-[200] flex flex-col items-center justify-center bg-kdm-paper"
         >
             <motion.div
@@ -83,13 +83,13 @@ function IntroOverlay({ onSkip }) {
                     className="absolute inset-0 h-full w-full"
                     initial={{ opacity: 1 }}
                     animate={{ opacity: 0 }}
-                    transition={{ duration: 0.35, delay: 1.1 }}
+                    transition={{ duration: 0.16, delay: 0.5 }}
                     fill="none"
                     strokeLinecap="round"
                     strokeLinejoin="round"
                 >
-                    <motion.path d={`M20 ${CY} L380 ${CY}`} stroke="rgb(var(--kdm-ink))" strokeWidth="1.5" {...draw(0, 0.5)} />
-                    <motion.path d={GEAR} stroke="rgb(var(--kdm-red))" strokeWidth="2" {...draw(0.3, 0.8)} />
+                    <motion.path d={`M20 ${CY} L380 ${CY}`} stroke="rgb(var(--kdm-ink))" strokeWidth="1.5" {...draw(0, 0.22)} />
+                    <motion.path d={GEAR} stroke="rgb(var(--kdm-red))" strokeWidth="2" {...draw(0.14, 0.36)} />
                     {TICKS.map((t, i) => (
                         <line
                             key={i}
@@ -100,7 +100,7 @@ function IntroOverlay({ onSkip }) {
                             stroke="rgb(var(--kdm-cyan))"
                             strokeWidth={t.major ? 1.8 : 1}
                             className="anim-fade"
-                            style={{ animationDelay: `${0.45 + i * 0.012}s`, animationDuration: '0.2s' }}
+                            style={{ animationDelay: `${0.2 + i * 0.005}s`, animationDuration: '0.2s' }}
                         />
                     ))}
                     {RAYS.map((r, i) => (
@@ -114,7 +114,7 @@ function IntroOverlay({ onSkip }) {
                             strokeWidth="2"
                             initial={{ pathLength: 0 }}
                             animate={{ pathLength: 1 }}
-                            transition={{ duration: 0.3, ease: EASE, delay: 0.75 + i * 0.02 }}
+                            transition={{ duration: 0.3, ease: EASE, delay: 0.34 + i * 0.01 }}
                         />
                     ))}
                     <motion.path
@@ -123,7 +123,7 @@ function IntroOverlay({ onSkip }) {
                         initial={{ scale: 0 }}
                         animate={{ scale: 1 }}
                         style={{ transformBox: 'fill-box', transformOrigin: '50% 100%' }}
-                        transition={{ duration: 0.45, ease: EASE, delay: 0.7 }}
+                        transition={{ duration: 0.45, ease: EASE, delay: 0.32 }}
                     />
                     <motion.rect
                         x="186"
@@ -133,7 +133,7 @@ function IntroOverlay({ onSkip }) {
                         fill="rgb(var(--kdm-yellow))"
                         initial={{ x: -170 }}
                         animate={{ x: 0 }}
-                        transition={{ duration: 0.9, ease: EASE, delay: 0.1 }}
+                        transition={{ duration: 0.4, ease: EASE, delay: 0.05 }}
                     />
                 </motion.svg>
 
@@ -142,7 +142,7 @@ function IntroOverlay({ onSkip }) {
                     className="absolute inset-0 flex items-center justify-center"
                     initial={{ opacity: 0, scale: 0.9 }}
                     animate={{ opacity: 1, scale: 1 }}
-                    transition={{ duration: 0.6, ease: EASE, delay: 1.05 }}
+                    transition={{ duration: 0.27, ease: EASE, delay: 0.47 }}
                 >
                     <LogoMark className="h-[180px] sm:h-[220px]" sizes="300px" fetchpriority="high" />
                 </motion.div>
@@ -152,7 +152,7 @@ function IntroOverlay({ onSkip }) {
                 className="t-label relative mt-8 text-kdm-ink"
                 initial={{ opacity: 0, letterSpacing: '0.5em' }}
                 animate={{ opacity: 1, letterSpacing: '0.24em' }}
-                transition={{ duration: 0.8, ease: EASE, delay: 1.15 }}
+                transition={{ duration: 0.36, ease: EASE, delay: 0.52 }}
             >
                 {company.tagline}
             </motion.p>
@@ -178,6 +178,7 @@ function IntroOverlay({ onSkip }) {
 export function IntroProvider({ children }) {
     const reduce = useReducedMotion();
     const [show, setShow] = useState(() => shouldShowIntro());
+    const [ready, setReady] = useState(() => !shouldShowIntro());
 
     useEffect(() => {
         if (!show) return undefined;
@@ -189,11 +190,19 @@ export function IntroProvider({ children }) {
         const root = document.documentElement;
         const previous = root.style.overflow;
         root.style.overflow = 'hidden';
-        const timer = setTimeout(() => setShow(false), HOLD_MS);
-        const skip = () => setShow(false);
+        // The overlay already covers the screen, so real content can start
+        // painting underneath it almost immediately instead of waiting for
+        // the whole hold to finish.
+        const readyTimer = setTimeout(() => setReady(true), 50);
+        const hideTimer = setTimeout(() => setShow(false), HOLD_MS);
+        const skip = () => {
+            setReady(true);
+            setShow(false);
+        };
         window.addEventListener('keydown', skip, { once: true });
         return () => {
-            clearTimeout(timer);
+            clearTimeout(readyTimer);
+            clearTimeout(hideTimer);
             window.removeEventListener('keydown', skip);
             root.style.overflow = previous;
         };
@@ -201,15 +210,18 @@ export function IntroProvider({ children }) {
 
     // If reduced motion turns on mid-intro, end it immediately.
     useEffect(() => {
-        if (reduce && show) setShow(false);
+        if (reduce && show) {
+            setReady(true);
+            setShow(false);
+        }
     }, [reduce, show]);
 
     return (
-        // The page starts its entrance as the curtain lifts.
-        <IntroContext.Provider value={!show}>
+        // The page starts its entrance once the overlay has made room for it.
+        <IntroContext.Provider value={ready}>
             {children}
             <AnimatePresence>
-                {show && <IntroOverlay key="intro" onSkip={() => setShow(false)} />}
+                {show && <IntroOverlay key="intro" onSkip={() => { setReady(true); setShow(false); }} />}
             </AnimatePresence>
         </IntroContext.Provider>
     );

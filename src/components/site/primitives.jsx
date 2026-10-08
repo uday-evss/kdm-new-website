@@ -128,7 +128,7 @@ export function Stagger({ children, className, as = 'div', gap = 0.07, delay = 0
 export function StaggerItem({ children, className, as = 'div', ...rest }) {
     const Component = motion[as];
     return (
-        <Component variants={fadeUp} className={className} {...rest}>
+        <Component variants={fadeUp} whileTap={{ scale: 0.98 }} className={className} {...rest}>
             {children}
         </Component>
     );
@@ -272,6 +272,8 @@ export function ButtonLink({ to, href, variant = 'primary', size = 'md', arrow =
     );
 }
 
+const MotionLink = motion(Link);
+
 // "Explore service →" — a quiet text link with a drawn underline.
 export function TextLink({ to, href, children, className, tone = 'blue', ...rest }) {
     const classes = cn(
@@ -286,13 +288,13 @@ export function TextLink({ to, href, children, className, tone = 'blue', ...rest
         </>
     );
     return href ? (
-        <a href={href} className={classes} {...rest}>
+        <motion.a href={href} whileTap={{ scale: 0.97 }} className={classes} {...rest}>
             {content}
-        </a>
+        </motion.a>
     ) : (
-        <Link to={to} className={classes} {...rest}>
+        <MotionLink to={to} whileTap={{ scale: 0.97 }} className={classes} {...rest}>
             {content}
-        </Link>
+        </MotionLink>
     );
 }
 

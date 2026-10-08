@@ -1,7 +1,9 @@
 import React, { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import { createPortal } from 'react-dom';
+import { motion } from 'framer-motion';
 import { ChevronLeft, ChevronRight, X, Maximize2 } from 'lucide-react';
 import { cn } from '@/lib/utils';
+import { EASE } from '@/lib/motion';
 import { Img } from './primitives';
 
 // Full-screen image viewer: arrow keys / buttons to move, Escape or the
@@ -35,13 +37,30 @@ export function Lightbox({ images, index, onClose, onIndex, label }) {
             className="fixed inset-0 z-[100] flex items-center justify-center bg-kdm-ink/95 p-4 sm:p-10"
             onClick={onClose}
         >
-            <img
+            <motion.div
                 key={image.src}
-                src={image.src}
-                alt={`${label} — photo ${index + 1}`}
-                className="max-h-full max-w-full rounded-lg object-contain shadow-2xl"
+                drag="x"
+                dragElastic={0.2}
+                dragConstraints={{ left: 0, right: 0 }}
+                onDragEnd={(e, { offset, velocity }) => {
+                    if (offset.x < -80 || velocity.x < -500) go(1);
+                    else if (offset.x > 80 || velocity.x > 500) go(-1);
+                }}
+                initial={{ opacity: 0, y: 12 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ duration: 0.3, ease: EASE }}
+                className="max-h-full max-w-full cursor-grab touch-none active:cursor-grabbing"
                 onClick={(e) => e.stopPropagation()}
-            />
+            >
+                <Img
+                    image={image}
+                    alt={`${label} — photo ${index + 1}`}
+                    sizes="100vw"
+                    priority
+                    className="h-auto max-h-full w-auto max-w-full rounded-card object-contain shadow-lift"
+                    style={{ maxWidth: `min(100%, ${image.w}px)`, maxHeight: `min(90vh, ${image.h}px)` }}
+                />
+            </motion.div>
             <button
                 ref={closeRef}
                 type="button"

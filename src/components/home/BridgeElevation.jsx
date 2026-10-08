@@ -18,8 +18,13 @@ const archY = (t) => DECK - 4 * (DECK - CROWN) * t * (1 - t);
 
 const SENSORS = [
     { id: 'acc', label: 'Accelerometer', x: 720, y: CROWN, lx: 760, ly: 70 },
-    { id: 'strain', label: 'Strain', x: 1200, y: (archY(0.7) + DECK) / 2, lx: 1250, ly: 160 },
-    { id: 'temp', label: 'Temperature', x: 330, y: DECK, lx: 360, ly: 225 },
+    // lx/ly are the label's position, pulled in from the sensor's own x/y so
+    // the callout stays inside the always-visible (xMid-centered) window of
+    // the "slice"-cropped viewBox below the lg breakpoint — see Hero.jsx's
+    // forced h-[200px]/sm:h-[260px] heights. Full 1440-wide drawing is only
+    // shown uncropped at lg:aspect-[4/1].
+    { id: 'strain', label: 'Strain', x: 1200, y: (archY(0.7) + DECK) / 2, lx: 950, ly: 160 },
+    { id: 'temp', label: 'Temperature', x: 330, y: DECK, lx: 420, ly: 225 },
     { id: 'tilt', label: 'Tilt', x: 920, y: 312, lx: 950, ly: 330 },
     { id: 'disp', label: 'Displacement', x: 1040, y: DECK, lx: 1010, ly: 225, flip: true },
     { id: 'water', label: 'Water level', x: 470, y: 318, lx: 400, ly: 345, flip: true },

@@ -128,7 +128,7 @@ export default function SensorExplorer({ className }) {
                                 aria-pressed={on}
                                 aria-label={s.name}
                                 style={{ left: `${(x / W) * 100}%`, top: `${(y / H) * 100}%` }}
-                                className="group absolute flex h-9 w-9 -translate-x-1/2 -translate-y-1/2 items-center justify-center rounded-full"
+                                className="group absolute flex h-11 w-11 -translate-x-1/2 -translate-y-1/2 items-center justify-center rounded-full"
                             >
                                 <span
                                     aria-hidden="true"
@@ -186,7 +186,7 @@ export default function SensorExplorer({ className }) {
                             exit={{ opacity: 0, y: -6 }}
                             transition={{ duration: 0.3, ease: EASE }}
                         >
-                            <h3 className="font-display text-2xl font-semibold tracking-tight text-kdm-ink">{active.name}</h3>
+                            <h3 className="t-h3">{active.name}</h3>
                             <dl className="mt-4 space-y-4 text-[15px] leading-relaxed">
                                 <div>
                                     <dt className="t-label text-kdm-cyan-ink">Measures</dt>

@@ -52,7 +52,7 @@ function JobCard({ job, index }) {
             <div className="flex flex-col lg:flex-row lg:items-start lg:justify-between gap-6">
                 <div className="min-w-0 flex-1">
                     <Link to={`/careers/${job.slug}`}>
-                        <h3 className="font-display text-xl sm:text-2xl font-semibold text-kdm-ink group-hover:text-kdm-blue transition-colors">
+                        <h3 className="t-h3 group-hover:text-kdm-blue transition-colors">
                             {job.title}
                         </h3>
                     </Link>

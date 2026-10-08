@@ -24,37 +24,12 @@
     --kdm-red: 226 50 31;       /* #E2321F  KDM red — signal colour  */
     --kdm-red-ink: 190 38 22;   /* #BE2616  red for small text (AA)  */
     --kdm-yellow: 246 196 0;    /* #F6C400  measurement marker       */
-
-    /* shadcn/ui tokens, mapped onto the KDM palette */
-    --background: 210 33% 98%;
-    --foreground: 215 50% 12%;
-    --card: 0 0% 100%;
-    --card-foreground: 215 50% 12%;
-    --popover: 0 0% 100%;
-    --popover-foreground: 215 50% 12%;
-    --primary: 221 74% 32%;
-    --primary-foreground: 0 0% 100%;
-    --secondary: 205 40% 95%;
-    --secondary-foreground: 215 50% 12%;
-    --muted: 205 40% 95%;
-    --muted-foreground: 215 18% 43%;
-    --accent: 205 40% 95%;
-    --accent-foreground: 215 50% 12%;
-    --destructive: 7 77% 50%;
-    --destructive-foreground: 0 0% 100%;
-    --border: 211 33% 90%;
-    --input: 211 33% 90%;
-    --ring: 221 74% 32%;
-    --radius: 0.875rem;
-  }
-
-  * {
-    @apply border-border;
   }
 
   html {
     -webkit-text-size-adjust: 100%;
     scroll-padding-top: 5.5rem;
+    scroll-behavior: smooth;
   }
 
   body {
@@ -127,6 +102,13 @@
     @apply text-kdm-graphite;
     font-size: clamp(1.05rem, 0.98rem + 0.35vw, 1.25rem);
     line-height: 1.6;
+  }
+
+  /* A standout number — stat tiles, counters. */
+  .t-stat {
+    @apply font-display font-semibold tracking-tight text-kdm-ink;
+    font-size: clamp(2.25rem, 1.6rem + 2.4vw, 4rem);
+    line-height: 1;
   }
 
   /* Technical annotation: small caps-style label used for eyebrows,

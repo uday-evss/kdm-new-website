@@ -49,8 +49,8 @@ export default function Difference() {
             <Container className="grid gap-12 lg:grid-cols-12 lg:gap-16">
                 <div className="lg:col-span-6">
                     <div className="lg:sticky lg:top-32">
-                        <SectionLabel index="07">Why KDM?</SectionLabel>
-                        <h2 id="why-title" className="mt-6 font-display text-[clamp(2.8rem,1rem+6vw,6.5rem)] font-semibold leading-[0.95] tracking-[-0.04em]">
+                        <SectionLabel index="10">Why KDM?</SectionLabel>
+                        <h2 id="why-title" className="t-display mt-6">
                             {THEMES.map((t) => (
                                 <span
                                     key={t}

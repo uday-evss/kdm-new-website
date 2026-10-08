@@ -27,7 +27,7 @@ export default function CareersTeaser() {
                     <div className="absolute -bottom-6 right-4 rounded-card bg-white p-5 shadow-lift ring-1 ring-kdm-line sm:right-8">
                         {count > 0 ? (
                             <>
-                                <p className="t-num font-display text-4xl font-semibold text-kdm-blue">{String(count).padStart(2, '0')}</p>
+                                <p className="t-num t-stat text-kdm-blue">{String(count).padStart(2, '0')}</p>
                                 <p className="mt-1 text-sm text-kdm-graphite">{count === 1 ? 'role' : 'roles'} open right now</p>
                             </>
                         ) : (
@@ -40,7 +40,7 @@ export default function CareersTeaser() {
                 </div>
 
                 <div className="order-1 lg:order-2 lg:col-span-6">
-                    <SectionLabel index="11">Careers</SectionLabel>
+                    <SectionLabel index="08">Careers</SectionLabel>
                     <RevealLines lines={['Build the infrastructure', 'of tomorrow.']} className="t-h2 mt-5" />
                     <span id="careers-title" className="sr-only">Careers at KDM</span>
                     <Reveal delay={0.1} className="t-lead mt-6 max-w-xl">

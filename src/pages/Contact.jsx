@@ -122,7 +122,7 @@ export default function Contact() {
                         {contact.branches.map((b, i) => (
                             <div key={b.city} className={cn('rounded-panel p-6 ring-1', i === 0 ? 'bg-kdm-blue text-white ring-kdm-blue' : 'bg-kdm-paper text-kdm-ink ring-kdm-line')}>
                                 <p className={cn('t-label', i === 0 ? 'text-kdm-yellow' : 'text-kdm-red-ink')}>{i === 0 ? 'Head office' : 'Branch & laboratory'}</p>
-                                <h2 className="mt-2 font-display text-2xl font-semibold">{b.city}</h2>
+                                <h2 className="t-h3 mt-2">{b.city}</h2>
                                 <p className={cn('mt-4 flex gap-3 text-sm leading-relaxed', i === 0 ? 'text-white/80' : 'text-kdm-graphite')}>
                                     <MapPin className="mt-0.5 h-4 w-4 shrink-0" aria-hidden="true" /> {b.address}
                                 </p>

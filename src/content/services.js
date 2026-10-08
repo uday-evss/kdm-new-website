@@ -1,21 +1,21 @@
 import { media } from './media';
+import { servicesNav } from './servicesNav';
 
 // The services KDM offers, with the "What We Do?" lists and photo galleries
 // from each service page of the live site. `legacyPath` is the old WordPress
 // URL, redirected to the new page so existing links and search results keep
 // working. Structural Health Monitoring has its own, richer page (ShmPage).
+// Shared nav fields (slug/title/shortTitle/summary/cover/featured) live in
+// servicesNav.js so the Navbar/Footer can import just those without pulling
+// in every gallery image below.
 
 const banner = (name) => media.banners.find((m) => m.src.includes(`/${name}.webp`));
+const nav = (slug) => servicesNav.find((s) => s.slug === slug);
 
 export const services = [
     {
-        slug: 'materials-testing',
+        ...nav('materials-testing'),
         legacyPath: '/materials-testing-laboratory-services',
-        title: 'Materials Testing Laboratory Services',
-        shortTitle: 'Materials Testing',
-        summary:
-            'Laboratory testing of construction materials — cement, concrete, aggregates, steel, bitumen and soil — with mix designs, load tests and non-destructive testing.',
-        cover: media['materials-testing'][0],
         capabilities: [
             'Admixture & Curing Compound',
             'Bituminous Mix Designs',
@@ -37,13 +37,8 @@ export const services = [
         gallery: media['materials-testing'],
     },
     {
-        slug: 'topo-surveys',
+        ...nav('topo-surveys'),
         legacyPath: '/topo-surveys',
-        title: 'Topo Surveys',
-        shortTitle: 'Topo Surveys',
-        summary:
-            'Topographical surveys with total station, DGPS, GPS and drone — levelling, profiling, contouring, route alignment and as-built surveys.',
-        cover: media.topo[4],
         capabilities: [
             'Topographical Survey with TS, DGPS, GPS & Drone',
             'Leveling by Digital Level & Auto Level instruments',
@@ -55,13 +50,8 @@ export const services = [
         gallery: media.topo,
     },
     {
-        slug: 'geotechnical-investigations',
+        ...nav('geotechnical-investigations'),
         legacyPath: '/geo-technical-investigations-foundation-design',
-        title: 'Geo-technical Investigations & Foundation Design',
-        shortTitle: 'Geo-technical Investigations',
-        summary:
-            'Bore-hole investigations, field and laboratory testing, pile and plate load tests, and the design of foundations, retaining structures and ground improvement.',
-        cover: banner('pile-load-test-2'),
         capabilities: [
             'Investigation by drilling bore holes, conducting field testing, collecting samples, carrying out laboratory tests and furnishing report with recommendations.',
             'Conducting field tests such as Plate Load Test, Static Cone Penetration Test, Electrical Resistivity Test and Permeability Test.',
@@ -73,13 +63,8 @@ export const services = [
         gallery: media.geotechnical,
     },
     {
-        slug: 'traffic-surveys',
+        ...nav('traffic-surveys'),
         legacyPath: '/traffic-survey',
-        title: 'Traffic Surveys',
-        shortTitle: 'Traffic Surveys',
-        summary:
-            'Automatic and video traffic counts, origin–destination, axle load, turning movement, parking, pedestrian and speed-and-delay surveys.',
-        cover: banner('sign-boards-3'),
         capabilities: [
             'Automatic Traffic Counter / Classifier (ATCC)',
             'Video Traffic Counter / Classifier (VTCC)',
@@ -95,13 +80,8 @@ export const services = [
         gallery: media.traffic,
     },
     {
-        slug: 'highways-bridges-buildings-irrigation',
+        ...nav('highways-bridges-buildings-irrigation'),
         legacyPath: '/highways-bridges-buildings-and-irrigation-our-services',
-        title: 'Highways, Bridges, Buildings And Irrigation',
-        shortTitle: 'Highways, Bridges & Buildings',
-        summary:
-            'Detailed project reports, feasibility studies, design review, authority / independent engineering, quality control and road safety audits.',
-        cover: banner('ssr-bridges-1'),
         capabilities: [
             'Authority/Independent Engineering Services',
             'Detailed Engineering Design Review',
@@ -119,13 +99,8 @@ export const services = [
         gallery: media['highways-bridges'],
     },
     {
-        slug: 'pavement-investigation-design',
+        ...nav('pavement-investigation-design'),
         legacyPath: '/pavement-investigation-and-pavement-design',
-        title: 'Pavement Investigation & Pavement Design',
-        shortTitle: 'Pavement Investigation & Design',
-        summary:
-            'Network survey vehicle, falling weight deflectometer, Benkelman beam, roughness and skid testing — with flexible and rigid pavement design.',
-        cover: banner('pavement-design-3'),
         capabilities: [
             'Networking Survey Vehicle (NSV)',
             'Falling Weight Deflectometer (FWD)',
@@ -143,13 +118,8 @@ export const services = [
         gallery: media.pavement,
     },
     {
-        slug: 'structural-condition-assessment',
+        ...nav('structural-condition-assessment'),
         legacyPath: '/structural-condition-assessment-rehabilitation',
-        title: 'Structural Condition Assessment & Rehabilitation',
-        shortTitle: 'Structural Condition Assessment',
-        summary:
-            'Condition assessment of existing structures by NDT and semi-destructive testing, seismic and fire-damage assessment, and retrofitting schemes.',
-        cover: banner('railways-19'),
         capabilities: [
             'Structural soundness assessment by NDT & Semi-Destructive tests, independent analysis and design check of as-built structures.',
             'Structures stability assessment for change in occupancy, future expansion, proposed modification, as per latest standards.',
@@ -164,13 +134,8 @@ export const services = [
         gallery: media['structural-assessment'],
     },
     {
-        slug: 'kdm-knowledge-share-center',
+        ...nav('kdm-knowledge-share-center'),
         legacyPath: '/kdm-knowledge-share-center-kdmksc',
-        title: 'KDM Knowledge Share Center (KDMKSC)',
-        shortTitle: 'Knowledge Share Center',
-        summary:
-            'Training and technology sharing in cement, concrete and construction technology — certification programmes, NDT, welding inspection, QA/QC and internships.',
-        cover: banner('kdmksc-2-1'),
         intro:
             'With the availability of different expertise groups with well experienced faculty and state-of-the-art equipment, KDM Engineers (India) Pvt. Ltd. started a new centre, the KDM Knowledge Share Centre (KDMKSC), dedicated to training and technology share on several aspects of Cement & Concrete and Construction Technology including Structural Assessment & Rehabilitation.',
         capabilities: [
@@ -197,14 +162,8 @@ export const services = [
         gallery: media.kdmksc,
     },
     {
-        slug: 'structural-health-monitoring',
+        ...nav('structural-health-monitoring'),
         legacyPath: '/structural-health-monitoring-assessment-rehabilitation',
-        title: 'Structural Health Monitoring, Assessment & Rehabilitation',
-        shortTitle: 'Structural Health Monitoring',
-        summary:
-            'Instrumenting bridges and structures to measure acceleration, modal frequencies, displacements, strains and forces — for assessment, monitoring and rehabilitation.',
-        cover: banner('shm-2'),
-        featured: true,
         // Rendered by its own page (pages/ShmPage.jsx) — see shm.js.
     },
 ];

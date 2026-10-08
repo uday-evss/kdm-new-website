@@ -3,7 +3,7 @@ import { Link } from 'react-router-dom';
 import { motion } from 'framer-motion';
 import { Facebook, Instagram, Linkedin, Youtube, ArrowUp } from 'lucide-react';
 import { company, contact, socials, formatPhone, telHref } from '@/content/site';
-import { services } from '@/content/services';
+import { servicesNav as services } from '@/content/servicesNav';
 import { EASE } from '@/lib/motion';
 import { LogoMark } from '@/components/brand/Logo';
 import { BlueprintGrid } from '@/components/engineering';
