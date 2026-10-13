@@ -5,7 +5,7 @@ import { ArrowRight, ChevronRight } from 'lucide-react';
 import { cn } from '@/lib/utils';
 import { EASE, VIEWPORT, fadeUp, lineRise, stagger } from '@/lib/motion';
 import { SITE_URL } from '@/content/site';
-import { BlueprintGrid, Figure, MeasureRule } from '@/components/engineering';
+import { BlueprintGrid, Figure, MeasureRule, SectionBubble, TitleBlock } from '@/components/engineering';
 import { useIntroDone } from '@/components/brand/IntroLoader';
 
 // Shared building blocks used by every page: page metadata, responsive
@@ -172,12 +172,14 @@ export function Section({ id, tone = 'white', className, children, ...rest }) {
     );
 }
 
-// "03 —— What KDM does": the numbered label that opens every section.
+// The label that opens every section, set like a section callout on a
+// drawing: a numbered bubble, a construction line and the section name.
 export function SectionLabel({ index, children, className, tone = 'dark' }) {
+    const light = tone === 'light';
     return (
-        <p className={cn('t-label flex items-center gap-3', tone === 'light' ? 'text-white/70' : 'text-kdm-muted', className)}>
-            {index && <span className={cn('t-num', tone === 'light' ? 'text-kdm-yellow' : 'text-kdm-red-ink')}>{index}</span>}
-            <span aria-hidden="true" className={cn('h-px w-8', tone === 'light' ? 'bg-white/40' : 'bg-kdm-ink/30')} />
+        <p className={cn('t-label flex items-center gap-3', light ? 'text-white/75' : 'text-kdm-graphite', className)}>
+            {index && <SectionBubble index={index} tone={tone} />}
+            <span aria-hidden="true" className={cn('h-px w-8', light ? 'bg-white/40' : 'bg-kdm-blue/40')} />
             <span>{children}</span>
         </p>
     );
@@ -215,37 +217,40 @@ export function SlideArrow({ className }) {
     );
 }
 
+// Primary actions use the logo's ring red; everything else stays quiet.
 const BUTTON = {
-    primary: 'bg-kdm-blue text-white hover:bg-kdm-navy shadow-[0_10px_24px_-12px_rgb(21_59_143/0.7)]',
-    red: 'bg-kdm-red text-white hover:bg-kdm-red-ink shadow-[0_10px_24px_-12px_rgb(226_50_31/0.7)]',
-    secondary: 'bg-white text-kdm-ink ring-1 ring-inset ring-kdm-line hover:ring-kdm-ink/30',
+    primary: 'bg-kdm-red text-white hover:bg-kdm-red-ink',
+    red: 'bg-kdm-red text-white hover:bg-kdm-red-ink',
+    indigo: 'bg-kdm-blue text-white hover:bg-kdm-navy',
+    secondary: 'bg-transparent text-kdm-ink ring-1 ring-inset ring-kdm-ink/25 hover:ring-kdm-ink/60 hover:bg-white',
     light: 'bg-white text-kdm-ink hover:bg-kdm-paper',
     'ghost-light': 'text-white ring-1 ring-inset ring-white/40 hover:bg-white/10',
 };
 
 const CHIP = {
-    primary: 'bg-white/15 group-hover:bg-kdm-red',
-    red: 'bg-white/15 group-hover:bg-white/25',
-    secondary: 'bg-kdm-surface text-kdm-blue group-hover:bg-kdm-blue group-hover:text-white',
-    light: 'bg-kdm-surface text-kdm-blue group-hover:bg-kdm-red group-hover:text-white',
-    'ghost-light': 'bg-white/15 group-hover:bg-kdm-red',
+    primary: 'border-white/30',
+    red: 'border-white/30',
+    indigo: 'border-white/30',
+    secondary: 'border-kdm-ink/20 text-kdm-red group-hover:text-kdm-red-ink',
+    light: 'border-kdm-ink/15 text-kdm-red',
+    'ghost-light': 'border-white/30',
 };
 
-// The KDM button: a pill with a round "arrow cell" that changes colour and
-// slides its arrow on hover, and settles slightly when pressed.
+// The KDM button: a square-cornered plate with a ruled-off "arrow cell" on
+// the right; the arrow slides through on hover and the plate settles
+// slightly when pressed.
 export function ButtonLink({ to, href, variant = 'primary', size = 'md', arrow = true, className, children, ...rest }) {
     const classes = cn(
-        'group relative inline-flex select-none items-center justify-center gap-3 rounded-full font-semibold transition-[background-color,box-shadow,color,transform] duration-300 ease-kdm active:scale-[0.97]',
+        'group relative inline-flex select-none items-stretch justify-center rounded-tag font-semibold transition-[background-color,box-shadow,color,transform] duration-300 ease-kdm active:scale-[0.98]',
         size === 'md' ? 'min-h-[48px] text-[15px]' : 'min-h-[40px] text-sm',
-        arrow ? (size === 'md' ? 'py-1.5 pl-6 pr-1.5' : 'py-1 pl-4 pr-1') : 'px-6 py-3',
         BUTTON[variant],
         className,
     );
     const content = (
         <>
-            <span>{children}</span>
+            <span className={cn('flex items-center', size === 'md' ? 'px-5' : 'px-4', !arrow && (size === 'md' ? 'px-6' : 'px-5'))}>{children}</span>
             {arrow && (
-                <span className={cn('flex shrink-0 items-center justify-center rounded-full transition-colors duration-300', size === 'md' ? 'h-9 w-9' : 'h-8 w-8', CHIP[variant])}>
+                <span className={cn('flex shrink-0 items-center justify-center border-l transition-colors duration-300', size === 'md' ? 'w-12' : 'w-10', CHIP[variant])}>
                     <SlideArrow />
                 </span>
             )}
@@ -272,7 +277,7 @@ export function ButtonLink({ to, href, variant = 'primary', size = 'md', arrow =
     );
 }
 
-const MotionLink = motion(Link);
+const MotionLink = motion.create(Link);
 
 // "Explore service →" — a quiet text link with a drawn underline.
 export function TextLink({ to, href, children, className, tone = 'blue', ...rest }) {
@@ -305,9 +310,9 @@ export function CheckList({ items, columns = 1, className, numbered = false }) {
             {items.map((item, i) => (
                 <li key={item} className="flex gap-4 border-t border-kdm-line py-3.5 leading-relaxed text-kdm-graphite">
                     {numbered ? (
-                        <span className="t-num w-6 shrink-0 pt-0.5 text-xs font-medium text-kdm-red-ink">{String(i + 1).padStart(2, '0')}</span>
+                        <span className="t-num w-7 shrink-0 pt-0.5 text-xs font-medium text-kdm-red-ink">{String(i + 1).padStart(2, '0')}</span>
                     ) : (
-                        <span aria-hidden="true" className="mt-[9px] h-1.5 w-1.5 shrink-0 bg-kdm-cyan" />
+                        <span aria-hidden="true" className="mt-[9px] h-1.5 w-1.5 shrink-0 border border-kdm-blue" />
                     )}
                     <span>{item}</span>
                 </li>
@@ -325,7 +330,7 @@ export function Breadcrumbs({ crumbs }) {
                 </li>
                 {crumbs.map((c) => (
                     <li key={c.label} className="flex items-center gap-1.5">
-                        <ChevronRight className="h-3 w-3" aria-hidden="true" />
+                        <ChevronRight className="h-3 w-3 text-kdm-blue/50" aria-hidden="true" />
                         {c.to ? (
                             <Link to={c.to} className="hover:text-kdm-blue">{c.label}</Link>
                         ) : (
@@ -338,23 +343,29 @@ export function Breadcrumbs({ crumbs }) {
     );
 }
 
-// The light, drawing-sheet hero at the top of inner pages: breadcrumb,
-// label, title and lead on a blueprint grid, with an optional framed image.
-export function PageHero({ title, eyebrow, image, imageAlt = '', caption, crumbs = [], children, aside, index = '00' }) {
+// The drawing-sheet hero at the top of inner pages: breadcrumb, section
+// callout, title and lead on a faint drafting grid, an optional framed image
+// or custom aside, and a title block naming the sheet.
+export function PageHero({ title, eyebrow, image, imageAlt = '', caption, crumbs = [], children, aside, index = '00', sheet }) {
     const lines = Array.isArray(title) ? title : [title];
     const hasSide = Boolean(image || aside);
     const ready = useIntroDone();
     const enter = ready ? 'show' : 'hidden';
+    const titleRows = [
+        ['Sheet', index],
+        ['Section', sheet ?? eyebrow ?? crumbs[crumbs.length - 1]?.label ?? 'KDM'],
+        ['Scale', 'NTS'],
+        ['Drawn for', 'KDM Engineers Group'],
+    ];
     return (
-        <section className="relative isolate overflow-hidden bg-kdm-paper pb-14 pt-28 sm:pb-20 sm:pt-36">
+        <section className="relative isolate overflow-hidden border-b border-kdm-line bg-kdm-paper pb-12 pt-28 sm:pb-16 sm:pt-36">
             <BlueprintGrid />
-            <div aria-hidden="true" className="absolute -right-40 -top-40 -z-10 h-[520px] w-[520px] rounded-full bg-kdm-cyan/10 blur-3xl" />
             <Container>
                 <Breadcrumbs crumbs={crumbs} />
                 <div className={cn('mt-10 grid items-end gap-12', hasSide && 'lg:grid-cols-12 lg:gap-16')}>
                     <div className={cn(hasSide && 'lg:col-span-7')}>
                         {eyebrow && <SectionLabel index={index}>{eyebrow}</SectionLabel>}
-                        <RevealLines as="h1" lines={lines} animate={ready} className="t-h1 mt-5" />
+                        <RevealLines as="h1" lines={lines} animate={ready} className="t-h1 mt-6" />
                         {children && (
                             <motion.div
                                 initial="hidden"
@@ -388,9 +399,10 @@ export function PageHero({ title, eyebrow, image, imageAlt = '', caption, crumbs
                         </motion.div>
                     )}
                 </div>
-            </Container>
-            <Container className="mt-14 sm:mt-20">
-                <MeasureRule />
+                <div className="mt-12 flex flex-col gap-6 sm:mt-16 md:flex-row md:items-end md:gap-10">
+                    <MeasureRule className="flex-1" />
+                    <TitleBlock rows={titleRows} className="hidden w-[340px] shrink-0 md:grid" />
+                </div>
             </Container>
         </section>
     );

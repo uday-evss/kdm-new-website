@@ -3,30 +3,43 @@
 @tailwind utilities;
 
 /* ------------------------------------------------------------------ */
-/* KDM Engineering System — design tokens                              */
-/* Colours come from the KDM logo: the deep ring blue, the cyan field, */
-/* the red ring and sun, and the yellow base. Stored as RGB channels   */
-/* so Tailwind can apply opacity (bg-kdm-blue/10).                     */
+/* KDM "Living Blueprint" design tokens                                */
+/* Brand colours are sampled from the official logo artwork            */
+/* (public/images/logo.png): ring red #DB2C1D, field cyan #02A2D3,      */
+/* base yellow #FAD403, outline indigo #352F96, wordmark red #A62F20.   */
+/* Stored as RGB channels so Tailwind can apply opacity                 */
+/* (bg-kdm-blue/10). Token names stay stable across the codebase:      */
+/* "blue" is the logo's indigo outline colour.                          */
 /* ------------------------------------------------------------------ */
 @layer base {
   :root {
-    --kdm-ink: 15 27 45;        /* #0F1B2D  headings, body text      */
-    --kdm-graphite: 51 66 90;   /* #33425A  secondary text           */
-    --kdm-muted: 91 107 130;    /* #5B6B82  captions (AA on white)   */
-    --kdm-line: 221 229 238;    /* #DDE5EE  hairlines, borders       */
-    --kdm-paper: 247 250 252;   /* #F7FAFC  page canvas              */
-    --kdm-surface: 238 244 248; /* #EEF4F8  quiet section background */
-    --kdm-mist: 227 238 245;    /* #E3EEF5  tinted panels            */
-    --kdm-blue: 21 59 143;      /* #153B8F  primary brand blue       */
-    --kdm-navy: 14 42 94;       /* #0E2A5E  deep blue                */
-    --kdm-cyan: 20 166 218;     /* #14A6DA  data / technical accent  */
-    --kdm-cyan-ink: 8 118 163;  /* #0876A3  cyan for small text (AA) */
-    --kdm-red: 226 50 31;       /* #E2321F  KDM red — signal colour  */
-    --kdm-red-ink: 190 38 22;   /* #BE2616  red for small text (AA)  */
-    --kdm-yellow: 246 196 0;    /* #F6C400  measurement marker       */
+    /* Neutrals - warm drawing paper and graphite ink */
+    --kdm-ink: 22 24 29;        /* #16181D  headings, body text            */
+    --kdm-graphite: 62 68 80;   /* #3E4450  secondary text                 */
+    --kdm-muted: 100 106 117;   /* #646A75  annotations (AA on all bgs)    */
+    --kdm-line: 226 224 216;    /* #E2E0D8  hairlines, borders             */
+    --kdm-paper: 251 250 247;   /* #FBFAF7  page canvas (warm white)       */
+    --kdm-surface: 243 242 237; /* #F3F2ED  alternate section (warm grey)  */
+    --kdm-mist: 234 242 246;    /* #EAF2F6  cool technical tint            */
+
+    /* Brand - from the logo */
+    --kdm-blue: 53 47 150;      /* #352F96  logo outline indigo: links,
+                                   drawing lines, focus, active states     */
+    --kdm-navy: 34 30 102;      /* #221E66  deep indigo                    */
+    --kdm-red: 219 44 29;       /* #DB2C1D  logo ring red: primary actions */
+    --kdm-red-ink: 166 47 32;   /* #A62F20  logo wordmark red: small text  */
+    --kdm-cyan: 2 162 211;      /* #02A2D3  logo field cyan: data, grids   */
+    --kdm-cyan-ink: 0 116 154;  /* #00749A  cyan for small text (AA)       */
+    --kdm-yellow: 250 212 3;    /* #FAD403  logo base yellow: markers only */
+
+    /* States */
+    --kdm-success: 31 122 77;   /* #1F7A4D */
+    --kdm-error: 166 47 32;     /* #A62F20 */
   }
 
   html {
+    /* Positioned so scroll-linked effects can measure offsets reliably. */
+    position: relative;
     -webkit-text-size-adjust: 100%;
     scroll-padding-top: 5.5rem;
     scroll-behavior: smooth;
@@ -54,7 +67,7 @@
   :focus-visible {
     outline: 2px solid rgb(var(--kdm-blue));
     outline-offset: 3px;
-    border-radius: 4px;
+    border-radius: 2px;
   }
 
   img {
@@ -70,32 +83,34 @@
     @apply mx-auto w-full max-w-site px-4 sm:px-6 lg:px-10;
   }
 
+  /* Editorial type scale - Inter Tight display, Inter body,
+     IBM Plex Mono for technical annotation. */
   .t-display {
     @apply font-display font-semibold text-kdm-ink;
-    font-size: clamp(2.6rem, 1.4rem + 5.2vw, 6.25rem);
-    line-height: 0.98;
-    letter-spacing: -0.035em;
+    font-size: clamp(2.6rem, 1.3rem + 4.3vw, 5.25rem);
+    line-height: 1;
+    letter-spacing: -0.018em;
   }
 
   .t-h1 {
     @apply font-display font-semibold text-kdm-ink;
-    font-size: clamp(2.35rem, 1.5rem + 3.6vw, 4.5rem);
-    line-height: 1.02;
-    letter-spacing: -0.03em;
+    font-size: clamp(2.35rem, 1.45rem + 3.7vw, 4.6rem);
+    line-height: 1.03;
+    letter-spacing: -0.016em;
   }
 
   .t-h2 {
     @apply font-display font-semibold text-kdm-ink;
-    font-size: clamp(1.9rem, 1.3rem + 2.5vw, 3.4rem);
-    line-height: 1.05;
-    letter-spacing: -0.028em;
+    font-size: clamp(1.95rem, 1.3rem + 2.6vw, 3.5rem);
+    line-height: 1.07;
+    letter-spacing: -0.014em;
   }
 
   .t-h3 {
     @apply font-display font-semibold text-kdm-ink;
-    font-size: clamp(1.3rem, 1.1rem + 0.8vw, 1.75rem);
+    font-size: clamp(1.3rem, 1.12rem + 0.75vw, 1.75rem);
     line-height: 1.15;
-    letter-spacing: -0.015em;
+    letter-spacing: -0.01em;
   }
 
   .t-lead {
@@ -104,39 +119,53 @@
     line-height: 1.6;
   }
 
-  /* A standout number — stat tiles, counters. */
+  /* A standout number - stat tiles, counters. */
   .t-stat {
     @apply font-display font-semibold tracking-tight text-kdm-ink;
     font-size: clamp(2.25rem, 1.6rem + 2.4vw, 4rem);
     line-height: 1;
-  }
-
-  /* Technical annotation: small caps-style label used for eyebrows,
-     coordinates and drawing callouts. */
-  .t-label {
-    @apply font-display text-[11px] font-medium uppercase tracking-[0.18em] sm:text-xs;
-  }
-
-  .t-num {
-    @apply font-display tabular-nums;
     font-feature-settings: 'tnum';
   }
 
-  /* Blueprint grid: a fine 24px grid with a stronger 120px module. */
+  /* Technical annotation (mono, uppercase): eyebrows, references,
+     coordinates and drawing callouts. */
+  .t-label {
+    @apply font-mono text-[11px] font-medium uppercase tracking-[0.12em] sm:text-xs;
+  }
+
+  .t-num {
+    @apply font-mono tabular-nums;
+    font-feature-settings: 'tnum', 'zero';
+  }
+
+  /* Drafting grid: a fine 24px grid with a stronger 120px module.
+     Kept faint - it should read as paper, not pattern. */
   .bg-blueprint {
     background-image:
-      linear-gradient(rgb(var(--kdm-cyan) / 0.09) 1px, transparent 1px),
-      linear-gradient(90deg, rgb(var(--kdm-cyan) / 0.09) 1px, transparent 1px),
-      linear-gradient(rgb(var(--kdm-cyan) / 0.05) 1px, transparent 1px),
-      linear-gradient(90deg, rgb(var(--kdm-cyan) / 0.05) 1px, transparent 1px);
+      linear-gradient(rgb(var(--kdm-blue) / 0.07) 1px, transparent 1px),
+      linear-gradient(90deg, rgb(var(--kdm-blue) / 0.07) 1px, transparent 1px),
+      linear-gradient(rgb(var(--kdm-cyan) / 0.06) 1px, transparent 1px),
+      linear-gradient(90deg, rgb(var(--kdm-cyan) / 0.06) 1px, transparent 1px);
     background-size: 120px 120px, 120px 120px, 24px 24px, 24px 24px;
+  }
+  @media (max-width: 639px) {
+    .bg-blueprint {
+      background-size: 96px 96px, 96px 96px, 32px 32px, 32px 32px;
+    }
+  }
+
+  /* A dashed construction line (use as a 1px-high divider). */
+  .construction-line {
+    background-image: linear-gradient(90deg, rgb(var(--kdm-blue) / 0.35) 50%, transparent 50%);
+    background-size: 8px 1px;
+    background-repeat: repeat-x;
   }
 
   /* Ruler ticks (minor every 8px, major every 40px). */
   .bg-ruler {
     background-image:
-      linear-gradient(90deg, rgb(var(--kdm-ink) / 0.55) 1px, transparent 1px),
-      linear-gradient(90deg, rgb(var(--kdm-ink) / 0.22) 1px, transparent 1px);
+      linear-gradient(90deg, rgb(var(--kdm-ink) / 0.5) 1px, transparent 1px),
+      linear-gradient(90deg, rgb(var(--kdm-ink) / 0.2) 1px, transparent 1px);
     background-size: 40px 100%, 8px 45%;
     background-repeat: repeat-x;
     background-position: 0 0, 0 0;
@@ -181,6 +210,27 @@
 .anim-fade {
   opacity: 0;
   animation: kdm-fade 0.4s ease forwards;
+}
+
+/* The signal pulse running along the hero bridge deck (SVG user units). */
+@keyframes kdm-deck-pulse {
+  from { transform: translateX(-40px); }
+  to { transform: translateX(1480px); }
+}
+.kdm-deck-pulse {
+  transform: translateX(-40px);
+  animation: kdm-deck-pulse 7s linear 2s infinite;
+}
+
+/* Line drawing in CSS: give the path pathLength="1" and this class; set
+   animation-delay / animation-duration inline. */
+@keyframes kdm-draw {
+  to { stroke-dashoffset: 0; }
+}
+.anim-draw {
+  stroke-dasharray: 1;
+  stroke-dashoffset: 1;
+  animation: kdm-draw 1.4s cubic-bezier(0.22, 1, 0.36, 1) forwards;
 }
 
 /* ------------------------------------------------------------------ */

@@ -6,7 +6,7 @@ import { company, contact, socials, formatPhone, telHref } from '@/content/site'
 import { servicesNav as services } from '@/content/servicesNav';
 import { EASE } from '@/lib/motion';
 import { LogoMark } from '@/components/brand/Logo';
-import { BlueprintGrid } from '@/components/engineering';
+import { TitleBlock } from '@/components/engineering';
 import { ABOUT_LINKS } from './Navbar';
 
 const SOCIAL_ICONS = { LinkedIn: Linkedin, Facebook, Instagram, YouTube: Youtube };
@@ -19,11 +19,11 @@ const EXPLORE = [
     { label: 'Contact', to: '/contact' },
 ];
 
-// The logo's four colours as a measuring strip.
+// The logo's colours as a measuring strip.
 function ColourRule() {
     const segments = ['bg-kdm-blue', 'bg-kdm-cyan', 'bg-kdm-yellow', 'bg-kdm-red'];
     return (
-        <div aria-hidden="true" className="flex h-1.5">
+        <div aria-hidden="true" className="flex h-1">
             {segments.map((c, i) => (
                 <motion.span
                     key={c}
@@ -61,9 +61,8 @@ export default function Footer() {
     const year = new Date().getFullYear();
 
     return (
-        <footer className="relative overflow-hidden bg-white">
+        <footer className="relative overflow-hidden bg-kdm-paper">
             <ColourRule />
-            <BlueprintGrid className="opacity-70" />
 
             <div className="container-kdm relative pt-20">
                 {/* Statement + logo */}
@@ -77,13 +76,22 @@ export default function Footer() {
                         <p className="mt-5 max-w-xl text-kdm-graphite">
                             Consultancy, testing services and training under one roof — since {company.foundedYear}.
                         </p>
+                        <TitleBlock
+                            className="mt-10 max-w-md"
+                            rows={[
+                                ['Organisation', company.shortName],
+                                ['Established', String(company.foundedYear)],
+                                ['Head office', contact.branches[0].city],
+                                ['Branch', contact.branches[1].city],
+                            ]}
+                        />
                     </div>
                     <div className="grid gap-8 sm:grid-cols-2 lg:col-span-5">
                         {contact.branches.map((b) => (
                             <address key={b.city} className="not-italic">
                                 <p className="t-label text-kdm-red-ink">{b.city}</p>
                                 <p className="mt-3 text-sm leading-relaxed text-kdm-graphite">{b.address}</p>
-                                <a href={telHref(b.phone)} className="mt-3 block font-display text-lg font-semibold text-kdm-ink hover:text-kdm-blue">
+                                <a href={telHref(b.phone)} className="t-num mt-3 block text-[17px] font-medium text-kdm-ink hover:text-kdm-blue">
                                     {formatPhone(b.phone)}
                                 </a>
                                 <a href={`mailto:${b.email}`} className="mt-1 block break-all text-sm text-kdm-graphite hover:text-kdm-blue">
@@ -139,7 +147,7 @@ export default function Footer() {
                                             target="_blank"
                                             rel="noopener noreferrer"
                                             aria-label={s.name}
-                                            className="flex h-11 w-11 items-center justify-center rounded-full text-kdm-graphite ring-1 ring-inset ring-kdm-line transition-colors hover:bg-kdm-blue hover:text-white hover:ring-kdm-blue"
+                                            className="flex h-11 w-11 items-center justify-center rounded-tag text-kdm-graphite ring-1 ring-inset ring-kdm-line transition-colors hover:bg-kdm-blue hover:text-white hover:ring-kdm-blue"
                                         >
                                             <Icon className="h-4 w-4" aria-hidden="true" />
                                         </a>

@@ -24,15 +24,17 @@ npm run lint
 | `src/pages/` | One file per route; routes are declared in `src/App.jsx` (old WordPress URLs redirect there too). |
 | `public/media/` | Optimised WebP photos (`*-sm.webp` small variants), logos and client logos. |
 
-## Design system — "KDM Engineering System"
+## Design system — "Living Blueprint"
 
-**Colour** (from the logo; tokens in `src/index.css`, Tailwind names `kdm-*`): ink `#0F1B2D`, graphite, muted `#5B6B82`, line `#DDE5EE`, paper `#F7FAFC`, surface, mist; brand blue `#153B8F`, navy `#0E2A5E`, cyan `#14A6DA` (data/technical), red `#E2321F` (signal/accent), yellow `#F6C400` (measurement marker). Use `*-ink` variants (`kdm-red-ink`, `kdm-cyan-ink`) for small text so contrast stays AA.
+**Colour** (sampled from the official logo artwork; tokens in `src/index.css`, Tailwind names `kdm-*`): logo ring red `#DB2C1D` (`kdm-red`, primary actions), outline indigo `#352F96` (`kdm-blue`, links, drawing lines, focus, active states), field cyan `#02A2D3` (`kdm-cyan`, data and grids), base yellow `#FAD403` (`kdm-yellow`, markers only), wordmark red `#A62F20` (`kdm-red-ink`, small red text). Neutrals: warm paper `#FBFAF7`, warm-grey surface `#F3F2ED`, cool mist `#EAF2F6`, graphite ink `#16181D`, muted `#646A75`, line `#E2E0D8`. States: `kdm-success`, `kdm-error`.
 
-**Type**: Space Grotesk (display, labels, numbers) + Inter (body). Classes: `t-display`, `t-h1`, `t-h2`, `t-h3`, `t-lead`, `t-label` (technical annotation), `t-num`.
+**Type**: Inter Tight (display), Inter (body), IBM Plex Mono (technical annotations, references, numbers). Classes: `t-display`, `t-h1`, `t-h2`, `t-h3`, `t-lead`, `t-stat`, `t-label` (mono uppercase), `t-num`.
 
-**Layout**: `container-kdm` (max 1320px, 16px mobile gutter), `Section` with tones `white | paper | surface | mist`, radii `rounded-card` (14px) / `rounded-panel` (20px), shadows `shadow-soft` / `shadow-lift`.
+**Geometry**: `container-kdm` (max 1320px, 16px mobile gutter); radii `rounded-tag` 3px, `rounded-card` 4px, `rounded-panel` 6px; light `shadow-soft` / `shadow-lift`; no glass, no gradients, square-cornered buttons with a ruled-off arrow cell.
 
-**Motion** (`src/lib/motion.js`): one easing `cubic-bezier(0.22, 1, 0.36, 1)`, fade-up reveals, line-by-line headline rises, masked image wipes, SVG line drawing. Every section opens with a numbered `SectionLabel` and the `MeasureRule` draws itself between key sections. Reduced-motion users get static content (MotionConfig `reducedMotion="user"` + CSS), and infinite animations pause when off screen.
+**Drawing language** (`src/components/engineering/`): `BlueprintGrid` (faint drafting grid), `SheetZones` (A–F / 1–4 sheet markers), `SectionBubble` (section callouts used by every `SectionLabel`), `TitleBlock` (sheet title blocks with real values only), `DimensionLine`, `CoordinateMarker`, `Annotation`, `CornerMarks`/`Figure`, `MeasureRule`, `ServiceDiagram` (one illustrative line drawing per service), `Waveform`, `SensorNode`. Decorative pieces are `aria-hidden`; illustrative drawings are labelled as such and carry no invented measurements.
+
+**Motion** (`src/lib/motion.js`): one easing `cubic-bezier(0.22, 1, 0.36, 1)`; line drawing, headline line rises, masked image wipes and short fades. There is no blocking intro — the page is usable immediately. Reduced-motion users get static content, and continuous animations pause off screen.
 
 ## Content placeholders to fill
 

@@ -6,7 +6,7 @@ import { projects } from '@/content/projects';
 import { useDesktop } from '@/hooks/useMediaQuery';
 import { Container, Img, RevealLines, SectionLabel, SlideArrow, TextLink } from '@/components/site/primitives';
 
-// 06 — Projects. Full-bleed project stories. On desktop the section pins and
+// 07 — Projects. Full-bleed project stories. On desktop the section pins and
 // scrolling moves the stories sideways, with the project counter and a
 // progress rule keeping place; on touch screens it is a native swipe row.
 
@@ -31,14 +31,14 @@ export function StoryCard({ project, index, wide = false, grid = false }) {
                     sizes={wide ? '40vw' : grid ? '(min-width: 1280px) 30vw, (min-width: 768px) 45vw, 100vw' : '84vw'}
                     className="h-full w-full object-cover transition-transform [transition-duration:1400ms] ease-kdm group-hover:scale-105"
                 />
-                <span className="t-label absolute left-4 top-4 rounded-full bg-white/90 px-3 py-1.5 text-kdm-ink backdrop-blur">
+                <span className="t-label absolute left-4 top-4 rounded-tag bg-white/90 px-3 py-1.5 text-kdm-ink">
                     Fig. {pad(index + 1)} — {project.place}
                 </span>
             </div>
             <div className={cn('flex flex-col', wide ? 'w-[42%] p-8 xl:p-10' : 'p-6')}>
                 <div className="flex items-start justify-between gap-4">
                     <span aria-hidden="true" className="t-num font-display text-5xl font-semibold leading-none text-kdm-muted/80 xl:text-6xl">{pad(index + 1)}</span>
-                    <span className="t-label rounded-full bg-kdm-surface px-3 py-1.5 text-right text-kdm-cyan-ink">{project.workType.replace(' (RSI)', '')}</span>
+                    <span className="t-label rounded-tag bg-kdm-surface px-3 py-1.5 text-right text-kdm-cyan-ink">{project.workType.replace(' (RSI)', '')}</span>
                 </div>
                 <h3 className={cn('font-display font-semibold tracking-tight text-kdm-ink', wide ? 'mt-8 text-3xl xl:text-[40px] xl:leading-[1.05]' : 'mt-5 text-2xl')}>
                     {project.title}
@@ -55,7 +55,7 @@ export function StoryCard({ project, index, wide = false, grid = false }) {
                 </ul>
                 <div className={cn('flex flex-wrap gap-1.5', wide ? 'mt-6' : 'mt-4')}>
                     {project.methods.slice(0, 3).map((m) => (
-                        <span key={m} className="rounded-full bg-kdm-paper px-2.5 py-1 text-xs text-kdm-graphite ring-1 ring-inset ring-kdm-line">
+                        <span key={m} className="rounded-tag bg-kdm-paper px-2.5 py-1 text-xs text-kdm-graphite ring-1 ring-inset ring-kdm-line">
                             {m}
                         </span>
                     ))}
@@ -72,7 +72,7 @@ export function StoryCard({ project, index, wide = false, grid = false }) {
 function Intro({ className }) {
     return (
         <div className={className}>
-            <SectionLabel index="09">Projects</SectionLabel>
+            <SectionLabel index="07">Projects</SectionLabel>
             <RevealLines lines={['Railway bridges,', 'instrumented', 'and understood.']} className="t-h2 mt-5" />
             <p className="t-lead mt-6 max-w-md">
                 Rail–structure interaction, vibration analysis, condition assessment and long-term monitoring for South

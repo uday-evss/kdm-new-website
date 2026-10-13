@@ -136,7 +136,7 @@ export default function CareerDetail() {
                         {facts.map(({ icon: Icon, text }) => (
                             <li
                                 key={text}
-                                className="inline-flex items-center gap-1.5 rounded-full bg-white px-3 py-1.5 text-sm font-medium text-kdm-ink ring-1 ring-inset ring-kdm-line"
+                                className="inline-flex items-center gap-1.5 rounded-tag bg-white px-3 py-1.5 text-sm font-medium text-kdm-ink ring-1 ring-inset ring-kdm-line"
                             >
                                 <Icon className="w-3.5 h-3.5" /> {text}
                             </li>
@@ -150,7 +150,7 @@ export default function CareerDetail() {
                 )}
             </PageHero>
 
-            <Section tone="white">
+            <Section tone="white" className="!pt-10 sm:!pt-14">
                 <Container>
                     {backLink}
                     <div className="grid gap-10 lg:grid-cols-12 lg:gap-16 items-start">
@@ -159,7 +159,7 @@ export default function CareerDetail() {
                             <div>
                                 <a
                                     href="#apply"
-                                    className="lg:hidden mt-4 mb-6 inline-flex items-center rounded-full bg-kdm-blue px-4 py-2 text-sm font-semibold text-white hover:bg-kdm-navy"
+                                    className="lg:hidden mt-4 mb-6 inline-flex items-center rounded-tag bg-kdm-red px-4 py-2 text-sm font-semibold text-white hover:bg-kdm-red-ink"
                                 >
                                     Apply now
                                 </a>
@@ -174,7 +174,7 @@ export default function CareerDetail() {
                             {posting.jdDownloadPath && (
                                 <a
                                     href={`${ERP_API_URL}${posting.jdDownloadPath}`}
-                                    className="mt-6 inline-flex items-center gap-2 rounded-full border border-kdm-blue/30 bg-kdm-blue/5 px-4 py-2 text-sm font-medium text-kdm-blue hover:bg-kdm-blue/10"
+                                    className="mt-6 inline-flex items-center gap-2 rounded-tag border border-kdm-blue/30 bg-kdm-blue/5 px-4 py-2 text-sm font-medium text-kdm-blue hover:bg-kdm-blue/10"
                                 >
                                     <FileDown className="w-4 h-4" /> Download full JD{posting.jdFileName ? ` (${posting.jdFileName})` : ''}
                                 </a>
@@ -233,7 +233,7 @@ export default function CareerDetail() {
                                     <button
                                         type="submit"
                                         disabled={submitting}
-                                        className="w-full rounded-full bg-kdm-blue px-4 py-2.5 text-sm font-semibold text-white transition-colors active:scale-[0.97] hover:bg-kdm-navy disabled:opacity-50"
+                                        className="w-full rounded-tag bg-kdm-red px-4 py-3 text-sm font-semibold text-white transition-colors active:scale-[0.98] hover:bg-kdm-red-ink disabled:opacity-50"
                                     >
                                         {submitting ? 'Submitting...' : 'Submit Application'}
                                     </button>

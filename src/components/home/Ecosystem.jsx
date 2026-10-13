@@ -9,7 +9,7 @@ import { LogoMark } from '@/components/brand/Logo';
 import { CornerMarks } from '@/components/engineering';
 import { Container, Img, RevealLines, SectionLabel, TextLink, Reveal } from '@/components/site/primitives';
 
-// 03 — What KDM does. An engineering system diagram: KDM at the centre,
+// 04 — What KDM does. An engineering system diagram: KDM at the centre,
 // nine disciplines around it. Hovering (or focusing, or tapping) a
 // discipline activates its connection, wakes its neighbours, and swaps in
 // what it means and where it lives. It cycles on its own until touched.
@@ -66,7 +66,7 @@ function Diagram({ active, onSelect, live }) {
                                     className="motion-safe:animate-dash-flow"
                                     initial={{ pathLength: 0 }}
                                     animate={{ pathLength: 1 }}
-                                    transition={{ duration: 0.5, ease: EASE }}
+                                    transition={{ duration: 0.35, ease: EASE }}
                                 />
                             )}
                             {on && live && (
@@ -104,15 +104,21 @@ function Diagram({ active, onSelect, live }) {
                         aria-pressed={on}
                         style={{ left: `${p.x}%`, top: `${p.y}%` }}
                         className={cn(
-                            'absolute flex -translate-x-1/2 -translate-y-1/2 items-center gap-2 whitespace-nowrap rounded-full px-3.5 py-2 text-sm font-semibold transition-all duration-500 ease-kdm',
+                            // A consistent ring + two-layer shadow at every state (only colour/
+                            // intensity differs) so the browser can cross-fade them smoothly —
+                            // toggling box-shadow on/off outright (e.g. none -> shadow-lift)
+                            // can't be interpolated and used to pop in abruptly instead of easing.
+                            'absolute flex -translate-x-1/2 -translate-y-1/2 items-center gap-2 whitespace-nowrap rounded-tag px-3.5 py-2 text-sm font-semibold ring-1 transition-[background-color,box-shadow,color,transform] [transition-duration:350ms] ease-kdm',
                             on
-                                ? 'scale-110 bg-kdm-blue text-white shadow-lift'
+                                ? 'scale-110 bg-kdm-blue text-white shadow-lift ring-kdm-blue'
                                 : isNeighbour(i)
-                                  ? 'bg-white text-kdm-ink ring-1 ring-kdm-cyan/60'
-                                  : 'bg-white text-kdm-graphite ring-1 ring-kdm-line hover:text-kdm-ink',
+                                  ? 'scale-100 bg-white text-kdm-ink shadow-soft ring-kdm-cyan/60'
+                                  : 'scale-100 bg-white text-kdm-graphite shadow-soft ring-kdm-line hover:text-kdm-ink',
                         )}
                     >
-                        <span className={cn('t-num text-[10px]', on ? 'text-kdm-yellow' : 'text-kdm-muted')}>{String(i + 1).padStart(2, '0')}</span>
+                        <span className={cn('t-num text-[10px] transition-colors [transition-duration:350ms]', on ? 'text-kdm-yellow' : 'text-kdm-muted')}>
+                            {String(i + 1).padStart(2, '0')}
+                        </span>
                         {d.verb}
                     </button>
                 );
@@ -147,7 +153,7 @@ function Detail({ discipline, index, announce }) {
                         <motion.div initial={{ scale: 1.08 }} animate={{ scale: 1 }} transition={{ duration: 1.2, ease: EASE }} className="h-full w-full">
                             <Img image={service.cover} alt="" sizes="(min-width: 1024px) 40vw, 100vw" className="h-full w-full object-cover" />
                         </motion.div>
-                        <span className="t-label absolute bottom-3 left-3 rounded-full bg-white/90 px-3 py-1 text-kdm-ink">{service.shortTitle}</span>
+                        <span className="t-label absolute bottom-3 left-3 rounded-tag bg-white/90 px-3 py-1 text-kdm-ink">{service.shortTitle}</span>
                     </div>
                     <CornerMarks />
                 </div>
@@ -182,7 +188,7 @@ export default function Ecosystem() {
             <Container>
                 <div className="grid items-end gap-8 lg:grid-cols-12">
                     <div className="lg:col-span-7">
-                        <SectionLabel index="03">What KDM does</SectionLabel>
+                        <SectionLabel index="04">Expertise</SectionLabel>
                         <RevealLines lines={['One engineering partner.', 'Multiple disciplines.']} className="t-h2 mt-5" />
                         <span id="ecosystem-title" className="sr-only">What KDM does</span>
                     </div>
@@ -201,7 +207,7 @@ export default function Ecosystem() {
                             onClick={() => select(i)}
                             aria-pressed={i === active}
                             className={cn(
-                                'shrink-0 rounded-full px-4 py-2.5 text-sm font-semibold transition-colors',
+                                'shrink-0 rounded-tag px-4 py-2.5 text-sm font-semibold transition-colors',
                                 i === active ? 'bg-kdm-blue text-white' : 'bg-white text-kdm-graphite ring-1 ring-kdm-line',
                             )}
                         >

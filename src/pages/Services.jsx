@@ -48,7 +48,7 @@ function ServiceIndex() {
                                         {s.shortTitle}
                                     </span>
                                     {s.featured && (
-                                        <span className="inline-flex shrink-0 items-center rounded-full bg-kdm-yellow px-2.5 py-1 text-[11px] font-bold uppercase tracking-wide text-kdm-ink">
+                                        <span className="inline-flex shrink-0 items-center rounded-tag bg-kdm-yellow px-2.5 py-1 text-[11px] font-bold uppercase tracking-wide text-kdm-ink">
                                             Flagship
                                         </span>
                                     )}

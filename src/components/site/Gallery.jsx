@@ -66,7 +66,7 @@ export function Lightbox({ images, index, onClose, onIndex, label }) {
                 type="button"
                 onClick={onClose}
                 aria-label="Close"
-                className="absolute right-4 top-4 rounded-full bg-white/10 p-2.5 text-white hover:bg-white/20"
+                className="absolute right-4 top-4 rounded-tag bg-white/10 p-2.5 text-white hover:bg-white/20"
             >
                 <X className="h-6 w-6" />
             </button>
@@ -79,7 +79,7 @@ export function Lightbox({ images, index, onClose, onIndex, label }) {
                             go(-1);
                         }}
                         aria-label="Previous photo"
-                        className="absolute left-3 sm:left-6 top-1/2 -translate-y-1/2 rounded-full bg-white/10 p-3 text-white hover:bg-white/20"
+                        className="absolute left-3 sm:left-6 top-1/2 -translate-y-1/2 rounded-tag bg-white/10 p-3 text-white hover:bg-white/20"
                     >
                         <ChevronLeft className="h-6 w-6" />
                     </button>
@@ -90,11 +90,11 @@ export function Lightbox({ images, index, onClose, onIndex, label }) {
                             go(1);
                         }}
                         aria-label="Next photo"
-                        className="absolute right-3 sm:right-6 top-1/2 -translate-y-1/2 rounded-full bg-white/10 p-3 text-white hover:bg-white/20"
+                        className="absolute right-3 sm:right-6 top-1/2 -translate-y-1/2 rounded-tag bg-white/10 p-3 text-white hover:bg-white/20"
                     >
                         <ChevronRight className="h-6 w-6" />
                     </button>
-                    <p className="absolute bottom-4 left-1/2 -translate-x-1/2 rounded-full bg-white/10 px-3 py-1 text-sm text-white">
+                    <p className="absolute bottom-4 left-1/2 -translate-x-1/2 rounded-tag bg-white/10 px-3 py-1 text-sm text-white">
                         {index + 1} / {images.length}
                     </p>
                 </>
@@ -124,7 +124,7 @@ export default function Gallery({ images, label }) {
                             aria-selected={category === c}
                             onClick={() => setCategory(c)}
                             className={cn(
-                                'rounded-full px-4 py-2 text-sm font-medium transition-colors',
+                                'rounded-tag px-4 py-2 text-sm font-medium transition-colors',
                                 category === c
                                     ? 'bg-kdm-blue text-white'
                                     : 'bg-white text-kdm-graphite ring-1 ring-inset ring-kdm-line hover:text-kdm-ink',

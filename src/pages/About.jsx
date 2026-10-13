@@ -1,12 +1,12 @@
 import React from 'react';
 import { motion } from 'framer-motion';
-import { Award, ShieldCheck } from 'lucide-react';
+import { ShieldCheck } from 'lucide-react';
 import { cn } from '@/lib/utils';
 import { EASE } from '@/lib/motion';
 import { media } from '@/content/media';
 import { company } from '@/content/site';
 import { LogoMark } from '@/components/brand/Logo';
-import { BlueprintGrid, CornerMarks, Figure, MeasureRule } from '@/components/engineering';
+import { CornerMarks, Figure, MeasureRule } from '@/components/engineering';
 import {
     Container,
     Img,
@@ -33,7 +33,7 @@ const initials = (name) =>
         .map((w) => w[0])
         .join('');
 
-const PILLAR_STYLE = ['border-kdm-blue', 'border-kdm-cyan', 'border-kdm-red'];
+const PILLAR_STYLE = ['bg-kdm-blue', 'bg-kdm-cyan', 'bg-kdm-red'];
 const CURRENT_YEAR = new Date().getFullYear();
 
 // The three words around the gear in the KDM logo — the name's meaning.
@@ -171,7 +171,7 @@ export default function About() {
                             <p className="t-label text-kdm-muted">Our values</p>
                             <ul className="mt-4 flex flex-wrap gap-2">
                                 {company.values.map((v, i) => (
-                                    <li key={v} className="flex items-center gap-2 rounded-full bg-kdm-paper px-4 py-2 font-semibold text-kdm-ink ring-1 ring-kdm-line">
+                                    <li key={v} className="flex items-center gap-2 rounded-tag bg-kdm-paper px-4 py-2 font-semibold text-kdm-ink ring-1 ring-kdm-line">
                                         <span aria-hidden="true" className={cn('h-2 w-2 rounded-full', ['bg-kdm-blue', 'bg-kdm-yellow', 'bg-kdm-red'][i])} />
                                         {v}
                                     </li>
@@ -189,12 +189,15 @@ export default function About() {
 
             {/* Vision / Mission / Strength */}
             <Section tone="paper">
-                <BlueprintGrid />
                 <Container className="relative">
                     <SectionHeading index="03" label="We believe in our" title={['Vision, mission', '& strength.']} />
-                    <Stagger className="mt-14 grid gap-6 md:grid-cols-3">
+                    <Stagger className="mt-14 grid border-t border-kdm-ink/20 md:grid-cols-3">
                         {company.pillars.map((p, i) => (
-                            <StaggerItem key={p.title} className={cn('rounded-panel border-t-4 bg-white p-8 shadow-soft', PILLAR_STYLE[i])}>
+                            <StaggerItem
+                                key={p.title}
+                                className="border-b border-kdm-line py-8 md:border-b-0 md:border-r md:px-8 md:first:pl-0 md:last:border-r-0 md:last:pr-0"
+                            >
+                                <span aria-hidden="true" className={cn('mb-6 block h-[3px] w-12', PILLAR_STYLE[i])} />
                                 <p className="t-num t-label text-kdm-muted">{String(i + 1).padStart(2, '0')}</p>
                                 <h3 className="t-h3 mt-4">{p.title}</h3>
                                 <p className="mt-4 leading-relaxed text-kdm-graphite">{p.text}</p>
@@ -216,7 +219,6 @@ export default function About() {
 
             {/* MD's message */}
             <Section id="md-message" tone="surface" className="overflow-hidden">
-                <BlueprintGrid />
                 <Container className="relative grid gap-14 lg:grid-cols-12 lg:gap-16">
                     <div className="lg:col-span-4">
                         <SectionLabel index="05">Message from the MD&apos;s desk</SectionLabel>
@@ -257,16 +259,16 @@ export default function About() {
             <Section id="team" tone="white">
                 <Container>
                     <SectionHeading index="06" label="Board of directors" title="Leadership." />
-                    <Stagger className="mt-14 grid gap-6 sm:grid-cols-3">
+                    <Stagger className="mt-14 grid border-t border-kdm-ink/20 sm:grid-cols-3">
                         {company.directors.map((d, i) => (
-                            <StaggerItem key={d.name} className="group relative rounded-panel bg-kdm-paper p-8 ring-1 ring-kdm-line">
+                            <StaggerItem key={d.name} className="group relative border-b border-kdm-line py-8 sm:border-b-0 sm:border-r sm:px-8 sm:first:pl-0 sm:last:border-r-0">
                                 <span className="t-num t-label text-kdm-muted">{String(i + 1).padStart(2, '0')}</span>
                                 {i === 0 && company.mdPortrait ? (
                                     <Img image={company.mdPortrait} alt="" sizes="80px" className="mt-6 h-20 w-20 rounded-full object-cover object-[40%_25%] ring-1 ring-kdm-line" />
                                 ) : (
                                     <span
                                         aria-hidden="true"
-                                        className="mt-6 flex h-20 w-20 items-center justify-center rounded-full bg-white font-display text-2xl font-semibold text-kdm-blue ring-1 ring-kdm-line transition-colors duration-500 group-hover:bg-kdm-blue group-hover:text-white"
+                                        className="mt-6 flex h-20 w-20 items-center justify-center rounded-full border border-kdm-ink/20 font-display text-2xl font-semibold text-kdm-blue"
                                     >
                                         {initials(d.name)}
                                     </span>
@@ -294,7 +296,7 @@ export default function About() {
                         <SectionLabel index="08">Accreditation</SectionLabel>
                         <h2 className="t-h2 mt-5">{accreditation.title}</h2>
                         <p className="t-lead mt-6">{accreditation.text}</p>
-                        <p className="mt-6 inline-flex items-center gap-2 rounded-full bg-kdm-surface px-4 py-2 text-sm font-semibold text-kdm-blue">
+                        <p className="mt-6 inline-flex items-center gap-2 rounded-tag bg-kdm-surface px-4 py-2 text-sm font-semibold text-kdm-blue">
                             <ShieldCheck className="h-4 w-4" aria-hidden="true" /> Certificate No. {accreditation.certificateNo}
                         </p>
                     </div>
@@ -307,9 +309,6 @@ export default function About() {
                             className="group relative mx-auto block max-w-xs"
                         >
                             <Img image={accreditation.image} alt="NABL accreditation certificate" sizes="320px" className="w-full rounded-card shadow-lift ring-1 ring-kdm-line transition-transform duration-500 group-hover:-translate-y-1" />
-                            <span className="absolute -right-4 -top-4 flex h-12 w-12 items-center justify-center rounded-full bg-kdm-yellow text-kdm-ink shadow-soft">
-                                <Award className="h-6 w-6" aria-hidden="true" />
-                            </span>
                         </a>
                     </div>
                 </Container>

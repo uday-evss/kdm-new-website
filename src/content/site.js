@@ -122,7 +122,7 @@ export const contact = {
             address: "9th Floor, Pardha's Picasa, Madhapur, Hyderabad - 500081",
             email: 'srinivasulu.kunchala@kdmengineers.com',
             person: 'Mr. K Srinivasulu',
-            phone: '8328498601',
+            phone: '9912806685',
         },
         {
             city: 'Visakhapatnam',

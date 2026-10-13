@@ -7,7 +7,7 @@ import { EASE } from '@/lib/motion';
 import { servicesNav as services, serviceSummaryNav as serviceSummary } from '@/content/servicesNav';
 import { company, contact, formatPhone, telHref } from '@/content/site';
 import Logo from '@/components/brand/Logo';
-import { BlueprintGrid, CornerMarks } from '@/components/engineering';
+import { CornerMarks } from '@/components/engineering';
 import { ButtonLink, Img, TextLink } from './primitives';
 import { serviceIcons } from './serviceIcons';
 
@@ -126,7 +126,6 @@ function ServicesPanel({ onNavigate, ...shell }) {
 
                 <div className="col-span-5">
                     <div className="relative overflow-hidden rounded-panel bg-kdm-paper p-5 ring-1 ring-kdm-line">
-                        <BlueprintGrid fade={false} className="opacity-60" />
                         <div className="relative">
                             <div className="relative aspect-[16/9] overflow-hidden rounded-card bg-kdm-mist">
                                 <AnimatePresence initial={false}>
@@ -141,7 +140,7 @@ function ServicesPanel({ onNavigate, ...shell }) {
                                         <Img image={active.cover} alt="" sizes="480px" className="h-full w-full object-cover" />
                                     </motion.div>
                                 </AnimatePresence>
-                                <span className="t-label absolute left-3 top-3 rounded-full bg-white/90 px-2.5 py-1 text-kdm-ink">
+                                <span className="t-label absolute left-3 top-3 rounded-tag bg-white/90 px-2.5 py-1 text-kdm-ink">
                                     Fig. {String(NON_FEATURED.indexOf(active) + 1).padStart(2, '0')}
                                 </span>
                             </div>
@@ -248,7 +247,6 @@ function MobileMenu({ onClose }) {
             transition={{ duration: 0.5, ease: [0.76, 0, 0.24, 1] }}
             className="fixed inset-0 z-40 overflow-y-auto bg-kdm-paper pt-20 lg:hidden"
         >
-            <BlueprintGrid fade={false} className="opacity-50" />
             <nav aria-label="Mobile" className="container-kdm relative pb-12">
                 <ul className="border-b border-kdm-line">
                     {NAV.map((n, i) => (
@@ -397,7 +395,7 @@ export default function Navbar() {
             <div
                 className={cn(
                     'relative z-50 transition-[background-color,box-shadow,border-color] duration-500 ease-kdm',
-                    solid ? 'border-b border-kdm-line bg-white/85 shadow-soft backdrop-blur-xl' : 'border-b border-transparent bg-transparent',
+                    solid ? 'border-b border-kdm-line bg-kdm-paper/95' : 'border-b border-transparent bg-transparent',
                 )}
             >
                 <div className={cn('container-kdm flex items-center justify-between gap-6 transition-[height] duration-500 ease-kdm', scrolled ? 'h-16' : 'h-20')}>
@@ -409,18 +407,18 @@ export default function Navbar() {
                                 const isActive = i === activeIndex;
                                 const pill = i === pillIndex && (
                                     <motion.span
-                                        layoutId="nav-pill"
+                                        layoutId="nav-mark"
                                         aria-hidden="true"
-                                        className="absolute inset-0 -z-10 rounded-full bg-kdm-ink/[0.05]"
+                                        className="absolute inset-x-3 bottom-0 h-px bg-kdm-blue xl:inset-x-4"
                                         transition={{ type: 'spring', stiffness: 420, damping: 36 }}
                                     />
                                 );
                                 const cls = cn(
-                                    'relative z-0 flex items-center gap-1 rounded-full px-3.5 py-2 text-[14.5px] font-medium transition-colors xl:px-4',
+                                    'relative z-0 flex items-center gap-1 px-3 py-2.5 text-[14.5px] font-medium transition-colors xl:px-4',
                                     isActive ? 'text-kdm-blue' : 'text-kdm-graphite hover:text-kdm-ink',
                                 );
                                 const dot = isActive && (
-                                    <span aria-hidden="true" className="absolute bottom-0.5 left-1/2 h-1 w-1 -translate-x-1/2 rounded-full bg-kdm-red" />
+                                    <span aria-hidden="true" className="absolute left-1/2 top-0 h-1.5 w-px -translate-x-1/2 bg-kdm-red" />
                                 );
                                 return (
                                     <li
@@ -485,7 +483,7 @@ export default function Navbar() {
                             aria-expanded={mobileOpen}
                             aria-controls="mobile-menu"
                             aria-label={mobileOpen ? 'Close menu' : 'Open menu'}
-                            className="flex h-11 w-11 items-center justify-center rounded-full text-kdm-ink ring-1 ring-inset ring-kdm-line hover:bg-white lg:hidden"
+                            className="flex h-11 w-11 items-center justify-center rounded-tag text-kdm-ink ring-1 ring-inset ring-kdm-line hover:bg-white lg:hidden"
                         >
                             {mobileOpen ? <X className="h-5 w-5" /> : <Menu className="h-5 w-5" />}
                         </button>

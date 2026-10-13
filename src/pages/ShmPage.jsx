@@ -5,7 +5,7 @@ import { findService } from '@/content/services';
 import { shm, analysisSoftware } from '@/content/shm';
 import { projects } from '@/content/projects';
 import { company } from '@/content/site';
-import { BlueprintGrid, CornerMarks, Figure, Waveform } from '@/components/engineering';
+import { CornerMarks, Figure, Waveform } from '@/components/engineering';
 import {
     ButtonLink,
     CheckList,
@@ -36,7 +36,7 @@ function HeroReadout() {
         <div className="relative">
             <MaskedImage image={shm.introImages[0]} alt="SHM sensors and a data aggregator on site" priority animate={ready} sizes="(min-width: 1024px) 40vw, 100vw" className="aspect-[4/3] rounded-panel" />
             <CornerMarks />
-            <div className="absolute inset-x-4 bottom-4 rounded-card bg-white/90 p-4 shadow-soft backdrop-blur-md">
+            <div className="absolute inset-x-4 bottom-4 rounded-card bg-white/90 p-4 shadow-soft">
                 <div className="flex items-center justify-between">
                     <p className="t-label text-kdm-ink">Dynamic response</p>
                     <p className="t-label text-kdm-muted">Illustrative</p>
@@ -90,7 +90,6 @@ export default function ShmPage() {
 
             {/* Sensors */}
             <Section tone="surface" className="overflow-hidden">
-                <BlueprintGrid />
                 <Container className="relative">
                     <SectionHeading index="02" label="Instrumentation" title={['Every sensor', 'has a question to answer.']}>
                         Choose a sensor on the drawing to see what it measures and why it matters.
@@ -142,7 +141,7 @@ export default function ShmPage() {
                         </SectionHeading>
                         <Stagger as="ul" gap={0.04} className="mt-8 flex flex-wrap gap-2">
                             {shm.applications.items.map((a) => (
-                                <StaggerItem as="li" key={a} className="rounded-full bg-kdm-paper px-4 py-2 text-sm font-medium text-kdm-ink ring-1 ring-inset ring-kdm-line">
+                                <StaggerItem as="li" key={a} className="rounded-tag bg-kdm-paper px-4 py-2 text-sm font-medium text-kdm-ink ring-1 ring-inset ring-kdm-line">
                                     {a}
                                 </StaggerItem>
                             ))}
@@ -162,11 +161,11 @@ export default function ShmPage() {
             <Section tone="paper">
                 <Container>
                     <SectionHeading index="07" label="Equipment" title={['Advanced instrumentation', '& data aggregation.']} />
-                    <Stagger className="mt-14 grid gap-6 md:grid-cols-2">
+                    <Stagger className="mt-14 grid border-t border-kdm-ink/20 md:grid-cols-2 md:gap-x-12">
                         {shm.instrumentation.map((item) => (
-                            <StaggerItem key={item.title} className="flex flex-col gap-6 rounded-panel bg-white p-6 ring-1 ring-kdm-line sm:flex-row">
+                            <StaggerItem key={item.title} className="flex flex-col gap-6 border-b border-kdm-line py-8 sm:flex-row">
                                 <div className="relative shrink-0">
-                                    <Img image={item.image} alt={item.title} sizes="160px" className="h-40 w-40 rounded-card bg-kdm-paper object-contain p-2" />
+                                    <Img image={item.image} alt={item.title} sizes="160px" className="h-36 w-36 rounded-card bg-white object-contain p-2 ring-1 ring-kdm-line" />
                                     <CornerMarks size="h-2 w-2" />
                                 </div>
                                 <div>

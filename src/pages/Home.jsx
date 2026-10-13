@@ -8,8 +8,8 @@ const loadBelowFold = () => import('@/components/home/HomeBelowFold');
 const HomeBelowFold = lazy(loadBelowFold);
 
 // The rest of the page mounts as the visitor approaches it (or straight away
-// when a link targets a section on it), and its code is fetched while the
-// browser is idle — so the first screen paints and responds quickly.
+// when a link targets a section on it), and its code is fetched at the first
+// interaction — so the first screen paints and responds quickly.
 function useBelowFold(sentinelRef) {
     const { hash } = useLocation();
     const [mount, setMount] = useState(false);
@@ -25,11 +25,17 @@ function useBelowFold(sentinelRef) {
         return () => io.disconnect();
     }, [mount, sentinelRef]);
 
+    // Fetch the rest of the page's code at the visitor's first sign of
+    // intent (scroll, touch, key, pointer) rather than competing with the
+    // first paint for the main thread.
     useEffect(() => {
-        const idle = window.requestIdleCallback ?? ((cb) => setTimeout(cb, 2000));
-        const cancel = window.cancelIdleCallback ?? clearTimeout;
-        const id = idle(() => loadBelowFold());
-        return () => cancel(id);
+        const events = ['scroll', 'pointerdown', 'pointermove', 'keydown', 'touchstart'];
+        const prefetch = () => {
+            events.forEach((e) => window.removeEventListener(e, prefetch));
+            loadBelowFold();
+        };
+        events.forEach((e) => window.addEventListener(e, prefetch, { passive: true, once: true }));
+        return () => events.forEach((e) => window.removeEventListener(e, prefetch));
     }, []);
 
     return mount;

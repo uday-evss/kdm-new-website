@@ -6,7 +6,7 @@ import { CornerMarks } from '@/components/engineering';
 import { ButtonLink, Container, MaskedImage, RevealLines, SectionLabel, Reveal, Stagger, StaggerItem } from '@/components/site/primitives';
 import { fetchOpenings, OPENINGS_QUERY_KEY } from '@/components/careers/careersCommon';
 
-// 11 — Careers. People first: engineers on site, the fields they can grow
+// 12 — Careers. People first: engineers on site, the fields they can grow
 // into, and — live from the KDM ERP — how many roles are open right now.
 export default function CareersTeaser() {
     const { data: openings } = useQuery({ queryKey: OPENINGS_QUERY_KEY, queryFn: fetchOpenings, staleTime: 60000 });
@@ -40,7 +40,7 @@ export default function CareersTeaser() {
                 </div>
 
                 <div className="order-1 lg:order-2 lg:col-span-6">
-                    <SectionLabel index="08">Careers</SectionLabel>
+                    <SectionLabel index="12">Careers</SectionLabel>
                     <RevealLines lines={['Build the infrastructure', 'of tomorrow.']} className="t-h2 mt-5" />
                     <span id="careers-title" className="sr-only">Careers at KDM</span>
                     <Reveal delay={0.1} className="t-lead mt-6 max-w-xl">
@@ -49,7 +49,7 @@ export default function CareersTeaser() {
                     </Reveal>
                     <Stagger as="ul" gap={0.04} className="mt-8 flex flex-wrap gap-2">
                         {careerTracks.map((t) => (
-                            <StaggerItem as="li" key={t} className="rounded-full bg-kdm-paper px-3.5 py-2 text-sm font-medium text-kdm-ink ring-1 ring-inset ring-kdm-line">
+                            <StaggerItem as="li" key={t} className="rounded-tag bg-kdm-paper px-3.5 py-2 text-sm font-medium text-kdm-ink ring-1 ring-inset ring-kdm-line">
                                 {t}
                             </StaggerItem>
                         ))}

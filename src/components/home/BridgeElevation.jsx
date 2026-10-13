@@ -1,6 +1,5 @@
 import React, { useEffect, useRef, useState } from 'react';
-import { motion, useInView, useMotionValue, useMotionValueEvent } from 'framer-motion';
-import { EASE } from '@/lib/motion';
+import { useInView, useMotionValue, useMotionValueEvent } from 'framer-motion';
 import { SensorNode } from '@/components/engineering';
 
 // The hero's line drawing: an elevation of a bowstring-arch railway bridge —
@@ -71,10 +70,16 @@ export default function BridgeElevation({ ready = true, pointerX, pointerY, clas
     }, [active, visible]);
     const highlighted = active ?? (ready ? SENSORS[cycle].id : null);
 
+    // Line drawing and fades run as CSS animations (one-off, compositor
+    // friendly) rather than one JS animation per element.
     const draw = (delay, duration = 1.6) => ({
-        initial: { pathLength: 0 },
-        animate: ready ? { pathLength: 1 } : { pathLength: 0 },
-        transition: { duration, ease: EASE, delay },
+        pathLength: 1,
+        className: ready ? 'anim-draw' : 'opacity-0',
+        style: { animationDelay: `${delay}s`, animationDuration: `${duration}s` },
+    });
+    const fadeIn = (delay, duration = 0.6) => ({
+        className: ready ? 'anim-fade' : 'opacity-0',
+        style: { animationDelay: `${delay}s`, animationDuration: `${duration}s` },
     });
 
     const ink = 'rgb(var(--kdm-navy) / 0.42)';
@@ -91,7 +96,7 @@ export default function BridgeElevation({ ready = true, pointerX, pointerY, clas
         >
             {/* Water and river bed contours */}
             {[318, 332, 346].map((y, i) => (
-                <motion.path
+                <path
                     key={y}
                     d={`M-20 ${y} ${Array.from({ length: 30 }, (_, k) => `Q ${k * 50 + 25} ${y + (k % 2 ? 4 : -4)} ${k * 50 + 50} ${y}`).join(' ')}`}
                     stroke={i === 0 ? 'rgb(var(--kdm-cyan) / 0.55)' : 'rgb(var(--kdm-cyan) / 0.22)'}
@@ -102,26 +107,21 @@ export default function BridgeElevation({ ready = true, pointerX, pointerY, clas
 
             {/* Piers */}
             {PIERS.map((x, i) => (
-                <motion.g
-                    key={x}
-                    initial={{ opacity: 0 }}
-                    animate={{ opacity: ready ? 1 : 0 }}
-                    transition={{ duration: 0.6, delay: 0.2 + i * 0.06 }}
-                >
+                <g key={x} {...fadeIn(0.2 + i * 0.06)}>
                     <rect x={x - 26} y={DECK + 8} width="52" height="10" stroke={ink} strokeWidth="1.4" fill="rgb(var(--kdm-paper))" />
                     <rect x={x - 14} y={DECK + 18} width="28" height="80" stroke={ink} strokeWidth="1.4" fill="rgb(var(--kdm-paper))" />
-                </motion.g>
+                </g>
             ))}
 
             {/* Tie girder (deck) */}
-            <motion.path d={`M-20 ${DECK - 8} L1460 ${DECK - 8}`} stroke={ink} strokeWidth="1.6" {...draw(0, 1.4)} />
-            <motion.path d={`M-20 ${DECK + 8} L1460 ${DECK + 8}`} stroke={ink} strokeWidth="1.6" {...draw(0.08, 1.4)} />
+            <path d={`M-20 ${DECK - 8} L1460 ${DECK - 8}`} stroke={ink} strokeWidth="1.6" {...draw(0, 1.4)} />
+            <path d={`M-20 ${DECK + 8} L1460 ${DECK + 8}`} stroke={ink} strokeWidth="1.6" {...draw(0.08, 1.4)} />
 
             {/* Arches and hangers */}
             {spans.map(({ x0, x1, xm }, si) => (
                 <g key={x0}>
-                    <motion.path d={`M${x0} ${DECK - 8} Q${xm} ${CONTROL_Y} ${x1} ${DECK - 8}`} stroke={ink} strokeWidth="2.2" {...draw(0.35 + si * 0.08, 1.5)} />
-                    <motion.path d={`M${x0 + 6} ${DECK - 8} Q${xm} ${CONTROL_Y + 14} ${x1 - 6} ${DECK - 8}`} stroke={faint} strokeWidth="1" {...draw(0.45 + si * 0.08, 1.5)} />
+                    <path d={`M${x0} ${DECK - 8} Q${xm} ${CONTROL_Y} ${x1} ${DECK - 8}`} stroke={ink} strokeWidth="2.2" {...draw(0.35 + si * 0.08, 1.5)} />
+                    <path d={`M${x0 + 6} ${DECK - 8} Q${xm} ${CONTROL_Y + 14} ${x1 - 6} ${DECK - 8}`} stroke={faint} strokeWidth="1" {...draw(0.45 + si * 0.08, 1.5)} />
                     {Array.from({ length: 11 }, (_, k) => {
                         const t = (k + 1) / 12;
                         const x = x0 + t * SPAN;
@@ -143,28 +143,26 @@ export default function BridgeElevation({ ready = true, pointerX, pointerY, clas
             ))}
 
             {/* Dimension line over one span */}
-            <motion.g initial={{ opacity: 0 }} animate={{ opacity: ready ? 1 : 0 }} transition={{ duration: 0.6, delay: 1.5 }}>
+            <g {...fadeIn(1.5)}>
                 <line x1="520" x2="520" y1="34" y2="58" stroke={ink} strokeWidth="1" />
                 <line x1="920" x2="920" y1="34" y2="58" stroke={ink} strokeWidth="1" />
-                <motion.path d="M520 46 L920 46" stroke="rgb(var(--kdm-red))" strokeWidth="1.2" {...draw(1.5, 0.9)} />
+                <path d="M520 46 L920 46" stroke="rgb(var(--kdm-red))" strokeWidth="1.2" {...draw(1.5, 0.9)} />
                 <path d="M520 46 l9 -4 v8 z M920 46 l-9 -4 v8 z" fill="rgb(var(--kdm-red))" />
                 <rect x="660" y="36" width="120" height="20" fill="rgb(var(--kdm-paper))" />
-                <text x="720" y="50" textAnchor="middle" className="fill-kdm-ink font-display" fontSize="13" fontWeight="600" letterSpacing="1.5">
+                <text x="720" y="50" textAnchor="middle" className="fill-kdm-ink font-mono" fontSize="12" fontWeight="500" letterSpacing="1">
                     SPAN 97.552 m
                 </text>
-            </motion.g>
+                <text x="140" y="50" className="fill-kdm-muted font-mono" fontSize="11" letterSpacing="1">
+                    ILLUSTRATIVE ELEVATION · NTS
+                </text>
+            </g>
 
             {/* A pulse running along the deck */}
             {ready && visible && (
-                <motion.g
-                    className="motion-reduce:hidden"
-                    initial={{ x: -40 }}
-                    animate={{ x: 1480 }}
-                    transition={{ duration: 7, ease: 'linear', repeat: Infinity, delay: 2 }}
-                >
+                <g className="kdm-deck-pulse motion-reduce:hidden">
                     <rect x="-90" y={DECK - 1.5} width="90" height="3" fill="url(#deck-pulse)" />
                     <circle cx="0" cy={DECK} r="3.5" fill="rgb(var(--kdm-cyan))" />
-                </motion.g>
+                </g>
             )}
             <defs>
                 <linearGradient id="deck-pulse" x1="0" x2="1">
@@ -177,12 +175,7 @@ export default function BridgeElevation({ ready = true, pointerX, pointerY, clas
             {SENSORS.map((s, i) => {
                 const on = highlighted === s.id;
                 return (
-                    <motion.g
-                        key={s.id}
-                        initial={{ opacity: 0 }}
-                        animate={{ opacity: ready ? 1 : 0 }}
-                        transition={{ duration: 0.5, delay: 1.7 + i * 0.12 }}
-                    >
+                    <g key={s.id} {...fadeIn(1.7 + i * 0.12, 0.5)}>
                         <path
                             d={`M${s.x} ${s.y} L${s.lx} ${s.ly}`}
                             stroke={on ? 'rgb(var(--kdm-red))' : 'rgb(var(--kdm-navy) / 0.35)'}
@@ -197,13 +190,13 @@ export default function BridgeElevation({ ready = true, pointerX, pointerY, clas
                             fontSize="12"
                             fontWeight="500"
                             letterSpacing="1.6"
-                            className="font-display uppercase"
+                            className="font-mono uppercase"
                             style={{ fill: on ? 'rgb(var(--kdm-red-ink))' : 'rgb(var(--kdm-navy) / 0.65)', transition: 'fill 0.3s' }}
                         >
                             {s.label}
                         </text>
                         <SensorNode x={s.x} y={s.y} active={on} color={on ? 'rgb(var(--kdm-red))' : 'rgb(var(--kdm-blue))'} />
-                    </motion.g>
+                    </g>
                 );
             })}
         </svg>

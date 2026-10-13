@@ -2,13 +2,15 @@ import React from 'react';
 import { Link } from 'react-router-dom';
 import { clients } from '@/content/clients';
 import { projects } from '@/content/projects';
-import { Container, RevealLines, SectionLabel, TextLink, Reveal, Stagger, StaggerItem, SlideArrow } from '@/components/site/primitives';
+import { company } from '@/content/site';
+import { Container, Img, RevealLines, SectionLabel, TextLink, Reveal, Stagger, StaggerItem, SlideArrow } from '@/components/site/primitives';
 import { ClientMarquee } from '@/components/site/widgets';
 
 // 09 — Clients. Two slow rows (government & PSU one way, private the
 // other) that pause under the cursor, then the client stories our own
 // project record tells.
 export default function ClientsShowcase() {
+    const accreditation = company.accreditations[0];
     const government = clients.filter((c) => c.sector === 'Government');
     const privateSector = clients.filter((c) => c.sector === 'Private');
     const byClient = Object.entries(
@@ -23,7 +25,7 @@ export default function ClientsShowcase() {
             <Container>
                 <div className="grid items-end gap-8 lg:grid-cols-12">
                     <div className="lg:col-span-7">
-                        <SectionLabel index="11">Clients</SectionLabel>
+                        <SectionLabel index="09">Clients &amp; accreditation</SectionLabel>
                         <RevealLines lines={['Trusted across government', 'and industry.']} className="t-h2 mt-5" />
                         <span id="clients-title" className="sr-only">Clients</span>
                     </div>
@@ -58,7 +60,7 @@ export default function ClientsShowcase() {
                                     <li key={p.slug}>
                                         <Link
                                             to={`/projects/${p.slug}`}
-                                            className="group inline-flex items-center gap-2 rounded-full bg-white px-3.5 py-2 text-sm font-medium text-kdm-ink ring-1 ring-kdm-line transition-colors hover:text-kdm-blue hover:ring-kdm-blue/40"
+                                            className="group inline-flex items-center gap-2 rounded-tag bg-white px-3.5 py-2 text-sm font-medium text-kdm-ink ring-1 ring-kdm-line transition-colors hover:text-kdm-blue hover:ring-kdm-blue/40"
                                         >
                                             {p.title.replace('Bridge between ', '')}
                                             <SlideArrow className="h-3.5 w-3.5" />
@@ -69,6 +71,24 @@ export default function ClientsShowcase() {
                         </StaggerItem>
                     ))}
                 </Stagger>
+
+                {/* Accreditation, exactly as published by the company */}
+                <div className="mt-6 grid items-center gap-8 border border-kdm-ink/15 bg-white p-6 sm:grid-cols-[auto_1fr] sm:p-8">
+                    <a
+                        href={accreditation.image.src}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        aria-label="View the NABL accreditation certificate"
+                        className="block w-28 shrink-0"
+                    >
+                        <Img image={accreditation.image} alt="NABL accreditation certificate" sizes="112px" className="w-full ring-1 ring-kdm-line" />
+                    </a>
+                    <div>
+                        <p className="t-label text-kdm-muted">Accreditation · Certificate No. {accreditation.certificateNo}</p>
+                        <h3 className="t-h3 mt-2">{accreditation.title}</h3>
+                        <p className="mt-2 max-w-3xl text-[15px] leading-relaxed text-kdm-graphite">{accreditation.text}</p>
+                    </div>
+                </div>
             </Container>
         </section>
     );

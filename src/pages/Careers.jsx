@@ -94,7 +94,7 @@ function JobCard({ job, index }) {
 
                 <Link
                     to={`/careers/${job.slug}`}
-                    className="inline-flex items-center justify-center gap-2 shrink-0 self-start rounded-full bg-kdm-blue hover:bg-kdm-navy text-white text-sm font-semibold px-5 py-2.5 transition-colors"
+                    className="inline-flex items-center justify-center gap-2 shrink-0 self-start rounded-tag bg-kdm-red hover:bg-kdm-red-ink text-white text-sm font-semibold px-5 py-2.5 transition-colors"
                 >
                     View &amp; Apply
                     <ArrowRight className="w-4 h-4" />
@@ -128,7 +128,7 @@ export default function Careers() {
                 and infrastructure consulting across India.
                 <ul className="mt-6 flex flex-wrap gap-2">
                     {careerTracks.map((t) => (
-                        <li key={t} className="rounded-full bg-white px-3 py-1.5 text-sm font-medium text-kdm-ink ring-1 ring-inset ring-kdm-line">
+                        <li key={t} className="rounded-tag bg-white px-3 py-1.5 text-sm font-medium text-kdm-ink ring-1 ring-inset ring-kdm-line">
                             {t}
                         </li>
                     ))}

@@ -6,7 +6,7 @@ import { EASE } from '@/lib/motion';
 import { shm, analysisSoftware } from '@/content/shm';
 import { Container, RevealLines, SectionLabel, Reveal, Stagger, StaggerItem } from '@/components/site/primitives';
 
-// 08 — Technology. The five processing phases of a KDM monitoring system as
+// 06 — Technology. The five processing phases of a KDM monitoring system as
 // one flowing pipeline — data travels left to right through it — with the
 // sensing technologies and analysis software beneath.
 
@@ -75,7 +75,7 @@ export function TagGroup({ title, items, tone = 'cyan' }) {
                         as="li"
                         key={t}
                         className={cn(
-                            'rounded-full px-3.5 py-2 text-sm font-medium ring-1 ring-inset',
+                            'rounded-tag px-3.5 py-2 text-sm font-medium ring-1 ring-inset',
                             tone === 'cyan' ? 'bg-white text-kdm-ink ring-kdm-line' : 'bg-kdm-blue text-white ring-kdm-blue',
                         )}
                     >

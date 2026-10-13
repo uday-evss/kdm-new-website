@@ -3,7 +3,6 @@ import { FileDown } from 'lucide-react';
 import { shm } from '@/content/shm';
 import { projects } from '@/content/projects';
 import { company } from '@/content/site';
-import { BlueprintGrid } from '@/components/engineering';
 import { ButtonLink, Container, RevealLines, SectionLabel, Reveal, Stagger, StaggerItem } from '@/components/site/primitives';
 import { StatCounter } from '@/components/site/widgets';
 import SensorExplorer from './SensorExplorer';
@@ -21,8 +20,6 @@ export default function ShmSignature() {
 
     return (
         <section aria-labelledby="shm-title" className="relative isolate overflow-hidden bg-kdm-navy py-20 sm:py-28 lg:py-32">
-            <BlueprintGrid />
-            <div aria-hidden="true" className="absolute -left-40 top-20 -z-10 h-[480px] w-[480px] rounded-full bg-kdm-cyan/15 blur-3xl" />
             <Container className="relative">
                 <div className="grid items-end gap-8 lg:grid-cols-12">
                     <div className="lg:col-span-7">

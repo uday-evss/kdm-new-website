@@ -5,7 +5,7 @@ import { cn } from '@/lib/utils';
 import { EASE } from '@/lib/motion';
 import { clients } from '@/content/clients';
 import { company, contact, formatPhone, telHref } from '@/content/site';
-import { BlueprintGrid, MeasureRule } from '@/components/engineering';
+import { MeasureRule } from '@/components/engineering';
 import { Container, ButtonLink, RevealLines, SectionLabel, SlideArrow } from './primitives';
 
 // Counts up to `value` the first time it scrolls into view, sharpening from
@@ -110,23 +110,48 @@ export function BrochureLinks({ className }) {
     );
 }
 
-// The closing call to action on most pages: light, measured, direct.
+// The closing call to action on most pages: a framed sheet with a red
+// datum rule, a portal frame drawn in construction lines, and direct lines
+// to the head office.
+function PortalFrame() {
+    const draw = (i) => ({
+        hidden: { pathLength: 0 },
+        show: { pathLength: 1, transition: { duration: 1.3, ease: EASE, delay: 0.12 * i } },
+    });
+    return (
+        <motion.svg
+            aria-hidden="true"
+            viewBox="0 0 260 180"
+            fill="none"
+            initial="hidden"
+            whileInView="show"
+            viewport={{ once: true }}
+            className="h-auto w-full max-w-[300px]"
+        >
+            <motion.path d="M10 170 H250" stroke="rgb(var(--kdm-ink) / 0.5)" strokeWidth="1.4" variants={draw(0)} />
+            <motion.path d="M40 170 V60 L130 20 L220 60 V170" stroke="rgb(var(--kdm-blue))" strokeWidth="1.8" variants={draw(1)} />
+            <motion.path d="M40 60 H220 M130 20 V170" stroke="rgb(var(--kdm-blue) / 0.35)" strokeWidth="1" strokeDasharray="4 4" variants={draw(2)} />
+            <motion.path d="M40 60 L130 170 L220 60" stroke="rgb(var(--kdm-cyan) / 0.6)" strokeWidth="1" variants={draw(3)} />
+            <motion.path d="M24 178 l16 -8 16 8 M204 178 l16 -8 16 8" stroke="rgb(var(--kdm-ink) / 0.5)" strokeWidth="1.2" variants={draw(4)} />
+            <motion.circle cx="130" cy="20" r="4" fill="rgb(var(--kdm-red))" variants={{ hidden: { opacity: 0 }, show: { opacity: 1, transition: { delay: 1.2 } } }} />
+        </motion.svg>
+    );
+}
+
 export function ContactBand({
     title = ["Let's build something", 'that lasts.'],
     text = 'Talk to our team about consultancy, testing, surveys or structural health monitoring for your project.',
+    index,
 }) {
     const hq = contact.branches[0];
     return (
-        <section className="relative isolate overflow-hidden bg-kdm-surface py-20 sm:py-28">
-            <BlueprintGrid />
-            <div aria-hidden="true" className="absolute -bottom-40 -left-20 -z-10 h-96 w-96 rounded-full bg-kdm-yellow/20 blur-3xl" />
-            <div aria-hidden="true" className="absolute -right-20 -top-32 -z-10 h-96 w-96 rounded-full bg-kdm-cyan/15 blur-3xl" />
+        <section className="relative isolate overflow-hidden border-t border-kdm-line bg-kdm-paper py-20 sm:py-28">
             <Container className="relative">
-                <MeasureRule className="mb-14" at="78%" />
-                <div className="grid items-end gap-10 lg:grid-cols-12">
+                <div className="relative grid items-end gap-12 border border-kdm-ink/15 bg-white/70 p-6 sm:p-10 lg:grid-cols-12 lg:p-14">
+                    <span aria-hidden="true" className="absolute inset-y-0 left-0 w-[3px] bg-kdm-red" />
                     <div className="lg:col-span-8">
-                        <SectionLabel>Start a conversation</SectionLabel>
-                        <RevealLines lines={Array.isArray(title) ? title : [title]} className="t-h1 mt-5" />
+                        <SectionLabel index={index}>Start a conversation</SectionLabel>
+                        <RevealLines lines={Array.isArray(title) ? title : [title]} className="t-h1 mt-6" />
                         <motion.p
                             initial={{ opacity: 0, y: 12 }}
                             whileInView={{ opacity: 1, y: 0 }}
@@ -136,19 +161,23 @@ export function ContactBand({
                         >
                             {text}
                         </motion.p>
-                    </div>
-                    <div className="flex flex-col gap-5 lg:col-span-4 lg:items-end">
-                        <ButtonLink to="/contact">Start a conversation</ButtonLink>
-                        <div className="flex flex-col gap-2 text-sm text-kdm-graphite lg:items-end">
-                            <a href={telHref(hq.phone)} className="inline-flex items-center gap-2 hover:text-kdm-blue">
-                                <Phone className="h-4 w-4 text-kdm-red" aria-hidden="true" /> {formatPhone(hq.phone)}
-                            </a>
-                            <a href={`mailto:${hq.email}`} className="inline-flex items-center gap-2 break-all hover:text-kdm-blue">
-                                <Mail className="h-4 w-4 shrink-0 text-kdm-red" aria-hidden="true" /> {hq.email}
-                            </a>
+                        <div className="mt-10 flex flex-wrap items-center gap-x-8 gap-y-5">
+                            <ButtonLink to="/contact">Send an enquiry</ButtonLink>
+                            <div className="flex flex-col gap-1.5 text-sm text-kdm-graphite">
+                                <a href={telHref(hq.phone)} className="t-num inline-flex items-center gap-2 hover:text-kdm-blue">
+                                    <Phone className="h-4 w-4 text-kdm-red" aria-hidden="true" /> {formatPhone(hq.phone)}
+                                </a>
+                                <a href={`mailto:${hq.email}`} className="inline-flex items-center gap-2 break-all hover:text-kdm-blue">
+                                    <Mail className="h-4 w-4 shrink-0 text-kdm-red" aria-hidden="true" /> {hq.email}
+                                </a>
+                            </div>
                         </div>
                     </div>
+                    <div className="hidden justify-end lg:col-span-4 lg:flex">
+                        <PortalFrame />
+                    </div>
                 </div>
+                <MeasureRule className="mt-10" at="78%" />
             </Container>
         </section>
     );

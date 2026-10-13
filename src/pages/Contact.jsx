@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import { MapPin, Phone, Mail, User, Send } from 'lucide-react';
 import { cn } from '@/lib/utils';
 import { contact, formatPhone, telHref } from '@/content/site';
-import { BlueprintGrid, CornerMarks } from '@/components/engineering';
+import { CornerMarks } from '@/components/engineering';
 import { Container, PageHero, Reveal, Section, SectionLabel, usePageMeta } from '@/components/site/primitives';
 
 const TOPICS = ['Consultancy', 'Testing', 'Structural Health Monitoring', 'Structural Assessment', 'Infrastructure', 'Training', 'Other'];
@@ -56,7 +56,7 @@ function EnquiryForm() {
                     {TOPICS.map((t) => (
                         <label key={t} className="cursor-pointer">
                             <input type="radio" name="topic" value={t} checked={form.topic === t} onChange={set('topic')} className="peer sr-only" />
-                            <span className="inline-block rounded-full px-4 py-2 text-sm font-medium text-kdm-graphite ring-1 ring-inset ring-kdm-line transition-colors peer-checked:bg-kdm-blue peer-checked:text-white peer-checked:ring-kdm-blue peer-focus-visible:outline peer-focus-visible:outline-2 peer-focus-visible:outline-offset-2 peer-focus-visible:outline-kdm-blue hover:text-kdm-ink">
+                            <span className="inline-block rounded-tag px-4 py-2 text-sm font-medium text-kdm-graphite ring-1 ring-inset ring-kdm-line transition-colors peer-checked:bg-kdm-blue peer-checked:text-white peer-checked:ring-kdm-blue peer-focus-visible:outline peer-focus-visible:outline-2 peer-focus-visible:outline-offset-2 peer-focus-visible:outline-kdm-blue hover:text-kdm-ink">
                                 {t}
                             </span>
                         </label>
@@ -86,11 +86,11 @@ function EnquiryForm() {
                 <p className="max-w-xs text-xs leading-relaxed text-kdm-muted">Sending opens a pre-filled email to our head office in your mail app.</p>
                 <button
                     type="submit"
-                    className="group inline-flex min-h-[48px] items-center justify-center gap-3 rounded-full bg-kdm-blue py-1.5 pl-6 pr-1.5 text-[15px] font-semibold text-white transition-colors hover:bg-kdm-navy active:scale-[0.97]"
+                    className="group inline-flex min-h-[48px] items-stretch justify-center rounded-tag bg-kdm-red text-[15px] font-semibold text-white transition-colors hover:bg-kdm-red-ink active:scale-[0.98]"
                 >
-                    Send enquiry
-                    <span className="flex h-9 w-9 items-center justify-center rounded-full bg-white/15 transition-colors group-hover:bg-kdm-red">
-                        <Send className="h-4 w-4" aria-hidden="true" />
+                    <span className="flex items-center px-5">Send enquiry</span>
+                    <span className="flex w-12 items-center justify-center border-l border-white/30">
+                        <Send className="h-4 w-4 transition-transform duration-300 group-hover:translate-x-0.5" aria-hidden="true" />
                     </span>
                 </button>
             </div>
@@ -104,7 +104,27 @@ export default function Contact() {
 
     return (
         <>
-            <PageHero index="01" eyebrow="Contact" title={["Let's build something", 'that lasts.']} crumbs={[{ label: 'Contact Us' }]}>
+            <PageHero
+                index="01"
+                eyebrow="Contact"
+                title={["Let's build something", 'that lasts.']}
+                crumbs={[{ label: 'Contact Us' }]}
+                aside={
+                    <dl className="border border-kdm-ink/15 bg-white">
+                        {contact.branches.map((b, i) => (
+                            <div key={b.city} className={cn('grid grid-cols-[7rem_1fr] gap-4 p-5', i > 0 && 'border-t border-kdm-ink/15')}>
+                                <dt className="t-label pt-1 text-kdm-muted">{i === 0 ? 'Head office' : 'Branch'}</dt>
+                                <dd>
+                                    <p className="font-display text-xl font-semibold text-kdm-ink">{b.city}</p>
+                                    <a href={telHref(b.phone)} className="t-num mt-1 block text-[15px] text-kdm-blue hover:underline">
+                                        {formatPhone(b.phone)}
+                                    </a>
+                                </dd>
+                            </div>
+                        ))}
+                    </dl>
+                }
+            >
                 Tell us about your structure, site or project — our engineers in Hyderabad and Visakhapatnam will get back to you.
             </PageHero>
 
@@ -144,7 +164,6 @@ export default function Contact() {
             </Section>
 
             <section aria-label="Map" className="relative bg-kdm-paper">
-                <BlueprintGrid fade={false} className="opacity-50" />
                 <Container className="relative py-12">
                     <div className="relative overflow-hidden rounded-panel ring-1 ring-kdm-line">
                         <iframe

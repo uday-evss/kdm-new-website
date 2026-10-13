@@ -5,6 +5,7 @@ import { EASE } from '@/lib/motion';
 import { clients } from '@/content/clients';
 import { Container, PageHero, Section, usePageMeta } from '@/components/site/primitives';
 import { ContactBand } from '@/components/site/widgets';
+import { CornerMarks } from '@/components/engineering';
 
 const SECTORS = ['All', 'Government', 'Private'];
 
@@ -19,14 +20,31 @@ export default function Clients() {
 
     return (
         <>
-            <PageHero index="01" eyebrow="Our clients" title={['Trusted across government', 'and industry.']} crumbs={[{ label: 'Our Clients' }]}>
+            <PageHero
+                index="01"
+                eyebrow="Our clients"
+                title={['Trusted across government', 'and industry.']}
+                crumbs={[{ label: 'Our Clients' }]}
+                aside={
+                    <div className="relative">
+                        <ul className="grid grid-cols-3 border-l border-t border-kdm-ink/15 bg-white" aria-label="Some of our clients">
+                            {clients.filter((c) => c.featured).slice(0, 9).map((c) => (
+                                <li key={c.name} className="flex aspect-[4/3] items-center justify-center border-b border-r border-kdm-ink/15 p-4">
+                                    <img src={c.logoSm} srcSet={`${c.logoSm} 1x, ${c.logo} 2x`} alt={c.name} className="max-h-12 max-w-full object-contain" />
+                                </li>
+                            ))}
+                        </ul>
+                        <CornerMarks />
+                    </div>
+                }
+            >
                 Government departments, public sector undertakings and leading private infrastructure companies we have worked
                 with.
             </PageHero>
 
             <Section tone="white">
                 <Container>
-                    <div role="tablist" aria-label="Filter clients" className="inline-flex rounded-full bg-kdm-paper p-1 ring-1 ring-kdm-line">
+                    <div role="tablist" aria-label="Filter clients" className="inline-flex rounded-card bg-kdm-paper p-1 ring-1 ring-kdm-line">
                         {SECTORS.map((s) => (
                             <button
                                 key={s}
@@ -34,10 +52,10 @@ export default function Clients() {
                                 role="tab"
                                 aria-selected={sector === s}
                                 onClick={() => setSector(s)}
-                                className={cn('relative rounded-full px-5 py-2.5 text-sm font-semibold transition-colors', sector === s ? 'text-white' : 'text-kdm-graphite hover:text-kdm-ink')}
+                                className={cn('relative rounded-tag px-5 py-2.5 text-sm font-semibold transition-colors', sector === s ? 'text-white' : 'text-kdm-graphite hover:text-kdm-ink')}
                             >
                                 {sector === s && (
-                                    <motion.span layoutId="client-tab" className="absolute inset-0 rounded-full bg-kdm-blue" transition={{ type: 'spring', stiffness: 420, damping: 36 }} />
+                                    <motion.span layoutId="client-tab" className="absolute inset-0 rounded-tag bg-kdm-blue" transition={{ type: 'spring', stiffness: 420, damping: 36 }} />
                                 )}
                                 <span className="relative">
                                     {s} <span className={cn('t-num ml-1 text-xs', sector === s ? 'text-white/70' : 'text-kdm-muted')}>{count(s)}</span>

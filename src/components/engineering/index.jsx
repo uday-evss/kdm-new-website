@@ -175,3 +175,6 @@ export function scaleTicks(cx, cy, r, count = 37, major = 6) {
         };
     });
 }
+
+export { SectionBubble, CoordinateMarker, DimensionLine, TitleBlock, SheetZones, Annotation } from './drawing';
+export { default as ServiceDiagram } from './ServiceDiagram';

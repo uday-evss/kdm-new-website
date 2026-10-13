@@ -5,7 +5,7 @@ import { EASE } from '@/lib/motion';
 import { strengths } from '@/content/home';
 import { Container, SectionLabel } from '@/components/site/primitives';
 
-// 07 — Why KDM? Three words carry the argument. As each strength scrolls
+// 08 — Why KDM? Three words carry the argument. As each strength scrolls
 // through the middle of the screen, the word it belongs to lights up.
 
 const THEMES = ['Experience', 'Technology', 'People'];
@@ -49,7 +49,7 @@ export default function Difference() {
             <Container className="grid gap-12 lg:grid-cols-12 lg:gap-16">
                 <div className="lg:col-span-6">
                     <div className="lg:sticky lg:top-32">
-                        <SectionLabel index="10">Why KDM?</SectionLabel>
+                        <SectionLabel index="08">Why KDM?</SectionLabel>
                         <h2 id="why-title" className="t-display mt-6">
                             {THEMES.map((t) => (
                                 <span

@@ -9,9 +9,23 @@ import { Container, PageHero, Section, SectionHeading, CheckList, SlideArrow, St
 import Gallery from '@/components/site/Gallery';
 import { ContactBand } from '@/components/site/widgets';
 import { serviceIcons } from '@/components/site/serviceIcons';
+import { CornerMarks, ServiceDiagram } from '@/components/engineering';
 
-// One service: what we do, the other services and a direct line to the
-// team, and the photo gallery from the service's page on the old site.
+// What each service's illustrative drawing shows.
+const DIAGRAM_SUBJECT = {
+    'materials-testing': 'Compression test on a concrete cube',
+    'topo-surveys': 'Contour survey from a total station',
+    'geotechnical-investigations': 'Bore hole through soil strata',
+    'traffic-surveys': 'Traffic count across a carriageway',
+    'highways-bridges-buildings-irrigation': 'Highway, bridge, canal and building',
+    'pavement-investigation-design': 'Pavement layers under a deflectometer load',
+    'structural-condition-assessment': 'Distressed frame — cracks, NDT, jacketing',
+    'kdm-knowledge-share-center': 'Classroom and workshop training',
+};
+
+// One service: an illustrative drawing of its subject, what we do, the other
+// services and a direct line to the team, and the photo gallery from the
+// service's page on the old site.
 export default function ServiceDetail() {
     const { slug } = useParams();
     const service = findService(slug);
@@ -68,7 +82,20 @@ export default function ServiceDetail() {
 
                     <aside className="space-y-6 lg:col-span-4">
                         <div className="lg:sticky lg:top-24 space-y-6">
-                            <div className="rounded-panel bg-kdm-blue p-7 text-white shadow-lift">
+                            {DIAGRAM_SUBJECT[service.slug] && (
+                                <figure className="relative border border-kdm-ink/15 bg-white p-5">
+                                    <CornerMarks />
+                                    <div className="flex items-center justify-between">
+                                        <span className="t-label text-kdm-muted">Fig. {String(index + 1).padStart(2, '0')}.A</span>
+                                        <span className="t-label text-kdm-muted">Illustrative · NTS</span>
+                                    </div>
+                                    <ServiceDiagram slug={service.slug} className="mt-4" />
+                                    <figcaption className="mt-3 border-t border-kdm-line pt-3 text-sm text-kdm-graphite">
+                                        {DIAGRAM_SUBJECT[service.slug]}
+                                    </figcaption>
+                                </figure>
+                            )}
+                            <div className="rounded-panel bg-kdm-blue p-7 text-white">
                                 <p className="t-label text-kdm-yellow">Talk to our team</p>
                                 <p className="t-h3 mt-3 text-white">{hq.person}</p>
                                 <p className="text-sm text-white/70">{hq.city} head office</p>

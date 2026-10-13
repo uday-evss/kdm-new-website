@@ -1,8 +1,9 @@
 /** @type {import('tailwindcss').Config} */
 
-// KDM design tokens. The palette is drawn from the KDM logo (deep ring blue,
-// cyan field, red ring and sun, yellow base) and lives as RGB channels in
-// src/index.css so every colour supports Tailwind's /opacity modifiers.
+// KDM "Living Blueprint" design tokens. The palette is sampled from the
+// official logo (ring red, field cyan, base yellow, outline indigo, wordmark
+// red) and lives as RGB channels in src/index.css so every colour supports
+// Tailwind's /opacity modifiers.
 const token = (name) => `rgb(var(--kdm-${name}) / <alpha-value>)`;
 
 module.exports = {
@@ -15,7 +16,8 @@ module.exports = {
             },
             fontFamily: {
                 sans: ['Inter', 'ui-sans-serif', 'system-ui', '-apple-system', 'Segoe UI', 'Roboto', 'sans-serif'],
-                display: ['"Space Grotesk"', 'Inter', 'ui-sans-serif', 'system-ui', 'sans-serif'],
+                display: ['"Inter Tight"', 'Inter', 'ui-sans-serif', 'system-ui', 'sans-serif'],
+                mono: ['"IBM Plex Mono"', 'ui-monospace', 'SFMono-Regular', 'Menlo', 'Consolas', 'monospace'],
             },
             colors: {
                 kdm: {
@@ -33,15 +35,20 @@ module.exports = {
                     red: token('red'),
                     'red-ink': token('red-ink'),
                     yellow: token('yellow'),
+                    success: token('success'),
+                    error: token('error'),
                 },
             },
+            // Restrained geometry: drawing-sheet corners, not app cards.
             borderRadius: {
-                card: '14px',
-                panel: '20px',
+                tag: '3px',
+                card: '4px',
+                panel: '6px',
             },
+            // Light, paper-like elevation - never heavy drop shadows.
             boxShadow: {
-                soft: '0 1px 2px rgb(15 27 45 / 0.04), 0 10px 30px -14px rgb(15 27 45 / 0.14)',
-                lift: '0 2px 4px rgb(15 27 45 / 0.04), 0 24px 48px -20px rgb(21 59 143 / 0.28)',
+                soft: '0 1px 2px rgb(22 24 29 / 0.05)',
+                lift: '0 1px 2px rgb(22 24 29 / 0.05), 0 18px 36px -24px rgb(22 24 29 / 0.3)',
                 ring: '0 0 0 1px rgb(var(--kdm-line))',
             },
             transitionTimingFunction: {
