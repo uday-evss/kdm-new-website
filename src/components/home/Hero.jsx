@@ -146,7 +146,7 @@ export default function Hero() {
                     Scroll to explore
                 </a>
                 <span aria-hidden="true" className="t-label hidden text-kdm-muted lg:block">
-                    {company.logoWords.join(' · ')}
+                    {servicesNav.map((s) => s.shortTitle).join(' · ')}
                 </span>
             </div>
         </section>

@@ -1,13 +1,15 @@
 import React from 'react';
+import { Link } from 'react-router-dom';
 import { company } from '@/content/site';
 import { clients } from '@/content/clients';
 import { media } from '@/content/media';
+import { servicesNav } from '@/content/servicesNav';
 import { DimensionLine, Figure } from '@/components/engineering';
 import { Container, MaskedImage, RevealLines, SectionLabel, Stagger, StaggerItem, Reveal, TextLink } from '@/components/site/primitives';
 import { StatCounter } from '@/components/site/widgets';
 
 // 02 — Introduction. Who KDM is, in the company's own words, beside field
-// photography; what the three letters stand for (from the logo); the
+// photography; our three departments in their canonical order; the
 // company's published figures set on a measured rule; and recognisable
 // clients.
 
@@ -63,12 +65,16 @@ export default function ProofStrip() {
                             />
                         </Figure>
                         <div className="mt-10">
-                            <p className="t-label text-kdm-muted">The name, from the logo</p>
+                            <p className="t-label text-kdm-muted">Our three departments</p>
                             <Stagger as="ol" className="mt-4 grid grid-cols-3 border-t border-kdm-ink/20">
-                                {company.logoWords.map((w, i) => (
-                                    <StaggerItem as="li" key={w} className="border-r border-kdm-line pr-3 pt-4 last:border-r-0 sm:pr-6 [&:not(:first-child)]:pl-3 sm:[&:not(:first-child)]:pl-6">
-                                        <span className={`block font-display text-5xl font-semibold leading-none sm:text-6xl ${LETTER_COLOUR[i]}`}>{w[0]}</span>
-                                        <span className="mt-2 block text-sm font-medium text-kdm-ink sm:text-base">{w}</span>
+                                {servicesNav.map((s, i) => (
+                                    <StaggerItem as="li" key={s.slug} className="border-r border-kdm-line pr-3 pt-4 last:border-r-0 sm:pr-6 [&:not(:first-child)]:pl-3 sm:[&:not(:first-child)]:pl-6">
+                                        <Link to={`/services/${s.slug}`} className="group block">
+                                            <span className={`t-num block font-display text-5xl font-semibold leading-none sm:text-6xl ${LETTER_COLOUR[i]}`}>
+                                                {String(i + 1).padStart(2, '0')}
+                                            </span>
+                                            <span className="mt-2 block text-sm font-medium text-kdm-ink group-hover:text-kdm-blue sm:text-base">{s.shortTitle}</span>
+                                        </Link>
                                     </StaggerItem>
                                 ))}
                             </Stagger>

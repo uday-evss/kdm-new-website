@@ -22,6 +22,11 @@ const nav = (slug) => servicesNav.find((s) => s.slug === slug);
 
 export const services = [
     {
+        ...nav('structural-health-monitoring'),
+        legacyPath: '/structural-health-monitoring-assessment-rehabilitation',
+        // Rendered by its own page (pages/ShmPage.jsx) — see shm.js.
+    },
+    {
         ...nav('materials-testing'),
         legacyPath: '/materials-testing-laboratory-services',
         capabilities: [
@@ -56,11 +61,6 @@ export const services = [
             'Designing ground improvement techniques in weak soil conditions.',
         ],
         gallery: media.geotechnical,
-    },
-    {
-        ...nav('structural-health-monitoring'),
-        legacyPath: '/structural-health-monitoring-assessment-rehabilitation',
-        // Rendered by its own page (pages/ShmPage.jsx) — see shm.js.
     },
 ];
 

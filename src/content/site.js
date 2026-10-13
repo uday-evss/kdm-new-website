@@ -8,8 +8,6 @@ export const company = {
     legalName: 'KDM Engineers (India) Pvt. Ltd.',
     tagline: 'Complete Civil Engineering Solutions',
     foundedYear: 2012,
-    // The words set around the gear in the KDM logo.
-    logoWords: ['Kwality', 'Design', 'Measure'],
     values: ['Integrity', 'Customer Delight', 'Social Commitment'],
 
     intro: [

@@ -12,7 +12,6 @@ import { ABOUT_LINKS } from './Navbar';
 const SOCIAL_ICONS = { LinkedIn: Linkedin, Facebook, Instagram, YouTube: Youtube };
 
 const EXPLORE = [
-    { label: 'Structural Health Monitoring', to: '/services/structural-health-monitoring' },
     { label: 'Projects', to: '/projects' },
     { label: 'Careers', to: '/careers' },
     { label: 'Contact', to: '/contact' },
@@ -104,7 +103,7 @@ export default function Footer() {
                 {/* Link columns */}
                 <div className="grid gap-10 py-14 sm:grid-cols-2 lg:grid-cols-4">
                     <FooterColumn title="Services">
-                        {services.filter((s) => !s.featured).map((s) => (
+                        {services.map((s) => (
                             <FooterLink key={s.slug} to={`/services/${s.slug}`}>
                                 {s.shortTitle}
                             </FooterLink>
@@ -165,7 +164,7 @@ export default function Footer() {
                         © {year} {company.legalName}. All rights reserved.
                     </p>
                     <p className="t-label hidden text-kdm-muted md:block">
-                        {company.logoWords.join(' · ')}
+                        {services.map((s) => s.shortTitle).join(' · ')}
                     </p>
                     <button
                         type="button"

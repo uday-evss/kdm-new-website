@@ -5,6 +5,8 @@ import { cn } from '@/lib/utils';
 import { EASE } from '@/lib/motion';
 import { media } from '@/content/media';
 import { company } from '@/content/site';
+import { servicesNav } from '@/content/servicesNav';
+import { serviceIcons } from '@/components/site/serviceIcons';
 import { LogoMark } from '@/components/brand/Logo';
 import { CornerMarks, Figure, MeasureRule } from '@/components/engineering';
 import {
@@ -36,28 +38,36 @@ const initials = (name) =>
 const PILLAR_STYLE = ['bg-kdm-blue', 'bg-kdm-cyan', 'bg-kdm-red'];
 const CURRENT_YEAR = new Date().getFullYear();
 
-// The three words around the gear in the KDM logo — the name's meaning.
-function KdmMeaning() {
+// Our three departments, in canonical order — SHM first, flagged as the
+// flagship department.
+function OurDepartments() {
     return (
         <div className="relative rounded-panel bg-white p-8 shadow-soft ring-1 ring-kdm-line">
             <CornerMarks />
             <div className="flex items-center gap-5">
                 <LogoMark className="h-20" sizes="120px" />
-                <p className="t-label text-kdm-muted">What the letters stand for</p>
+                <p className="t-label text-kdm-muted">Our three departments</p>
             </div>
             <ul className="mt-8 space-y-3">
-                {company.logoWords.map((w, i) => (
-                    <motion.li
-                        key={w}
-                        initial={{ opacity: 0, x: -16 }}
-                        animate={{ opacity: 1, x: 0 }}
-                        transition={{ duration: 0.7, ease: EASE, delay: 0.4 + i * 0.12 }}
-                        className="flex items-baseline gap-4 border-t border-kdm-line pt-3"
-                    >
-                        <span className="w-10 font-display text-4xl font-semibold text-kdm-red">{w[0]}</span>
-                        <span className="font-display text-3xl font-semibold tracking-tight text-kdm-ink">{w}</span>
-                    </motion.li>
-                ))}
+                {servicesNav.map((s, i) => {
+                    const Icon = serviceIcons[s.slug];
+                    return (
+                        <motion.li
+                            key={s.slug}
+                            initial={{ opacity: 0, x: -16 }}
+                            animate={{ opacity: 1, x: 0 }}
+                            transition={{ duration: 0.7, ease: EASE, delay: 0.4 + i * 0.12 }}
+                            className="flex items-baseline gap-4 border-t border-kdm-line pt-3"
+                        >
+                            <span className="w-10 font-display text-4xl font-semibold text-kdm-red">{String(i + 1).padStart(2, '0')}</span>
+                            <span className="flex items-center gap-2 font-display text-2xl font-semibold tracking-tight text-kdm-ink">
+                                <Icon className="h-5 w-5 shrink-0 text-kdm-blue" aria-hidden="true" />
+                                {s.shortTitle}
+                                {s.featured && <span className="t-label font-sans text-kdm-red-ink">Flagship</span>}
+                            </span>
+                        </motion.li>
+                    );
+                })}
             </ul>
         </div>
     );
@@ -114,7 +124,7 @@ export default function About() {
                 eyebrow="About KDM"
                 title={['Engineering credibility,', `built since ${company.foundedYear}.`]}
                 crumbs={[{ label: 'About Us' }]}
-                aside={<KdmMeaning />}
+                aside={<OurDepartments />}
             >
                 {company.foreword[0]}
             </PageHero>

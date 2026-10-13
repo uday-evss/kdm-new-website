@@ -38,7 +38,7 @@ export default function Logo({ compact = false, tone = 'dark', className }) {
                     KDM<span className="text-kdm-red">.</span>
                 </span>
                 <span className={cn('t-label mt-1 block !text-[9.5px] !tracking-[0.24em]', tone === 'light' ? 'text-white/70' : 'text-kdm-muted')}>
-                    Engineers Group
+                    Engineers India
                 </span>
             </span>
         </Link>

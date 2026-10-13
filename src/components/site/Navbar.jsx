@@ -11,17 +11,14 @@ import { CornerMarks } from '@/components/engineering';
 import { ButtonLink, Img, TextLink } from './primitives';
 import { serviceIcons } from './serviceIcons';
 
-const SHM = '/services/structural-health-monitoring';
-
 export const NAV = [
     { label: 'About', to: '/about', menu: 'about', match: (p) => p === '/about' || p === '/clients' },
     {
         label: 'Services',
         to: '/services',
         menu: 'services',
-        match: (p) => p.startsWith('/services') && p !== SHM,
+        match: (p) => p.startsWith('/services'),
     },
-    { label: 'Monitoring', to: SHM, match: (p) => p === SHM },
     { label: 'Projects', to: '/projects', match: (p) => p.startsWith('/projects') },
     { label: 'Careers', to: '/careers', match: (p) => p.startsWith('/careers') },
 ];
@@ -57,12 +54,8 @@ function PanelShell({ id, children, onEnter, onLeave }) {
     );
 }
 
-// Structural Health Monitoring already has its own top-level "Monitoring"
-// nav entry — leaving it out here avoids listing it twice.
-const NON_FEATURED = services.filter((s) => !s.featured);
-
 function ServicesPanel({ onNavigate, ...shell }) {
-    const [active, setActive] = useState(NON_FEATURED[0]);
+    const [active, setActive] = useState(services[0]);
     const Icon = serviceIcons[active.slug];
 
     return (
@@ -70,12 +63,12 @@ function ServicesPanel({ onNavigate, ...shell }) {
             <div className="container-kdm grid grid-cols-12 gap-10 py-10">
                 <div className="col-span-7">
                     <p className="t-label flex items-center gap-3 text-kdm-muted">
-                        <span className="t-num text-kdm-red-ink">{String(NON_FEATURED.length).padStart(2, '0')}</span>
+                        <span className="t-num text-kdm-red-ink">{String(services.length).padStart(2, '0')}</span>
                         <span aria-hidden="true" className="h-px w-8 bg-kdm-ink/30" />
-                        Disciplines under one roof
+                        Our three departments
                     </p>
-                    <ul className="mt-6 grid grid-cols-2 gap-x-6">
-                        {NON_FEATURED.map((s, i) => {
+                    <ul className="mt-6">
+                        {services.map((s, i) => {
                             const ItemIcon = serviceIcons[s.slug];
                             const isActive = s.slug === active.slug;
                             return (
@@ -86,7 +79,7 @@ function ServicesPanel({ onNavigate, ...shell }) {
                                         onMouseEnter={() => setActive(s)}
                                         onFocus={() => setActive(s)}
                                         className={cn(
-                                            'group flex items-center gap-4 border-t border-kdm-line py-3.5 transition-colors',
+                                            'group flex items-center gap-4 border-t border-kdm-line py-3.5 transition-colors last:border-b',
                                             isActive ? 'text-kdm-blue' : 'text-kdm-ink',
                                         )}
                                     >
@@ -96,6 +89,11 @@ function ServicesPanel({ onNavigate, ...shell }) {
                                             aria-hidden="true"
                                         />
                                         <span className="text-[15px] font-medium">{s.shortTitle}</span>
+                                        {s.featured && (
+                                            <span className="rounded-full bg-kdm-yellow px-2 py-0.5 text-[10px] font-bold uppercase tracking-wide text-kdm-ink">
+                                                Flagship
+                                            </span>
+                                        )}
                                         <span
                                             aria-hidden="true"
                                             className={cn(
@@ -138,7 +136,7 @@ function ServicesPanel({ onNavigate, ...shell }) {
                                     </motion.div>
                                 </AnimatePresence>
                                 <span className="t-label absolute left-3 top-3 rounded-tag bg-white/90 px-2.5 py-1 text-kdm-ink">
-                                    Fig. {String(NON_FEATURED.indexOf(active) + 1).padStart(2, '0')}
+                                    Fig. {String(services.indexOf(active) + 1).padStart(2, '0')}
                                 </span>
                             </div>
                             <motion.div key={`${active.slug}-text`} initial={{ opacity: 0, y: 8 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.35, ease: EASE }} className="mt-5">
@@ -179,14 +177,7 @@ function AboutPanel({ onNavigate, ...shell }) {
                 <div className="relative col-span-4 rounded-panel bg-kdm-paper p-6 ring-1 ring-kdm-line">
                     <CornerMarks />
                     <p className="t-label text-kdm-muted">Est. {company.foundedYear}</p>
-                    <p className="t-h3 mt-3 leading-tight">
-                        {company.logoWords.map((w) => (
-                            <span key={w} className="block">
-                                <span className="text-kdm-red">{w[0]}</span>
-                                {w.slice(1)}
-                            </span>
-                        ))}
-                    </p>
+                    <p className="t-h3 mt-3 leading-tight">{company.name}</p>
                     <p className="mt-3 text-sm leading-relaxed text-kdm-graphite">
                         {company.values.join(' · ')} — the values behind every engagement.
                     </p>
@@ -271,12 +262,13 @@ function MobileMenu({ onClose }) {
                                                 transition={{ duration: 0.35, ease: EASE }}
                                                 className="overflow-hidden"
                                             >
-                                                {NON_FEATURED.map((s) => {
+                                                {services.map((s) => {
                                                     const Icon = serviceIcons[s.slug];
                                                     return (
                                                         <li key={s.slug}>
                                                             <Link to={`/services/${s.slug}`} onClick={onClose} className="flex items-center gap-3 py-2.5 pl-7 text-[15px] text-kdm-graphite">
                                                                 <Icon className="h-4 w-4 text-kdm-red" aria-hidden="true" /> {s.shortTitle}
+                                                                {s.featured && <span className="t-label text-kdm-red-ink">Flagship</span>}
                                                             </Link>
                                                         </li>
                                                     );
