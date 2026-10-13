@@ -25,7 +25,7 @@ export default function ClientsShowcase() {
             <Container>
                 <div className="grid items-end gap-8 lg:grid-cols-12">
                     <div className="lg:col-span-7">
-                        <SectionLabel index="09">Clients &amp; accreditation</SectionLabel>
+                        <SectionLabel index="10">Clients &amp; accreditation</SectionLabel>
                         <RevealLines lines={['Trusted across government', 'and industry.']} className="t-h2 mt-5" />
                         <span id="clients-title" className="sr-only">Clients</span>
                     </div>

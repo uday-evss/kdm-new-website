@@ -100,7 +100,7 @@ export const strengths = [
     },
     {
         title: 'Everything under one roof',
-        text: 'Consultancy, testing, surveys, monitoring, rehabilitation and training from a single engineering partner.',
+        text: 'Structural health monitoring, materials testing and geo-technical investigation from a single engineering partner.',
         theme: 'People',
     },
 ];
@@ -147,14 +147,5 @@ export const knowledgeTracks = [
     },
 ];
 
-// Areas a new engineer can grow into — the company's own service lines.
-export const careerTracks = [
-    'Structural Health Monitoring',
-    'Materials Testing',
-    'Geotechnical Investigation',
-    'Surveys & Traffic Engineering',
-    'Pavement Engineering',
-    'Design & Consultancy',
-    'Structural Assessment',
-    'Training',
-];
+// Areas a new engineer can grow into — the company's three departments.
+export const careerTracks = ['Structural Health Monitoring', 'Materials Testing', 'Geotechnical Investigation'];

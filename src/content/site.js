@@ -3,9 +3,9 @@
 // clients.js) so the copy lives in one place.
 
 export const company = {
-    name: 'KDM Engineers Group',
-    shortName: 'KDMEG',
-    legalName: 'KDM Engineers [India] Pvt. Ltd.',
+    name: 'KDM Engineers (India) Pvt. Ltd.',
+    shortName: 'KDMEI',
+    legalName: 'KDM Engineers (India) Pvt. Ltd.',
     tagline: 'Complete Civil Engineering Solutions',
     foundedYear: 2012,
     // The words set around the gear in the KDM logo.
@@ -13,20 +13,20 @@ export const company = {
     values: ['Integrity', 'Customer Delight', 'Social Commitment'],
 
     intro: [
-        'The KDM Engineers Group (KDMEG) is a leading civil engineering organization with the goal of being a centre of excellence and accessibility to the construction industry, offering Civil Engineering Consultancy, Testing Services and Training all under one roof.',
-        'KDM Engineers Group uses a well-structured quality assurance and management system, as well as a strong commitment, to supply clients with complete solutions. Our company strives to maintain unwavering efforts in the pursuit of optimum and high-quality solutions.',
+        'KDM Engineers (India) Pvt. Ltd. is a civil engineering company specialising in Structural Health Monitoring, Materials Testing and Geo-technical Investigations — a centre of excellence and accessibility to the construction industry.',
+        'We work to a well-structured quality assurance and management system, with a strong commitment to supplying clients with complete, defensible engineering solutions — pursuing optimum, high-quality outcomes on every project.',
     ],
 
     foreword: [
-        'KDM Engineers Group is a renowned and leading civil engineering firm that aspires to become a center of excellence in the construction sector by bringing together civil engineering consultancy and services, as well as training, under one roof.',
-        'KDM Engineers Group uses a well-structured quality assurance and management system, as well as a strong commitment, to supply clients with complete solutions. Our company strives to maintain unwavering efforts in the pursuit of optimum and high-quality solutions.',
+        'KDM Engineers (India) Pvt. Ltd. is a civil engineering company that aspires to be a centre of excellence in structural health monitoring, materials testing and geo-technical investigations for the construction sector.',
+        'We work to a well-structured quality assurance and management system, with a strong commitment to supplying clients with complete, defensible engineering solutions — pursuing optimum, high-quality outcomes on every project.',
     ],
 
     // "We believe in Our …"
     pillars: [
         {
             title: 'Vision',
-            text: 'To bring Civil Engineering Consultancy & Services, Training and Rehabilitation Technology under one roof and to become a center of excellence and approachable for construction industry.',
+            text: 'To bring Structural Health Monitoring, Materials Testing and Geo-technical Investigation under one roof, and to become a center of excellence and approachable for the construction industry.',
         },
         {
             title: 'Mission',
@@ -38,25 +38,18 @@ export const company = {
         },
     ],
 
-    // The two companies that make up the group ("Wings of KDM Group").
-    wings: [
-        { name: 'KDM Engineers & Consultants Pvt. Ltd.', abbr: 'KDMECPL' },
-        { name: 'KDM Engineers (India) Pvt. Ltd.', abbr: 'KDMEI' },
-    ],
-
     // From the "KDM Milestones" roadmap graphic on the About page.
     milestones: [
-        { year: '2012', text: 'Established KDM Engineers (India) Pvt. Ltd.', done: true },
-        { year: '2018', text: 'Established KDM Engineers and Consultants Pvt. Ltd.', done: true },
+        { year: '2012', text: 'Established as KDM Engineers (India) Pvt. Ltd.', done: true },
         { year: '2021', text: 'Completed 26+ detailed engineering projects', done: true },
         { year: '2025', text: 'To be a premier organization at national level' },
         { year: '2030', text: 'To create an international image' },
     ],
 
     mdMessage: [
-        'From the year 2012, The KDM Engineers Group has been providing services to numerous clients across the country and also established two wings namely KDM Engineers and Consultants Pvt. Ltd. and KDM Engineers (India) Pvt. Ltd. to provide optimum engineering solutions in all aspects. The efficiency of services and commitment towards work has placed the KDM engineers group at the highest level in the construction industry.',
+        'Since 2012, KDM Engineers (India) Pvt. Ltd. has been providing Structural Health Monitoring, Materials Testing and Geo-technical Investigation services to clients across the country. The efficiency of our services and our commitment towards work has placed us at a high level in the construction industry.',
         'Our integrity, resources and prompt completion of projects have put us on the radar of major infrastructure companies.',
-        'The KDM Engineers Group has never left any stone unturned and is constantly one step ahead of the obstacles, striving to provide the client with satisfactory service as promised.',
+        'We have never left any stone unturned, and are constantly one step ahead of the obstacles, striving to provide the client with satisfactory service as promised.',
     ],
 
     // Portrait for the MD's message (null shows a monogram instead).
@@ -68,18 +61,14 @@ export const company = {
         { name: 'Mr. M. Ramakrishna', role: 'Director' },
     ],
 
-    // "Our Forte"
+    // "Our Forte" — SHM first, per the company's flagship positioning.
     forte: [
-        'Detailed Project Reports',
-        'Authority/Independent Engineering Services',
-        'Quality Control/Assurance',
-        'Road Safety Audits and Action Plans',
-        'Traffic Engineering & Surveys',
-        'Pavement Investigation, Design and Review',
-        'Structural Condition Assessment & NDT',
-        'Topo Surveys',
-        'Geo Technical Investigations',
+        'Structural Health Monitoring & Long-Term Live Monitoring',
+        'Bridge Load Testing & Condition Assessment',
+        'Non-Destructive / Semi-Destructive Testing',
         'Material Testing Laboratory Services',
+        'Geo-technical Investigations & Foundation Design',
+        'Quality Control/Assurance',
     ],
 
     stats: [

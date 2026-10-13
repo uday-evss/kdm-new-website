@@ -35,6 +35,18 @@ const LEGACY_REDIRECTS = {
     '/shm': '/services/structural-health-monitoring',
     ...Object.fromEntries(services.map((s) => [s.legacyPath, `/services/${s.slug}`])),
     ...Object.fromEntries(projects.map((p) => [`/${p.slug}`, `/projects/${p.slug}`])),
+    // Six disciplines the wider KDM Engineers Group site used to carry are
+    // outside this entity's approved three-department portfolio (see
+    // content/services.js) and no longer have pages here — their old
+    // WordPress URLs redirect to the services index rather than 404ing.
+    // (Visiting their new-style /services/:slug URL already redirects the
+    // same way, via ServiceDetail's own "service not found" fallback.)
+    '/topo-surveys': '/services',
+    '/traffic-survey': '/services',
+    '/highways-bridges-buildings-and-irrigation-our-services': '/services',
+    '/pavement-investigation-and-pavement-design': '/services',
+    '/structural-condition-assessment-rehabilitation': '/services',
+    '/kdm-knowledge-share-center-kdmksc': '/services',
 };
 
 function LegacyRedirect({ to }) {

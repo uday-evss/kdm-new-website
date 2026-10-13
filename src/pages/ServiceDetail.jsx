@@ -3,9 +3,8 @@ import { Link, Navigate, useParams } from 'react-router-dom';
 import { Phone, Mail, FileDown } from 'lucide-react';
 import { cn } from '@/lib/utils';
 import { services, findService, serviceSummary } from '@/content/services';
-import { knowledgeTracks } from '@/content/home';
 import { company, contact, formatPhone, telHref } from '@/content/site';
-import { Container, PageHero, Section, SectionHeading, CheckList, SlideArrow, Stagger, StaggerItem, usePageMeta } from '@/components/site/primitives';
+import { Container, PageHero, Section, SectionHeading, CheckList, SlideArrow, usePageMeta } from '@/components/site/primitives';
 import Gallery from '@/components/site/Gallery';
 import { ContactBand } from '@/components/site/widgets';
 import { serviceIcons } from '@/components/site/serviceIcons';
@@ -14,13 +13,7 @@ import { CornerMarks, ServiceDiagram } from '@/components/engineering';
 // What each service's illustrative drawing shows.
 const DIAGRAM_SUBJECT = {
     'materials-testing': 'Compression test on a concrete cube',
-    'topo-surveys': 'Contour survey from a total station',
     'geotechnical-investigations': 'Bore hole through soil strata',
-    'traffic-surveys': 'Traffic count across a carriageway',
-    'highways-bridges-buildings-irrigation': 'Highway, bridge, canal and building',
-    'pavement-investigation-design': 'Pavement layers under a deflectometer load',
-    'structural-condition-assessment': 'Distressed frame — cracks, NDT, jacketing',
-    'kdm-knowledge-share-center': 'Classroom and workshop training',
 };
 
 // One service: an illustrative drawing of its subject, what we do, the other
@@ -35,7 +28,6 @@ export default function ServiceDetail() {
     const hq = contact.branches[0];
     const index = services.indexOf(service);
     const Icon = serviceIcons[service.slug];
-    const isKsc = service.slug === 'kdm-knowledge-share-center';
 
     return (
         <>
@@ -57,27 +49,15 @@ export default function ServiceDetail() {
                             <span className="flex h-12 w-12 items-center justify-center rounded-full bg-kdm-surface text-kdm-blue">
                                 <Icon className="h-6 w-6" aria-hidden="true" />
                             </span>
-                            <p className="t-label text-kdm-muted">{isKsc ? 'Programmes' : 'What we do'}</p>
+                            <p className="t-label text-kdm-muted">What we do</p>
                         </div>
-                        <h2 className="t-h2 mt-6">{isKsc ? 'What we teach.' : 'What we do.'}</h2>
-                        {isKsc ? (
-                            <Stagger className="mt-10 grid gap-x-10 sm:grid-cols-2">
-                                {knowledgeTracks.map((t, i) => (
-                                    <StaggerItem key={t.title} className="border-t-2 border-kdm-ink pb-8 pt-4">
-                                        <p className="t-label text-kdm-muted">Track {String(i + 1).padStart(2, '0')}</p>
-                                        <h3 className="t-h3 mt-3">{t.title}</h3>
-                                        <CheckList items={t.items} className="mt-4" />
-                                    </StaggerItem>
-                                ))}
-                            </Stagger>
-                        ) : (
-                            <CheckList
-                                items={service.capabilities}
-                                numbered
-                                columns={service.capabilities.every((c) => c.length < 60) ? 2 : 1}
-                                className="mt-10"
-                            />
-                        )}
+                        <h2 className="t-h2 mt-6">What we do.</h2>
+                        <CheckList
+                            items={service.capabilities}
+                            numbered
+                            columns={service.capabilities.every((c) => c.length < 60) ? 2 : 1}
+                            className="mt-10"
+                        />
                     </div>
 
                     <aside className="space-y-6 lg:col-span-4">

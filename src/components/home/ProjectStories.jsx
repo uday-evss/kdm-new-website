@@ -72,7 +72,7 @@ export function StoryCard({ project, index, wide = false, grid = false }) {
 function Intro({ className }) {
     return (
         <div className={className}>
-            <SectionLabel index="07">Projects</SectionLabel>
+            <SectionLabel index="08">Projects</SectionLabel>
             <RevealLines lines={['Railway bridges,', 'instrumented', 'and understood.']} className="t-h2 mt-5" />
             <p className="t-lead mt-6 max-w-md">
                 Rail–structure interaction, vibration analysis, condition assessment and long-term monitoring for South

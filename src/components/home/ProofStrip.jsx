@@ -34,7 +34,7 @@ export default function ProofStrip() {
                     <div className="lg:col-span-5">
                         <SectionLabel index="02">Introduction</SectionLabel>
                         <RevealLines lines={['One partner for the', 'whole life of a structure.']} className="t-h2 mt-6" />
-                        <span id="intro-title" className="sr-only">About KDM Engineers Group</span>
+                        <span id="intro-title" className="sr-only">About KDM Engineers (India) Pvt. Ltd.</span>
                         <Reveal delay={0.1} className="mt-8 space-y-5 text-[17px] leading-relaxed text-kdm-graphite">
                             {company.intro.map((p) => (
                                 <p key={p}>{p}</p>

@@ -63,42 +63,6 @@ function KdmMeaning() {
     );
 }
 
-// Two companies, two paths, one group — drawn as converging lines.
-function Wings() {
-    const draw = (delay) => ({
-        initial: { pathLength: 0 },
-        whileInView: { pathLength: 1 },
-        viewport: { once: true, margin: '-15%' },
-        transition: { duration: 1.4, ease: EASE, delay },
-    });
-    return (
-        <div className="relative mx-auto mt-16 max-w-5xl">
-            <svg viewBox="0 0 1000 220" className="absolute inset-x-0 top-[88px] hidden h-[220px] w-full md:block" fill="none" aria-hidden="true">
-                <motion.path d="M250 0 C250 120, 500 90, 500 220" stroke="rgb(var(--kdm-blue))" strokeWidth="2" {...draw(0.2)} />
-                <motion.path d="M750 0 C750 120, 500 90, 500 220" stroke="rgb(var(--kdm-red))" strokeWidth="2" {...draw(0.35)} />
-                <motion.path d="M250 0 C250 120, 500 90, 500 220" stroke="rgb(var(--kdm-cyan))" strokeWidth="2" strokeDasharray="2 10" className="motion-safe:animate-dash-flow" {...draw(1.2)} />
-                <motion.path d="M750 0 C750 120, 500 90, 500 220" stroke="rgb(var(--kdm-yellow))" strokeWidth="2" strokeDasharray="2 10" className="motion-safe:animate-dash-flow" {...draw(1.3)} />
-            </svg>
-            <Stagger className="relative grid gap-6 md:grid-cols-2 md:gap-[18%]">
-                {company.wings.map((w, i) => (
-                    <StaggerItem key={w.abbr} className="relative rounded-panel bg-white p-6 text-center shadow-soft ring-1 ring-kdm-line">
-                        <p className={cn('t-label', i === 0 ? 'text-kdm-blue' : 'text-kdm-red-ink')}>Wing {String(i + 1).padStart(2, '0')}</p>
-                        <p className="mt-3 font-display text-xl font-semibold text-kdm-ink">{w.name}</p>
-                        <p className="t-label mt-2 text-kdm-muted">{w.abbr}</p>
-                    </StaggerItem>
-                ))}
-            </Stagger>
-            <Reveal delay={0.6} className="relative mx-auto mt-10 max-w-sm md:mt-[180px]">
-                <div className="rounded-panel bg-kdm-blue p-7 text-center text-white shadow-lift">
-                    <LogoMark className="mx-auto h-14" sizes="90px" />
-                    <p className="t-label mt-4 text-kdm-yellow">The group</p>
-                    <p className="mt-2 font-display text-2xl font-semibold">{company.name}</p>
-                </div>
-            </Reveal>
-        </div>
-    );
-}
-
 function Milestones() {
     return (
         <div className="relative mt-16">
@@ -111,7 +75,7 @@ function Milestones() {
                     transition={{ duration: 1.8, ease: EASE }}
                 />
             </div>
-            <Stagger as="ol" gap={0.12} className="relative grid gap-8 md:grid-cols-5 md:gap-6">
+            <Stagger as="ol" gap={0.12} className="relative grid gap-8 md:grid-cols-4 md:gap-6">
                 {company.milestones.map((m) => {
                     const target = !m.done && Number(m.year) >= CURRENT_YEAR;
                     return (
@@ -159,13 +123,19 @@ export default function About() {
             <Section id="company" tone="white">
                 <Container className="grid gap-14 lg:grid-cols-12 lg:gap-16">
                     <div className="lg:col-span-6">
-                        <SectionHeading index="02" label="Our story" title={['Consultancy, testing', 'and training —', 'under one roof.']} />
+                        <SectionHeading index="02" label="Our story" title={['Structural health,', 'materials, ground —', 'understood.']} />
                         <div className="mt-8 space-y-5 text-lg leading-relaxed text-kdm-graphite">
                             {company.intro.map((p) => (
                                 <Reveal key={p}>
                                     <p>{p}</p>
                                 </Reveal>
                             ))}
+                            <Reveal>
+                                <p className="text-base text-kdm-muted">
+                                    KDM Engineers (India) Pvt. Ltd. was established in {company.foundedYear} as a standalone
+                                    engineering company within the wider KDM group of companies.
+                                </p>
+                            </Reveal>
                         </div>
                         <div className="mt-10">
                             <p className="t-label text-kdm-muted">Our values</p>
@@ -207,21 +177,11 @@ export default function About() {
                 </Container>
             </Section>
 
-            {/* Wings */}
-            <Section id="wings" tone="white">
-                <Container>
-                    <SectionHeading index="04" label="Wings of KDM" title={['Two companies.', 'One group.']} align="center">
-                        Two wings established to provide optimum engineering solutions in all aspects.
-                    </SectionHeading>
-                    <Wings />
-                </Container>
-            </Section>
-
             {/* MD's message */}
             <Section id="md-message" tone="surface" className="overflow-hidden">
                 <Container className="relative grid gap-14 lg:grid-cols-12 lg:gap-16">
                     <div className="lg:col-span-4">
-                        <SectionLabel index="05">Message from the MD&apos;s desk</SectionLabel>
+                        <SectionLabel index="04">Message from the MD&apos;s desk</SectionLabel>
                         <div className="relative mt-8 max-w-[240px] sm:max-w-sm">
                             {company.mdPortrait ? (
                                 <Img image={company.mdPortrait} alt={`${md.name}, ${md.role}`} sizes="(min-width: 640px) 384px, 240px" className="aspect-[4/5] w-full rounded-panel object-cover object-[40%_30%]" />
@@ -258,7 +218,7 @@ export default function About() {
             {/* Leadership */}
             <Section id="team" tone="white">
                 <Container>
-                    <SectionHeading index="06" label="Board of directors" title="Leadership." />
+                    <SectionHeading index="05" label="Board of directors" title="Leadership." />
                     <Stagger className="mt-14 grid border-t border-kdm-ink/20 sm:grid-cols-3">
                         {company.directors.map((d, i) => (
                             <StaggerItem key={d.name} className="group relative border-b border-kdm-line py-8 sm:border-b-0 sm:border-r sm:px-8 sm:first:pl-0 sm:last:border-r-0">
@@ -284,7 +244,7 @@ export default function About() {
             {/* Milestones */}
             <Section id="milestones" tone="paper">
                 <Container>
-                    <SectionHeading index="07" label="KDM milestones" title={['From one company', 'to a group with a goal.']} />
+                    <SectionHeading index="06" label="KDM milestones" title={['Building toward', 'a national name.']} />
                     <Milestones />
                 </Container>
             </Section>
@@ -293,7 +253,7 @@ export default function About() {
             <Section tone="white">
                 <Container className="grid items-center gap-14 lg:grid-cols-12">
                     <div className="lg:col-span-7">
-                        <SectionLabel index="08">Accreditation</SectionLabel>
+                        <SectionLabel index="07">Accreditation</SectionLabel>
                         <h2 className="t-h2 mt-5">{accreditation.title}</h2>
                         <p className="t-lead mt-6">{accreditation.text}</p>
                         <p className="mt-6 inline-flex items-center gap-2 rounded-tag bg-kdm-surface px-4 py-2 text-sm font-semibold text-kdm-blue">
@@ -317,7 +277,7 @@ export default function About() {
             {/* Clients */}
             <Section tone="paper" className="overflow-hidden">
                 <Container className="flex flex-wrap items-end justify-between gap-6">
-                    <SectionHeading index="09" label="Trusted by" title="Our clients." />
+                    <SectionHeading index="08" label="Trusted by" title="Our clients." />
                     <TextLink to="/clients">Full clientele</TextLink>
                 </Container>
                 <div className="mt-12">

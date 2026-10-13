@@ -16,7 +16,7 @@ import BridgeElevation from './BridgeElevation';
 // itself across the foot of the sheet. A title block records the sheet's
 // (real) particulars. On desktop the sensor nearest the cursor lights up.
 
-const HEADLINE = ['From ground', 'to structure.', 'From data', 'to decisions.'];
+const HEADLINE = ['Understand the', 'structure.', 'Monitor its', 'health.'];
 
 export default function Hero() {
     const ready = useIntroDone();
@@ -69,12 +69,12 @@ export default function Hero() {
                     />
 
                     <motion.p {...enter(0.45)} className="t-lead mt-8 max-w-xl">
-                        Complete civil engineering solutions — from investigation and testing to monitoring, assessment
-                        and rehabilitation. Consultancy, testing and training under one roof.
+                        {company.name} delivers specialised engineering services across Structural Health Monitoring,
+                        Materials Testing and Geo-technical Investigations.
                     </motion.p>
 
                     <motion.div {...enter(0.6)} className="mt-10 flex flex-wrap items-center gap-3">
-                        <ButtonLink href="#services">Explore our services</ButtonLink>
+                        <ButtonLink to="/services/structural-health-monitoring">Explore structural health monitoring</ButtonLink>
                         <ButtonLink to="/contact" variant="secondary">
                             Start a conversation
                         </ButtonLink>

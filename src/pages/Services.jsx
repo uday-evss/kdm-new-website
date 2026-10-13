@@ -92,20 +92,20 @@ function ServiceIndex() {
 }
 
 export default function Services() {
-    usePageMeta('Our Services', `Civil engineering consultancy, testing services and training: ${services.map((s) => s.shortTitle).join(', ')}.`);
-    const banner = services.find((s) => s.slug === 'highways-bridges-buildings-irrigation').cover;
+    usePageMeta('Our Services', `Structural health monitoring, materials testing and geo-technical investigations: ${services.map((s) => s.shortTitle).join(', ')}.`);
+    const banner = services.find((s) => s.featured).cover;
 
     return (
         <>
             <PageHero
                 index="01"
                 eyebrow="Our services"
-                title={['Nine disciplines.', 'One engineering partner.']}
+                title={['Three departments.', 'One engineering partner.']}
                 image={banner}
-                caption="Fig. 01 — Bridge works"
+                caption="Fig. 01 — Structural health monitoring"
                 crumbs={[{ label: 'Our Services' }]}
             >
-                Civil engineering consultancy, testing services and training — all under one roof.
+                Structural health monitoring, materials testing and geo-technical investigations — all under one roof.
             </PageHero>
 
             <Section tone="white">

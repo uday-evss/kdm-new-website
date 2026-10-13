@@ -55,8 +55,10 @@ function Preview({ service, index }) {
     );
 }
 
+const FEATURED_INDEX = Math.max(0, servicesNav.findIndex((s) => s.featured));
+
 export default function ServiceIndex() {
-    const [active, setActive] = useState(0);
+    const [active, setActive] = useState(FEATURED_INDEX);
 
     return (
         <section id="services" aria-labelledby="services-title" className="relative scroll-mt-16 border-t border-kdm-line bg-kdm-paper py-20 sm:py-28 lg:py-32">
@@ -68,7 +70,7 @@ export default function ServiceIndex() {
                         <span id="services-title" className="sr-only">Our services</span>
                     </div>
                     <Reveal delay={0.1} className="lg:col-span-5">
-                        <p className="t-lead">Consultancy, testing, surveys, monitoring and training — each delivered by its own specialist team.</p>
+                        <p className="t-lead">Structural health monitoring, materials testing and geo-technical investigation — each delivered by its own specialist team.</p>
                         <TextLink to="/services" className="mt-5">
                             All services
                         </TextLink>

@@ -5,7 +5,7 @@ import { contact, formatPhone, telHref } from '@/content/site';
 import { CornerMarks } from '@/components/engineering';
 import { Container, PageHero, Reveal, Section, SectionLabel, usePageMeta } from '@/components/site/primitives';
 
-const TOPICS = ['Consultancy', 'Testing', 'Structural Health Monitoring', 'Structural Assessment', 'Infrastructure', 'Training', 'Other'];
+const TOPICS = ['Structural Health Monitoring', 'Materials Testing', 'Geo-technical Investigations', 'General Enquiry'];
 const EMPTY = { name: '', company: '', email: '', phone: '', topic: '', message: '' };
 
 function Field({ label, optional, children, className }) {

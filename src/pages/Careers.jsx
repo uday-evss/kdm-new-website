@@ -105,7 +105,7 @@ function JobCard({ job, index }) {
 }
 
 export default function Careers() {
-    usePageMeta('Careers', 'Open positions at KDM Engineers Group — structural health monitoring, materials testing, geotechnical investigations and infrastructure consulting across India.');
+    usePageMeta('Careers', 'Open positions at KDM Engineers (India) Pvt. Ltd. — structural health monitoring, materials testing and geotechnical investigations across India.');
     const { data: openings, isLoading, isError, refetch } = useQuery({
         queryKey: OPENINGS_QUERY_KEY,
         queryFn: fetchOpenings,

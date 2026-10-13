@@ -1,11 +1,12 @@
 import React from 'react';
 import { cn } from '@/lib/utils';
 import { company } from '@/content/site';
+import { servicesNav } from '@/content/servicesNav';
 import { Figure } from '@/components/engineering';
 import { Container, Img, RevealLines, SectionLabel, Reveal, Stagger, StaggerItem, TextLink } from '@/components/site/primitives';
 
-// 10 — Company story and leadership: the Managing Director's own words, the
-// group's two wings and the milestones it has reached (targets are left to
+// 11 — Company story and leadership: the Managing Director's own words, our
+// three departments and the milestones reached so far (targets are left to
 // the About page's full timeline).
 export default function LeadershipTeaser() {
     const md = company.directors[0];
@@ -29,7 +30,7 @@ export default function LeadershipTeaser() {
                 </div>
 
                 <div className="lg:col-span-8">
-                    <SectionLabel index="10">Company &amp; leadership</SectionLabel>
+                    <SectionLabel index="11">Company &amp; leadership</SectionLabel>
                     <span id="leadership-title" className="sr-only">Company story and leadership</span>
                     <RevealLines as="blockquote" lines={[`“${quote}”`]} className="t-h2 mt-8 !leading-[1.12]" />
                     <Reveal delay={0.1} className="mt-6 text-kdm-graphite">
@@ -38,12 +39,12 @@ export default function LeadershipTeaser() {
 
                     <div className="mt-14 grid gap-10 md:grid-cols-2">
                         <div>
-                            <p className="t-label text-kdm-muted">Wings of the group</p>
+                            <p className="t-label text-kdm-muted">Our departments</p>
                             <ul className="mt-4 border-t border-kdm-ink/20">
-                                {company.wings.map((w) => (
-                                    <li key={w.abbr} className="flex items-baseline justify-between gap-4 border-b border-kdm-line py-3">
-                                        <span className="font-medium text-kdm-ink">{w.name}</span>
-                                        <span className="t-label text-kdm-muted">{w.abbr}</span>
+                                {servicesNav.map((s, i) => (
+                                    <li key={s.slug} className="flex items-baseline justify-between gap-4 border-b border-kdm-line py-3">
+                                        <span className="font-medium text-kdm-ink">{s.shortTitle}</span>
+                                        <span className="t-label text-kdm-muted">{String(i + 1).padStart(2, '0')}</span>
                                     </li>
                                 ))}
                             </ul>

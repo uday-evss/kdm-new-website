@@ -12,7 +12,6 @@ import { ButtonLink, Img, TextLink } from './primitives';
 import { serviceIcons } from './serviceIcons';
 
 const SHM = '/services/structural-health-monitoring';
-const KSC = '/services/kdm-knowledge-share-center';
 
 export const NAV = [
     { label: 'About', to: '/about', menu: 'about', match: (p) => p === '/about' || p === '/clients' },
@@ -20,17 +19,15 @@ export const NAV = [
         label: 'Services',
         to: '/services',
         menu: 'services',
-        match: (p) => p.startsWith('/services') && p !== SHM && p !== KSC,
+        match: (p) => p.startsWith('/services') && p !== SHM,
     },
     { label: 'Monitoring', to: SHM, match: (p) => p === SHM },
     { label: 'Projects', to: '/projects', match: (p) => p.startsWith('/projects') },
-    { label: 'Knowledge Center', to: KSC, match: (p) => p === KSC },
     { label: 'Careers', to: '/careers', match: (p) => p.startsWith('/careers') },
 ];
 
 export const ABOUT_LINKS = [
     { label: 'About the Company', to: '/about', note: 'Foreword, vision, mission and values' },
-    { label: 'Wings of KDM', to: '/about#wings', note: 'The two companies of the group' },
     { label: "MD's Message", to: '/about#md-message', note: 'From the Managing Director' },
     { label: 'Leadership', to: '/about#team', note: 'Board of directors' },
     { label: 'Milestones', to: '/about#milestones', note: `Our journey since ${company.foundedYear}` },
@@ -191,7 +188,7 @@ function AboutPanel({ onNavigate, ...shell }) {
                         ))}
                     </p>
                     <p className="mt-3 text-sm leading-relaxed text-kdm-graphite">
-                        {company.values.join(' · ')} — the values behind {company.wings.length} companies and one group.
+                        {company.values.join(' · ')} — the values behind every engagement.
                     </p>
                 </div>
             </div>

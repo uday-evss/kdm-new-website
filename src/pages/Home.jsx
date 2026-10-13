@@ -47,7 +47,7 @@ function useBelowFold(sentinelRef) {
 export default function Home() {
     usePageMeta(
         null,
-        'KDM Engineers Group — civil engineering consultancy, NABL-accredited materials testing, geotechnical investigation, pavement engineering, structural assessment and structural health monitoring of bridges, since 2012.',
+        'KDM Engineers (India) Pvt. Ltd. — structural health monitoring, NABL-accredited materials testing and geotechnical investigation for bridges and infrastructure, since 2012.',
     );
     const sentinelRef = useRef(null);
     const mount = useBelowFold(sentinelRef);

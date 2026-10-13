@@ -28,7 +28,7 @@ export function LogoMark({ className, sizes = '96px', ...rest }) {
 
 export default function Logo({ compact = false, tone = 'dark', className }) {
     return (
-        <Link to="/" aria-label="KDM Engineers Group — home" className={cn('group flex shrink-0 items-center gap-3', className)}>
+        <Link to="/" aria-label="KDM Engineers (India) Pvt. Ltd. — home" className={cn('group flex shrink-0 items-center gap-3', className)}>
             <LogoMark
                 className={cn('transition-[height] duration-500 ease-kdm', compact ? 'h-9' : 'h-11 sm:h-12')}
                 sizes={compact ? '52px' : '68px'}

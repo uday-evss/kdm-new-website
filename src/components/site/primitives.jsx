@@ -11,7 +11,7 @@ import { useIntroDone } from '@/components/brand/IntroLoader';
 // Shared building blocks used by every page: page metadata, responsive
 // images, reveals, layout, headings, buttons and the inner-page hero.
 
-const SITE_NAME = 'KDM Engineers Group';
+const SITE_NAME = 'KDM Engineers (India) Pvt. Ltd.';
 const DEFAULT_TITLE = `${SITE_NAME} — Complete Civil Engineering Solutions`;
 
 function setMeta(attr, key, content) {
@@ -355,7 +355,7 @@ export function PageHero({ title, eyebrow, image, imageAlt = '', caption, crumbs
         ['Sheet', index],
         ['Section', sheet ?? eyebrow ?? crumbs[crumbs.length - 1]?.label ?? 'KDM'],
         ['Scale', 'NTS'],
-        ['Drawn for', 'KDM Engineers Group'],
+        ['Drawn for', 'KDM Engineers (India) Pvt. Ltd.'],
     ];
     return (
         <section className="relative isolate overflow-hidden border-b border-kdm-line bg-kdm-paper pb-12 pt-28 sm:pb-16 sm:pt-36">

@@ -140,7 +140,7 @@ function PortalFrame() {
 
 export function ContactBand({
     title = ["Let's build something", 'that lasts.'],
-    text = 'Talk to our team about consultancy, testing, surveys or structural health monitoring for your project.',
+    text = 'Talk to our team about structural health monitoring, materials testing or geo-technical investigation for your project.',
     index,
 }) {
     const hq = contact.branches[0];

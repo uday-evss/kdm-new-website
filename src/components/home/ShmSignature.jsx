@@ -23,7 +23,7 @@ export default function ShmSignature() {
             <Container className="relative">
                 <div className="grid items-end gap-8 lg:grid-cols-12">
                     <div className="lg:col-span-7">
-                        <SectionLabel index="05" tone="light">Structural Health Monitoring</SectionLabel>
+                        <SectionLabel index="04" tone="light">Structural Health Monitoring</SectionLabel>
                         <RevealLines lines={["We don't just inspect", 'structures.', 'We listen to them.']} className="t-h1 mt-5 text-white" />
                         <span id="shm-title" className="sr-only">Structural Health Monitoring</span>
                     </div>
